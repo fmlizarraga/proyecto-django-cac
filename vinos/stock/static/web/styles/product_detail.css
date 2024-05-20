@@ -1,0 +1,33 @@
+.product-detail {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.product-detail h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.product-detail p {
+    margin: 8px 0;
+}
+
+.product-detail a {
+    display: inline-block;
+    padding: 8px 16px;
+    margin-top: 16px;
+    text-decoration: none;
+    background-color: #7700ff;
+    color: #fff;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.product-detail a:hover {
+    background-color: #6b00b3;
+}

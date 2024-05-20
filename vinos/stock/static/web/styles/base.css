@@ -1,0 +1,46 @@
+:root {
+    --corp-bg-color: #440750;
+    --corp-fg-color: #fce5ca;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+header, footer {
+    background-color: var(--corp-bg-color);
+    color: var(--corp-fg-color);
+    text-align: center;
+    padding: 1em;
+}
+
+header nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+header nav ul li {
+    display: inline;
+    margin: 0 1em;
+}
+
+header nav ul li a {
+    color: var(--corp-fg-color);
+    text-decoration: none;
+}
+
+main {
+    padding: 2em;
+}
+
+footer {
+    text-align: center;
+    padding: 1em 0;
+    background-color: var(--corp-bg-color);
+    color: var(--corp-fg-color);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}

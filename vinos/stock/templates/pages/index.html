@@ -1,0 +1,19 @@
+{% extends "pages/base.html" %}
+{% load static %}
+
+{% block title %}{{title}}{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'web/styles/index.css' %}">
+{% endblock %}
+
+{% block main %}
+    <h2>Bienvenidos a Bodega San Martin</h2>
+    <p>
+        En Bodega San Martin, gestionamos con precisión y eficiencia nuestro inventario de vinos.
+        Este sistema está diseñado exclusivamente para el uso del personal de la bodega,
+        permitiendo realizar registros detallados de entradas y salidas,
+        así como consultar el inventario actual en cualquier momento.
+        Nuestro objetivo es garantizar la mejor organización y control para ofrecer siempre
+        la más alta calidad en nuestros productos. ¡Gracias por su dedicación y esfuerzo continuo!
+    </p>
+{% endblock %}
