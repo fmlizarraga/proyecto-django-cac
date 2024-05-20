@@ -11,7 +11,11 @@ Primero no olvides crear un entorno virtual y activarlo!
 python3 -m venv venv
 source venv/bin/activate
 ```
-Instala Django e inica el servidor asi
+Instala Django (la unica dependencia por ahora)
+```
+pip install django
+```
+Inicia el servidor asi
 ```
 cd vinos/
 python manage.py runserver
