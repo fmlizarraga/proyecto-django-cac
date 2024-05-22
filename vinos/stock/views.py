@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render,redirect
-from .forms import AddProductForm, EntryForm, ExitForm
+from django.http import Http404
+from .forms import AddProductForm, AddRecordForm
 
 # ! Temporal
 MY_STOCK = [
@@ -98,3 +99,29 @@ def add_product(req):
     
     context['form'] = form
     return render(req, 'forms/add_product.html', context)
+
+def add_record(req, type):
+    if type == 'entry':
+        title = 'Registrar Entrada'
+    elif type == 'exit':
+        title = 'Registrar Salida'
+    else:
+        raise Http404("Tipo de registro no válido")
+
+    context = {
+        'title': title,
+    }
+    
+    if req.method == 'POST':
+        form = AddRecordForm(req.POST)
+
+        if form.is_valid():
+            # TODO: accion en base de datos (dependiendo si es type entry o exit)
+
+            messages.success(req, '¡Entrada/Salida registrada con exito!')
+            return redirect('product_list')
+    else:
+        form = AddRecordForm()
+        
+    context['form'] = form
+    return render(req, 'forms/add_record.html', context)

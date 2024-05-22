@@ -47,7 +47,7 @@ class AddProductForm(forms.Form):
 
         return cleaned_data
 
-class EntryForm(forms.Form):
+class AddRecordForm(forms.Form):
     prid = forms.IntegerField(
         label="Código",
         required=True
@@ -56,13 +56,12 @@ class EntryForm(forms.Form):
         label="Cantidad",
         required=True
     )
+    def clean_quantity(self):
+        quantity = self.cleaned_data.get('quantity')
+        if quantity < 1:
+            raise ValidationError("La cantidad debe ser al menos una unidad.")
+        return quantity
+    def clean(self):
+        cleaned_data = super().clean()
 
-class ExitForm(forms.Form):
-    prid = forms.IntegerField(
-        label="Código",
-        required=True
-    )
-    quantity = forms.IntegerField(
-        label="Cantidad",
-        required=True
-    )
+        return cleaned_data
