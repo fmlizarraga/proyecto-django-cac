@@ -32,4 +32,4 @@ cd $PROJECT_DIR
 
 # Iniciar el servidor de Django
 echo "Iniciando el servidor de Django..."
-python manage.py runserver
+python manage.py runserver 8245
