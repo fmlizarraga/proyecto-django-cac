@@ -57,15 +57,32 @@ class Branch(models.Model):
         return self.name
 
 class Product(models.Model):
+    MALBEC = 'Malbec'
+    CABERNET = 'Cabernet'
+    MERLOT = 'Merlot'
+    CHARDONNAY = 'Chardonnay'
+    SYRAH = 'Syrah'
+    PINOT_NOIR = 'Pinot Noir'
+    SAUVIGNON_BLANC = 'Sauvignon Blanc'
+    
+    VARIETY_CHOICES = [
+        (MALBEC, 'Malbec'),
+        (CABERNET, 'Cabernet'),
+        (MERLOT, 'Merlot'),
+        (CHARDONNAY, 'Chardonnay'),
+        (SYRAH, 'Syrah'),
+        (PINOT_NOIR, 'Pinot Noir'),
+        (SAUVIGNON_BLANC, 'Sauvignon Blanc'),
+    ]
+
     name = models.CharField(
         max_length=100, 
-        verbose_name="Nombre", 
-        validators=[RegexValidator(r'^\S+', 'Este campo no puede estar vacío.')]
+        verbose_name="Nombre"
     )
     variety = models.CharField(
-        max_length=100, 
-        verbose_name="Varietal", 
-        validators=[RegexValidator(r'^\S+', 'Este campo no puede estar vacío.')]
+        max_length=20,
+        choices=VARIETY_CHOICES,
+        verbose_name="Varietal"
     )
     description = models.TextField(
         max_length=500, 
@@ -94,6 +111,10 @@ class BranchStock(models.Model):
 
 
 class Employee(Person):
+    is_active = models.BooleanField(
+        verbose_name="En actividad",
+        default=True
+    )
     cuil = models.IntegerField(
         verbose_name="CUIL", 
         unique=True,
@@ -102,7 +123,7 @@ class Employee(Person):
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name="Sucursal")
 
     def __str__(self):
-        return f"Empleado: {self.full_name()} - DNI: {self.dni} - CUIL: {self.cuil} - Sucursal: {self.branch}"
+        return f"Empleado: {self.full_name()} - DNI: {self.dni} - CUIL: {self.cuil} - Sucursal: {self.branch} - En actividad: {'Si' if self.is_active else 'No'}"
 
 class Record(models.Model):
     ENTRY = 'entry'
@@ -113,7 +134,7 @@ class Record(models.Model):
     ]
 
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
-    branch = models.ForeignKey(Branch, on_delete=models.PROTECT)
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
     quantity = models.IntegerField(
         verbose_name="Cantidad",
         validators=[validate_positive]
