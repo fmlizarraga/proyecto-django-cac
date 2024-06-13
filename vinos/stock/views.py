@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import Http404
 from .models import Product
-from .forms import AddProductForm, AddRecordForm
+from .forms import AddProductForm,AddRecordForm,RegisterBranch
 
 def index(req):
     context = {
@@ -73,3 +73,22 @@ def add_record(req, type):
         
     context['form'] = form
     return render(req, 'forms/add_record.html', context)
+
+def register_branch(req):
+    context = {
+        'title': 'Registrar Sucursal'
+    }
+
+    if req.method == 'POST':
+        form = RegisterBranch(req.POST)
+
+        if form.is_valid():
+            form.save
+            messages.success(req, '¡La sucursal se registró con exito!')
+            return redirect('index')
+    else:
+        form = RegisterBranch()
+    
+    context['form'] = form
+
+    return render(req, 'forms/register_branch.html', context)

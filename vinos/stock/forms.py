@@ -1,7 +1,8 @@
 from django import forms
+from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from datetime import datetime
-from .models import Product
+from .models import Product,Branch
 
 class AddProductForm(forms.ModelForm):
     class Meta:
@@ -61,5 +62,45 @@ class AddRecordForm(forms.Form):
         return quantity
     def clean(self):
         cleaned_data = super().clean()
+
+        return cleaned_data
+
+class RegisterBranch(forms.ModelForm):
+    area_code = forms.CharField(
+        max_length=5, 
+        label="Código de Área",
+        widget=forms.TextInput(attrs={'class': 'telephone-pre'})
+    )
+    phone_number = forms.CharField(
+        max_length=15, 
+        label="Número de Teléfono",
+        widget=forms.TextInput(attrs={'class': 'telephone-sub'})
+    )
+
+    class Meta:
+        model = Branch
+        fields = ['name', 'address', 'telephone']
+        widgets = {
+            'telephone': forms.HiddenInput(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['telephone'].required = False
+
+    def clean(self):
+        cleaned_data = super().clean()
+        area_code = cleaned_data.get("area_code")
+        phone_number = cleaned_data.get("phone_number")
+
+        full_phone_number = f"+54{area_code}{phone_number}"
+        
+        phone_validator = RegexValidator(r'^\+?1?\d{9,15}$', 'Número de teléfono no válido.')
+        try:
+            phone_validator(full_phone_number)
+        except ValidationError as e:
+            self.add_error('phone_number', e)
+        
+        cleaned_data['telephone'] = full_phone_number
 
         return cleaned_data

@@ -1,0 +1,20 @@
+{% extends "pages/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'web/styles/forms.css' %}">
+{% endblock %}
+
+{% block main %}
+    <div class="form-container">
+        <h1>{{ title }}</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <br>
+            <button type="submit">Guardar</button>
+        </form>
+        <a href="{% url 'index' %}">Volver al inicio</a>
+    </div>
+{% endblock %}

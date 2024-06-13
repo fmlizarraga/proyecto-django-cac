@@ -63,3 +63,28 @@
 .form-container a:hover {
     text-decoration: underline;
 }
+
+.form-container form p:has(.telephone-pre){
+    margin-bottom: 15px;
+    display: inline-block;
+    width: 15%;
+}
+.form-container form p:has(.telephone-sub) {
+    margin-bottom: 15px;
+    display: inline-block;
+    width: calc(85% - 1em);
+}
+
+.errorlist.nonfield {
+    list-style-type: none; /* Ocultar las viñetas */
+    color: red; /* Color rojo para resaltar */
+    font-weight: bold; /* Opcional: Hacer el texto en negrita para más énfasis */
+    background-color: #fdd; /* Opcional: Fondo rojo claro para mayor visibilidad */
+    padding: 10px; /* Opcional: Añadir un poco de espacio alrededor del texto */
+    border: 1px solid red; /* Opcional: Añadir un borde rojo */
+    border-radius: 4px; /* Opcional: Bordes redondeados */
+}
+
+.errorlist.nonfield li {
+    display: inline; /* Mostrar el contenido del <li> en línea, si es necesario */
+}
