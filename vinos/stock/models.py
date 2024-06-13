@@ -94,6 +94,7 @@ class Product(models.Model):
     )
     quantity = models.IntegerField(
         verbose_name="Cantidad Disponible", 
+        default=0,
         validators=[validate_positive]
     )
     branches = models.ManyToManyField(Branch, through='BranchStock', verbose_name="Sucursales")
