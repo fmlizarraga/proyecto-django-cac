@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import Http404
-from .models import Product
+from .models import Product,Branch
 from .forms import AddProductForm,AddRecordForm,RegisterBranch
 
 def index(req):
@@ -83,12 +83,21 @@ def register_branch(req):
         form = RegisterBranch(req.POST)
 
         if form.is_valid():
-            form.save
+            form.save()
             messages.success(req, '¡La sucursal se registró con exito!')
-            return redirect('index')
+            return redirect('branch_list')
     else:
         form = RegisterBranch()
     
     context['form'] = form
 
     return render(req, 'forms/register_branch.html', context)
+
+def branch_list(req):
+    branches = Branch.objects.all()
+    context = {
+        'title': 'Sucursales',
+        'branches': branches
+    }
+
+    return render(req, 'pages/branch_list.html', context)

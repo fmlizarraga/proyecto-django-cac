@@ -1,0 +1,27 @@
+{% extends "pages/base.html" %}
+{% load static %}
+
+{% block titulo %}{{title}}{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'web/styles/branch_list.css' %}"> 
+{% endblock %}
+
+{% block main %}
+    <div class="branch-list">
+        <div class="branch-item">
+            <a href="{% url 'add_branch' %}">Registrar nueva sucursal</a>
+        </div>
+        {% for branch in branches %}
+            <div class="branch-item">
+                <h2>{{ branch.name }}</h2>
+                <p><strong>Direccion:</strong> {{ branch.address }}</p>
+                <p><strong>Telefono:</strong> {{ branch.telephone }}</p>
+            </div>
+        {% empty %}
+            <div class="branch-item">
+                <p>No hay Sucursales disponibles.</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
