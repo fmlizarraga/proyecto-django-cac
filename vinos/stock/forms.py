@@ -1,8 +1,9 @@
+from typing import Any
 from django import forms
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from datetime import datetime
-from .models import Product,Branch
+from .models import Product,Branch,Record,Employee,BranchStock
 
 class AddProductForm(forms.ModelForm):
     class Meta:
@@ -45,22 +46,41 @@ class AddProductForm(forms.ModelForm):
             self.save_m2m()
         return product
 
-class AddRecordForm(forms.Form):
-    prid = forms.IntegerField(
-        label="Código",
-        required=True
-    )
-    quantity = forms.IntegerField(
-        label="Cantidad",
-        required=True
-    )
+class AddRecordForm(forms.ModelForm):
+    product = forms.ModelChoiceField(queryset=Product.objects.all(), label="Producto")
+    employee = forms.ModelChoiceField(queryset=Employee.objects.all(), label="Empleado")
+
+    class Meta:
+        model = Record
+        fields = ['product', 'quantity', 'employee', 'typeof']
+        widgets = {
+            'typeof': forms.HiddenInput(),
+            'quantity': forms.TextInput(attrs={'class': 'input-short'})
+        }
+    
     def clean_quantity(self):
         quantity = self.cleaned_data.get('quantity')
         if quantity < 1:
             raise ValidationError("La cantidad debe ser al menos una unidad.")
         return quantity
+
     def clean(self):
         cleaned_data = super().clean()
+        product = cleaned_data.get("product")
+        quantity = cleaned_data.get("quantity")
+        typeof = cleaned_data.get("typeof")
+        employee = cleaned_data.get("employee")
+
+        if not product or not quantity or not typeof or not employee:
+            return cleaned_data
+
+        branch = employee.branch
+
+        branch_stock, created = BranchStock.objects.get_or_create(product=product, branch=branch)
+
+        if typeof == Record.EXIT:
+            if branch_stock.stock < quantity:
+                raise ValidationError('No hay suficiente stock en la sucursal para registrar la salida.')
 
         return cleaned_data
 

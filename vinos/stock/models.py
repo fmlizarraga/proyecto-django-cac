@@ -91,7 +91,7 @@ class Product(models.Model):
     branches = models.ManyToManyField(Branch, through='BranchStock', verbose_name="Sucursales")
 
     def __str__(self):
-        return f"Nombre: {self.name} - Varietal: {self.variety} - Descripcion: {self.description} - Cosecha: {self.vintage} - Cantidad Disponible: {self.quantity}"
+        return f"Nombre: {self.name} - Varietal: {self.variety} - Descripcion: {self.description} - Cosecha: {self.vintage}"
 
 class BranchStock(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

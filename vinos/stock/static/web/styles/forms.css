@@ -75,6 +75,10 @@
     width: calc(85% - 1em);
 }
 
+.form-container form p:has(.input-short){
+    width: 30%;
+}
+
 .errorlist.nonfield {
     list-style-type: none; /* Ocultar las viñetas */
     color: red; /* Color rojo para resaltar */

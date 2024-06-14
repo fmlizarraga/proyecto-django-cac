@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import Http404
-from .models import Product,Branch
+from .models import Product,Branch,Record,BranchStock
 from .forms import AddProductForm,AddRecordForm,RegisterBranch
 
 def index(req):
@@ -49,28 +49,56 @@ def add_product(req):
     return render(req, 'forms/add_product.html', context)
 
 def add_record(req, type):
-    if type == 'entry':
-        title = 'Registrar Entrada'
-    elif type == 'exit':
-        title = 'Registrar Salida'
-    else:
-        raise Http404("Tipo de registro no válido")
-
-    context = {
-        'title': title,
+    TYPE_CHOICES = {
+        'entry': Record.ENTRY,
+        'exit': Record.EXIT,
     }
+
+    if type not in TYPE_CHOICES:
+        messages.error(req, 'Tipo de registro no válido.')
+        return redirect('index')
+    
+    context = {}
+    if type == TYPE_CHOICES['entry']:
+        context['title'] = "Ingreso"
+    elif type == TYPE_CHOICES['exit']:
+        context['title'] = "Egreso"
     
     if req.method == 'POST':
         form = AddRecordForm(req.POST)
 
         if form.is_valid():
-            # TODO: accion en base de datos (dependiendo si es type entry o exit)
+            record = form.save(commit=False)
+            record.typeof = TYPE_CHOICES[type]
+            employee = record.employee
+            branch = employee.branch
+            record.branch = branch
 
-            messages.success(req, '¡Entrada/Salida registrada con exito!')
-            return redirect('product_list')
+            branch_stock, created = BranchStock.objects.get_or_create(
+                product=record.product, 
+                branch=branch
+            )
+
+
+            if record.typeof == Record.ENTRY:
+                branch_stock.stock += record.quantity
+            elif record.typeof == Record.EXIT:
+                if branch_stock.stock < record.quantity:
+                    messages.error(req, 'No hay suficiente stock en la sucursal para registrar la salida.')
+                    return render(req, 'forms/add_record.html', context)
+
+                branch_stock.stock -= record.quantity
+
+            branch_stock.save()
+            record.save()
+
+            messages.success(req, '¡El registro se creó con éxito y el stock se actualizó!')
+            return redirect('index')
+        else:
+            messages.error(req, 'Error al crear el registro. Verifique los datos ingresados.')
     else:
-        form = AddRecordForm()
-        
+        form = AddRecordForm(initial={'typeof': TYPE_CHOICES[type]})
+
     context['form'] = form
     return render(req, 'forms/add_record.html', context)
 
