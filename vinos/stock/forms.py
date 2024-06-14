@@ -40,10 +40,9 @@ class AddProductForm(forms.ModelForm):
     
     def save(self, commit=True):
         product = super(AddProductForm, self).save(commit=False)
-        product.quantity = 0  # Ensure quantity is set to 0
         if commit:
             product.save()
-            self.save_m2m()  # To save ManyToMany field if necessary
+            self.save_m2m()
         return product
 
 class AddRecordForm(forms.Form):

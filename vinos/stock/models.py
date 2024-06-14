@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import RegexValidator, EmailValidator, MinValueValidator, MaxValueValidator
+from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
 from django.core.exceptions import ValidationError
 import datetime
 
@@ -24,10 +24,6 @@ class Person(models.Model):
         verbose_name="DNI", 
         unique=True,
         validators=[validate_positive]
-    )
-    email = models.EmailField(
-        verbose_name="Correo Electrónico",
-        validators=[EmailValidator()]
     )
 
     class Meta:
@@ -91,11 +87,6 @@ class Product(models.Model):
     vintage = models.IntegerField(
         verbose_name="Cosecha",
         validators=[MinValueValidator(1900), MaxValueValidator(datetime.date.today().year)]
-    )
-    quantity = models.IntegerField(
-        verbose_name="Cantidad Disponible", 
-        default=0,
-        validators=[validate_positive]
     )
     branches = models.ManyToManyField(Branch, through='BranchStock', verbose_name="Sucursales")
 

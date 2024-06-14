@@ -12,7 +12,6 @@
         {% for product in stock %}
             <div class="product-card">
                 <h2>{{ product.name }}</h2>
-                <p><strong>Disponibles:</strong> {{ product.quantity }} unidades</p>
                 <p><strong>Variedad:</strong> {{ product.variety }}</p>
                 <p><strong>Descripción:</strong> {{ product.description|truncatechars:30 }}</p>
                 <p><strong>Año:</strong> {{ product.vintage }}</p>
