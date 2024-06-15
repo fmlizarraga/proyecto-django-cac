@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
 import datetime
 
 def validate_positive(value):
@@ -96,13 +97,14 @@ class Product(models.Model):
 class BranchStock(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
-    stock = models.IntegerField(verbose_name="Stock en Sucursal")
+    stock = models.IntegerField(verbose_name="Stock en Sucursal", default=0)
 
     def __str__(self):
         return f"Sucursal: {self.branch.name} - Producto: {self.product.name} - Stock: {self.stock}"
 
 
 class Employee(Person):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Usuario", related_name="employee")
     is_active = models.BooleanField(
         verbose_name="En actividad",
         default=True

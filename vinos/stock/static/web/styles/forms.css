@@ -25,6 +25,9 @@
 
 .form-container input[type="text"],
 .form-container input[type="number"],
+.form-container input[type="password"],
+.form-container input[type="email"],
+.form-container select,
 .form-container textarea {
     width: calc(100% - 22px);
     padding: 10px;
@@ -77,6 +80,16 @@
     width: 30%;
 }
 
+.form-container ul {
+    list-style-type: none; /* Ocultar las viñetas */
+    color: orangered; /* Color amarillo para resaltar */
+    font-weight: bold; /* Opcional: Hacer el texto en negrita para más énfasis */
+    background-color: rgb(255, 249, 221); /* Opcional: Fondo naranja claro para mayor visibilidad */
+    padding: 10px; /* Opcional: Añadir un poco de espacio alrededor del texto */
+    border: 1px solid orangered; /* Opcional: Añadir un borde amarillo */
+    border-radius: 4px; /* Opcional: Bordes redondeados */
+}
+
 .errorlist.nonfield, .errorlist {
     list-style-type: none; /* Ocultar las viñetas */
     color: red; /* Color rojo para resaltar */
@@ -89,4 +102,8 @@
 
 .errorlist.nonfield, .errorlist li {
     display: inline; /* Mostrar el contenido del <li> en línea, si es necesario */
+}
+
+.helptext {
+    display: none;
 }

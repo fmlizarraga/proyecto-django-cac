@@ -2,6 +2,8 @@ from typing import Any
 from django import forms
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from datetime import datetime
 from .models import Product,Branch,Record,Employee,BranchStock
 
@@ -48,15 +50,19 @@ class AddProductForm(forms.ModelForm):
 
 class AddRecordForm(forms.ModelForm):
     product = forms.ModelChoiceField(queryset=Product.objects.all(), label="Producto")
-    employee = forms.ModelChoiceField(queryset=Employee.objects.all(), label="Empleado")
 
     class Meta:
         model = Record
-        fields = ['product', 'quantity', 'employee', 'typeof']
+        fields = ['product', 'quantity', 'typeof']
         widgets = {
             'typeof': forms.HiddenInput(),
-            'quantity': forms.TextInput(attrs={'class': 'input-short'})
+            'quantity': forms.TextInput(attrs={'class': 'input-short'}),
+            'employee': forms.HiddenInput()
         }
+    
+    def __init__(self, *args, **kwargs):
+        self.employee = kwargs.pop('employee', None)
+        super().__init__(*args, **kwargs)
     
     def clean_quantity(self):
         quantity = self.cleaned_data.get('quantity')
@@ -69,12 +75,11 @@ class AddRecordForm(forms.ModelForm):
         product = cleaned_data.get("product")
         quantity = cleaned_data.get("quantity")
         typeof = cleaned_data.get("typeof")
-        employee = cleaned_data.get("employee")
 
-        if not product or not quantity or not typeof or not employee:
+        if not product or not quantity or not typeof:
             return cleaned_data
 
-        branch = employee.branch
+        branch = self.employee.branch
 
         branch_stock, created = BranchStock.objects.get_or_create(product=product, branch=branch)
 
@@ -83,6 +88,13 @@ class AddRecordForm(forms.ModelForm):
                 raise ValidationError('No hay suficiente stock en la sucursal para registrar la salida.')
 
         return cleaned_data
+    
+    def save(self, commit=True):
+        record = super().save(commit=False)
+        record.employee = self.employee
+        if commit:
+            record.save()
+        return record
 
 class RegisterBranch(forms.ModelForm):
     area_code = forms.CharField(
@@ -134,3 +146,34 @@ class RegisterEmployee(forms.ModelForm):
         cleaned_data = super().clean()
 
         return cleaned_data
+
+class RegisterUser(UserCreationForm):
+    email = forms.EmailField(required=True, help_text="Requerido. Ingrese una direccion de email válida.")
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
+    
+    # Añadir campos adicionales para Employee
+    first_name = forms.CharField(max_length=100)
+    last_name = forms.CharField(max_length=100)
+    dni = forms.IntegerField()
+    cuil = forms.IntegerField()
+    branch = forms.ModelChoiceField(queryset=Branch.objects.all(), label="Sucursal")
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if commit:
+            user.save()
+            Employee.objects.create(
+                user=user,
+                first_name=self.cleaned_data['first_name'],
+                last_name=self.cleaned_data['last_name'],
+                dni=self.cleaned_data['dni'],
+                cuil=self.cleaned_data['cuil'],
+                branch=self.cleaned_data['branch']
+            )
+        return user
+
+class LoginUser(AuthenticationForm):
+    username = forms.CharField(label="Username", max_length=254)
+    password = forms.CharField(label="Password", widget=forms.PasswordInput)

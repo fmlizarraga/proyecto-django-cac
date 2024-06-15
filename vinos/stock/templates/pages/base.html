@@ -18,9 +18,14 @@
             <ul>
                 <li><a href="{% url 'index' %}">Inicio</a></li>
                 <li><a href="{% url 'product_list' %}">Catalogo</a></li>
+                {% if user.is_authenticated %}
                 <li><a href="{% url 'add_record' 'entry' %}">Nueva Entrada</a></li>
                 <li><a href="{% url 'add_record' 'exit' %}">Nueva Salida</a></li>
                 <li><a href="{% url 'admin_page' %}">Administrar</a></li>
+                <li><a href="{% url 'logout' %}">Salir</a></li>
+                {% else %}
+                <li><a href="{% url 'login' %}">Ingresar</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>

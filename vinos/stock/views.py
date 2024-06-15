@@ -1,8 +1,9 @@
 from django.contrib import messages
 from django.shortcuts import render,redirect,get_object_or_404
-from django.http import Http404
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 from .models import Product,Branch,Record,BranchStock,Employee
-from .forms import AddProductForm,AddRecordForm,RegisterBranch,RegisterEmployee
+from .forms import AddProductForm,AddRecordForm,RegisterBranch,LoginUser,RegisterUser
 
 def index(req):
     context = {
@@ -30,6 +31,7 @@ def product_detail(req, pid):
 
     return render(req, 'pages/product_detail.html', context)
 
+@login_required
 def add_product(req):
     context = {
         'title': 'Nuevo Producto',
@@ -48,6 +50,7 @@ def add_product(req):
     context['form'] = form
     return render(req, 'forms/add_product.html', context)
 
+@login_required
 def add_record(req, type):
     TYPE_CHOICES = {
         'entry': Record.ENTRY,
@@ -58,6 +61,11 @@ def add_record(req, type):
         messages.error(req, 'Tipo de registro no válido.')
         return redirect('index')
     
+    try:
+        employee = Employee.objects.get(user=req.user)
+    except Employee.DoesNotExist:
+        return redirect('index')  # Redirigir a una página de error si el empleado no existe
+    
     context = {}
     if type == TYPE_CHOICES['entry']:
         context['title'] = "Ingreso"
@@ -65,7 +73,7 @@ def add_record(req, type):
         context['title'] = "Egreso"
     
     if req.method == 'POST':
-        form = AddRecordForm(req.POST)
+        form = AddRecordForm(req.POST, employee=employee)
 
         if form.is_valid():
             record = form.save(commit=False)
@@ -97,11 +105,12 @@ def add_record(req, type):
         else:
             messages.error(req, 'Error al crear el registro. Verifique los datos ingresados.')
     else:
-        form = AddRecordForm(initial={'typeof': TYPE_CHOICES[type]})
+        form = AddRecordForm(initial={'typeof': TYPE_CHOICES[type]}, employee=employee)
 
     context['form'] = form
     return render(req, 'forms/add_record.html', context)
 
+@login_required
 def register_branch(req):
     context = {
         'title': 'Registrar Sucursal'
@@ -121,6 +130,7 @@ def register_branch(req):
 
     return render(req, 'forms/register_branch.html', context)
 
+@login_required
 def branch_list(req):
     branches = Branch.objects.all()
     context = {
@@ -130,25 +140,26 @@ def branch_list(req):
 
     return render(req, 'pages/branch_list.html', context)
 
-def register_employee(req):
-    context = {
-        'title': 'Registrar Empleado'
-    }
+# def register_employee(req):
+#     context = {
+#         'title': 'Registrar Empleado'
+#     }
 
-    if req.method == 'POST':
-        form = RegisterEmployee(req.POST)
+#     if req.method == 'POST':
+#         form = RegisterEmployee(req.POST)
 
-        if form.is_valid():
-            form.save()
-            messages.success(req, '¡El empleado se registró con exito!')
-            return redirect('index')
-    else:
-        form = RegisterEmployee()
+#         if form.is_valid():
+#             form.save()
+#             messages.success(req, '¡El empleado se registró con exito!')
+#             return redirect('index')
+#     else:
+#         form = RegisterEmployee()
     
-    context['form'] = form
+#     context['form'] = form
 
-    return render(req, 'forms/register_employee.html', context)
+#     return render(req, 'forms/register_employee.html', context)
 
+@login_required
 def employee_list(req):
     employees = Employee.objects.all()
     context = {
@@ -158,9 +169,45 @@ def employee_list(req):
 
     return render(req, 'pages/employee_list.html', context)
 
+@login_required
 def administrate(req):
     context = {
         'title': 'Administrar'
     }
 
     return render(req, 'pages/admin_page.html', context)
+
+def register_user(req):
+    if req.method == 'POST':
+        form = RegisterUser(req.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(req, f'Cuenta creada para {username}!')
+            login(req,user)
+            return redirect('index')
+    else:
+        form = RegisterUser()
+    return render(req, 'forms/register.html', {'form': form})
+
+def login_user(req):
+    if req.method == 'POST':
+        form = LoginUser(data=req.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(req, user)
+                messages.success(req, f'Bienvenid@, {username}!')
+                return redirect('index')
+            else:
+                messages.error(req, 'Usuario o contraseña inválido')
+    else:
+        form = LoginUser()
+    return render(req, 'forms/login.html', {'form': form})
+
+def logout_user(req):
+    logout(req)
+    messages.success(req, 'Has sido desconectado.')
+    return redirect('login')
