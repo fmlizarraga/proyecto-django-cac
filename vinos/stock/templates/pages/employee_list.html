@@ -1,0 +1,28 @@
+{% extends "pages/base.html" %}
+{% load static %}
+
+{% block titulo %}{{title}}{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'web/styles/branch_list.css' %}"> 
+{% endblock %}
+
+{% block main %}
+    <div class="branch-list">
+        <div class="branch-item">
+            <a href="{% url 'add_employee' %}">Registrar nuevo empleado</a>
+        </div>
+        {% for e in employees %}
+            <div class="branch-item">
+                <h2>{{ e.full_name }}</h2>
+                <p><strong>DNI:</strong> {{ e.dni }}</p>
+                <p><strong>CUIL:</strong> {{ e.cuil }}</p>
+                <p><strong>Sucursal:</strong> {{ e.branch }}</p>
+            </div>
+        {% empty %}
+            <div class="branch-item">
+                <p>No hay empleados disponibles.</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,8 +1,8 @@
 from django.contrib import messages
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import Http404
-from .models import Product,Branch,Record,BranchStock
-from .forms import AddProductForm,AddRecordForm,RegisterBranch
+from .models import Product,Branch,Record,BranchStock,Employee
+from .forms import AddProductForm,AddRecordForm,RegisterBranch,RegisterEmployee
 
 def index(req):
     context = {
@@ -129,3 +129,31 @@ def branch_list(req):
     }
 
     return render(req, 'pages/branch_list.html', context)
+
+def register_employee(req):
+    context = {
+        'title': 'Registrar Empleado'
+    }
+
+    if req.method == 'POST':
+        form = RegisterEmployee(req.POST)
+
+        if form.is_valid():
+            form.save()
+            messages.success(req, '¡El empleado se registró con exito!')
+            return redirect('index')
+    else:
+        form = RegisterEmployee()
+    
+    context['form'] = form
+
+    return render(req, 'forms/register_employee.html', context)
+
+def employee_list(req):
+    employees = Employee.objects.all()
+    context = {
+        'title': 'Empleados',
+        'employees': employees
+    }
+
+    return render(req, 'pages/employee_list.html', context)

@@ -79,7 +79,7 @@
     width: 30%;
 }
 
-.errorlist.nonfield {
+.errorlist.nonfield, .errorlist {
     list-style-type: none; /* Ocultar las viñetas */
     color: red; /* Color rojo para resaltar */
     font-weight: bold; /* Opcional: Hacer el texto en negrita para más énfasis */
@@ -89,6 +89,6 @@
     border-radius: 4px; /* Opcional: Bordes redondeados */
 }
 
-.errorlist.nonfield li {
+.errorlist.nonfield, .errorlist li {
     display: inline; /* Mostrar el contenido del <li> en línea, si es necesario */
 }

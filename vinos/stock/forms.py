@@ -123,3 +123,14 @@ class RegisterBranch(forms.ModelForm):
         cleaned_data['telephone'] = full_phone_number
 
         return cleaned_data
+
+class RegisterEmployee(forms.ModelForm):
+    branch = forms.ModelChoiceField(queryset=Branch.objects.all(), label="Sucursal")
+    class Meta:
+        model = Employee
+        fields = ['first_name', 'last_name','dni','cuil','branch']
+    
+    def clean(self):
+        cleaned_data = super().clean()
+
+        return cleaned_data
