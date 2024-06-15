@@ -11,4 +11,5 @@ urlpatterns = [
     path('branch/list/', views.branch_list, name='branch_list'),
     path('employee/add/', views.register_employee, name='add_employee'),
     path('employee/list/', views.employee_list, name='employee_list'),
+    path('admin/', views.administrate, name='admin_page'),
 ]

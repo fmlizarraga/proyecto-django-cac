@@ -9,11 +9,19 @@ body {
     background-color: #f4f4f4;
 }
 
+header {
+    top: 0;
+}
+
 header, footer {
     background-color: var(--corp-bg-color);
     color: var(--corp-fg-color);
     text-align: center;
     padding: 1em;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    right: 0;
 }
 
 header nav ul {
@@ -33,14 +41,14 @@ header nav ul li a {
 
 main {
     padding: 2em;
+    width: calc(100% - 2em);
+    margin-top: 150px;
+    margin-bottom: 85px;
 }
 
 footer {
-    text-align: center;
-    padding: 1em 0;
+    /* padding: 1em 0; */
     background-color: var(--corp-bg-color);
     color: var(--corp-fg-color);
-    position: absolute;
     bottom: 0;
-    width: 100%;
 }

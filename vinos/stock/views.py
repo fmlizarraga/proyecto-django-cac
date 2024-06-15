@@ -157,3 +157,10 @@ def employee_list(req):
     }
 
     return render(req, 'pages/employee_list.html', context)
+
+def administrate(req):
+    context = {
+        'title': 'Administrar'
+    }
+
+    return render(req, 'pages/admin_page.html', context)
