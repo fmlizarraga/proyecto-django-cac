@@ -150,25 +150,6 @@ def branch_list(req):
 
     return render(req, 'pages/branch_list.html', context)
 
-# def register_employee(req):
-#     context = {
-#         'title': 'Registrar Empleado'
-#     }
-
-#     if req.method == 'POST':
-#         form = RegisterEmployee(req.POST)
-
-#         if form.is_valid():
-#             form.save()
-#             messages.success(req, '¡El empleado se registró con exito!')
-#             return redirect('index')
-#     else:
-#         form = RegisterEmployee()
-    
-#     context['form'] = form
-
-#     return render(req, 'forms/register_employee.html', context)
-
 @login_required
 def employee_list(req):
     employees = Employee.objects.all()

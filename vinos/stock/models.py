@@ -77,7 +77,7 @@ class Product(models.Model):
     branches = models.ManyToManyField(Branch, through='BranchStock', verbose_name="Sucursales")
 
     def __str__(self):
-        return f"Nombre: {self.name} - Varietal: {self.variety} - Descripcion: {self.description} - Cosecha: {self.vintage}"
+        return f"Cod.: {self.pk} - {self.name} - {self.variety} {self.vintage}"
 
 class BranchStock(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -106,6 +106,9 @@ class Employee(Person):
         ]
     )
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name="Sucursal")
+
+    def full_name(self):
+        return self.user.get_full_name()
 
     def __str__(self):
         return f"Empleado: {self.user.get_full_name()} - DNI: {self.dni} - CUIL: {self.cuil} - Sucursal: {self.branch} - En actividad: {'Si' if self.is_active else 'No'}"
