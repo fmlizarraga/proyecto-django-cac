@@ -21,6 +21,7 @@
                 {% if user.is_authenticated %}
                 <li><a href="{% url 'add_record' 'entry' %}">Nueva Entrada</a></li>
                 <li><a href="{% url 'add_record' 'exit' %}">Nueva Salida</a></li>
+                <li><a href="{% url 'record_list' %}">Registros</a></li>
                 <li><a href="{% url 'admin_page' %}">Administrar</a></li>
                 <li><a href="{% url 'logout' %}">Salir</a></li>
                 {% else %}

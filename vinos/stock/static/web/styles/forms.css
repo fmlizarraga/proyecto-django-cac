@@ -81,6 +81,7 @@
 }
 
 .form-container ul {
+    font-size: smaller;
     list-style-type: none; /* Ocultar las viñetas */
     color: orangered; /* Color amarillo para resaltar */
     font-weight: bold; /* Opcional: Hacer el texto en negrita para más énfasis */
@@ -105,5 +106,6 @@
 }
 
 .helptext {
-    display: none;
+    font-size: smaller;
+    color: rgb(96, 58, 128);
 }

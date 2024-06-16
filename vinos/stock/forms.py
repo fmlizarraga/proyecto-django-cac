@@ -57,7 +57,6 @@ class AddRecordForm(forms.ModelForm):
         widgets = {
             'typeof': forms.HiddenInput(),
             'quantity': forms.TextInput(attrs={'class': 'input-short'}),
-            'employee': forms.HiddenInput()
         }
     
     def __init__(self, *args, **kwargs):
@@ -136,38 +135,29 @@ class RegisterBranch(forms.ModelForm):
 
         return cleaned_data
 
-class RegisterEmployee(forms.ModelForm):
-    branch = forms.ModelChoiceField(queryset=Branch.objects.all(), label="Sucursal")
-    class Meta:
-        model = Employee
-        fields = ['first_name', 'last_name','dni','cuil','branch']
-    
-    def clean(self):
-        cleaned_data = super().clean()
-
-        return cleaned_data
-
 class RegisterUser(UserCreationForm):
-    email = forms.EmailField(required=True, help_text="Requerido. Ingrese una direccion de email válida.")
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password1', 'password2']
-    
-    # Añadir campos adicionales para Employee
+    username = forms.CharField(max_length=100, label="Nombre de usuario", required=True, help_text="Requerido. 150 caracteres o menos. Solo letras, numeros y @/./+/-/_.")
+    email = forms.EmailField(required=True, help_text="Requerido. Ingrese una dirección de email válida.")
     first_name = forms.CharField(max_length=100)
     last_name = forms.CharField(max_length=100)
-    dni = forms.IntegerField()
-    cuil = forms.IntegerField()
+    dni = forms.IntegerField(label="DNI")
+    cuil = forms.CharField(max_length=13, label="CUIL", help_text="Formato: NN-NNNNNNNN-N")
     branch = forms.ModelChoiceField(queryset=Branch.objects.all(), label="Sucursal")
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name']
 
     def save(self, commit=True):
         user = super().save(commit=False)
+        user.username = self.cleaned_data['username']
+        user.email = self.cleaned_data['email']
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
         if commit:
             user.save()
             Employee.objects.create(
                 user=user,
-                first_name=self.cleaned_data['first_name'],
-                last_name=self.cleaned_data['last_name'],
                 dni=self.cleaned_data['dni'],
                 cuil=self.cleaned_data['cuil'],
                 branch=self.cleaned_data['branch']
@@ -175,5 +165,5 @@ class RegisterUser(UserCreationForm):
         return user
 
 class LoginUser(AuthenticationForm):
-    username = forms.CharField(label="Username", max_length=254)
-    password = forms.CharField(label="Password", widget=forms.PasswordInput)
+    username = forms.CharField(label="Nombre de usuario", max_length=100)
+    password = forms.CharField(label="Contraseña", widget=forms.PasswordInput)

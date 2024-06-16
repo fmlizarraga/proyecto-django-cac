@@ -111,6 +111,16 @@ def add_record(req, type):
     return render(req, 'forms/add_record.html', context)
 
 @login_required
+def record_list(req):
+    records = Record.objects.all()
+    context = {
+        'title': 'Registros',
+        'records': records
+    }
+
+    return render(req, 'pages/record_list.html', context)
+
+@login_required
 def register_branch(req):
     context = {
         'title': 'Registrar Sucursal'

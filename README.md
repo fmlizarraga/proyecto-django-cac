@@ -23,7 +23,3 @@ Inicia el servidor asi
 cd vinos/
 python manage.py runserver
 ```
-
-## Admin superuser
-- usuario: super
-- contraseña: super45

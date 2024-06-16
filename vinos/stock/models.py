@@ -9,18 +9,6 @@ def validate_positive(value):
         raise ValidationError("El valor debe ser positivo")
 
 class Person(models.Model):
-    first_name = models.CharField(
-        max_length=100, 
-        verbose_name="Nombre",
-        validators=[
-            RegexValidator(r'^[a-zA-Z]+$', 'Solo se permiten caracteres alfabéticos.')
-        ]
-    )
-    last_name = models.CharField(
-        max_length=100,
-        verbose_name="Apellido",
-        validators=[RegexValidator(r'^[a-zA-Z]+$', 'Solo se permiten caracteres alfabéticos.')]
-    )
     dni = models.IntegerField(
         verbose_name="DNI", 
         unique=True,
@@ -29,9 +17,6 @@ class Person(models.Model):
 
     class Meta:
         abstract = True
-    
-    def full_name(self):
-        return f"{self.first_name} {self.last_name}"
 
 class Branch(models.Model):
     name = models.CharField(
@@ -109,15 +94,21 @@ class Employee(Person):
         verbose_name="En actividad",
         default=True
     )
-    cuil = models.IntegerField(
+    cuil = models.CharField(
         verbose_name="CUIL", 
         unique=True,
-        validators=[validate_positive]
+        max_length=13,
+        validators=[
+            RegexValidator(
+                regex=r'^\d{2}-\d{7,8}-\d$',
+                message='El CUIL debe estar en el formato NN-NNNNNNNN-N'
+            )
+        ]
     )
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name="Sucursal")
 
     def __str__(self):
-        return f"Empleado: {self.full_name()} - DNI: {self.dni} - CUIL: {self.cuil} - Sucursal: {self.branch} - En actividad: {'Si' if self.is_active else 'No'}"
+        return f"Empleado: {self.user.get_full_name()} - DNI: {self.dni} - CUIL: {self.cuil} - Sucursal: {self.branch} - En actividad: {'Si' if self.is_active else 'No'}"
 
 class Record(models.Model):
     ENTRY = 'entry'
@@ -139,7 +130,7 @@ class Record(models.Model):
         verbose_name="Tipo"
     )
     employee = models.ForeignKey(Employee, on_delete=models.PROTECT, verbose_name="Empleado")
-    date = models.DateField(verbose_name="Fecha de registro", auto_now_add=True)
+    date = models.DateTimeField(verbose_name="Fecha de registro", auto_now_add=True)
 
     def __str__(self):
         return f"Product: {self.product.name} - Branch: {self.branch.name} - Quantity: {self.quantity} - Type:{self.get_typeof_display()} - Employee: {self.employee.full_name()} - Date: {self.date}"

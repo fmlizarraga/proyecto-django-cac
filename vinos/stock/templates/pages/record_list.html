@@ -1,0 +1,34 @@
+{% extends "pages/base.html" %}
+{% load static %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'web/styles/record_list.css' %}"> 
+{% endblock %}
+
+{% block main %}
+    <div class="record-list">
+        <div class="record-item">
+            <a href="{% url 'add_record' 'entry' %}">Nueva Entrada</a>
+            <a href="{% url 'add_record' 'exit' %}">Nueva Salida</a>
+        </div>
+        {% for record in records %}
+            <div class="record-item">
+                {% if record.typeof == 'entry' %}
+                <h2>Entrada</h2>
+                {% else %}
+                <h2>Salida</h2>
+                {% endif %}
+                <p><strong>Fecha:</strong> {{ record.date }}</p>
+                <p><strong>Producto:</strong> {{ record.product.name }} - {{ record.product.variety }} x {{ record.quantity }} </p>
+                <p><strong>Sucursal:</strong> {{ record.branch }}</p>
+                <p><strong>Empleado:</strong> {{ record.employee.user.username }} - {{ record.employee.cuil }}</p>
+            </div>
+        {% empty %}
+            <div class="record-item">
+                <p>No hay empleados disponibles.</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
