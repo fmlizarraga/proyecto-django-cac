@@ -19,7 +19,7 @@ header, footer {
     text-align: center;
     padding: 1em;
     position: fixed;
-    width: 100%;
+    width: calc(100% - 2em);
     left: 0;
     right: 0;
 }
@@ -41,7 +41,7 @@ header nav ul li a {
 
 main {
     padding: 2em;
-    width: calc(100% - 2em);
+    width: calc(100% - 4em);
     margin-top: 150px;
     margin-bottom: 85px;
 }

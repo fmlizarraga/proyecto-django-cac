@@ -14,7 +14,7 @@
                 <h2>{{ product.name }}</h2>
                 <p><strong>Variedad:</strong> {{ product.variety }}</p>
                 <p><strong>Descripción:</strong> {{ product.description|truncatechars:30 }}</p>
-                <p><strong>Año:</strong> {{ product.vintage }}</p>
+                <p><strong>Cosecha:</strong> {{ product.vintage }}</p>
                 <a href="{% url 'product_detail' product.id %}">Ver Detalle</a>
             </div>
         {% empty %}

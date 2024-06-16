@@ -82,28 +82,28 @@
 
 .form-container ul {
     font-size: smaller;
-    list-style-type: none; /* Ocultar las viñetas */
-    color: orangered; /* Color amarillo para resaltar */
-    font-weight: bold; /* Opcional: Hacer el texto en negrita para más énfasis */
-    background-color: rgb(255, 249, 221); /* Opcional: Fondo naranja claro para mayor visibilidad */
-    padding: 10px; /* Opcional: Añadir un poco de espacio alrededor del texto */
-    border: 1px solid orangered; /* Opcional: Añadir un borde amarillo */
-    border-radius: 4px; /* Opcional: Bordes redondeados */
+    list-style-type: none;
+    color: orangered;
+    font-weight: bold;
+    background-color: rgb(255, 249, 221);
+    padding: 10px;
+    border: 1px solid orangered;
+    border-radius: 4px;
 }
 
 .errorlist.nonfield, .errorlist {
-    list-style-type: none; /* Ocultar las viñetas */
-    color: red; /* Color rojo para resaltar */
-    font-weight: bold; /* Opcional: Hacer el texto en negrita para más énfasis */
-    background-color: #fdd; /* Opcional: Fondo rojo claro para mayor visibilidad */
-    padding: 10px; /* Opcional: Añadir un poco de espacio alrededor del texto */
-    border: 1px solid red; /* Opcional: Añadir un borde rojo */
-    border-radius: 4px; /* Opcional: Bordes redondeados */
+    list-style-type: none;
+    color: red;
+    font-weight: bold;
+    background-color: #fdd;
+    padding: 10px;
+    border: 1px solid red;
+    border-radius: 4px;
 }
 
-.errorlist.nonfield, .errorlist li {
-    display: inline; /* Mostrar el contenido del <li> en línea, si es necesario */
-}
+/* .errorlist.nonfield, .errorlist li {
+    margin-bottom: 1em;
+} */
 
 .helptext {
     font-size: smaller;
