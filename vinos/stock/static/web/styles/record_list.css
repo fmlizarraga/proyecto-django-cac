@@ -41,11 +41,6 @@ main {
     color: #000;
 }
 
-.record-item p {
-    color: #888;
-    /* text-align: center; */
-}
-
 .record-item p:last-child {
     margin-bottom: 0;
 }
@@ -73,4 +68,9 @@ main {
     background-color: #6b00b3;
     color: #fff;
     border-color: #333;
+}
+
+.record-item p.highlight,
+.record-item p.highlight strong {
+    color: #6b00b3;
 }

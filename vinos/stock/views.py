@@ -1,4 +1,7 @@
+from typing import Any
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -110,15 +113,45 @@ def add_record(req, type):
     context['form'] = form
     return render(req, 'forms/add_record.html', context)
 
-@login_required
-def record_list(req):
-    records = Record.objects.all()
-    context = {
-        'title': 'Registros',
-        'records': records
-    }
+class RecordsByBranch(LoginRequiredMixin, ListView):
+    model = Record
+    context_object_name = 'records'
+    template_name = 'pages/record_list.html'
+    ordering = ['branch']
+    
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
 
-    return render(req, 'pages/record_list.html', context)
+        try:
+            employee = Employee.objects.get(user=self.request.user)
+        except Employee.DoesNotExist:
+            return redirect('index')  # Redirigir
+
+        context['title'] = 'Registros (Sucursal)'
+        context['employee'] = employee
+        context['order'] = 'branch'
+
+        return context
+
+class RecordsByTime(LoginRequiredMixin, ListView):
+    model = Record
+    context_object_name = 'records'
+    template_name = 'pages/record_list.html'
+    ordering = ['date']
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+
+        try:
+            employee = Employee.objects.get(user=self.request.user)
+        except Employee.DoesNotExist:
+            return redirect('index')  # Redirigir
+
+        context['title'] = 'Registros (Hora)'
+        context['employee'] = employee
+        context['order'] = 'time'
+
+        return context
 
 @login_required
 def register_branch(req):

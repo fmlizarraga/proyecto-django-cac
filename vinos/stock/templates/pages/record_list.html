@@ -10,20 +10,26 @@
 {% block main %}
     <div class="record-list">
         <div class="record-item">
+            <h2>{{title}}</h2>
+            {% if order == 'time' %}
+            <a href="{% url 'record_list_branch' %}">Ordenar por sucursal</a>
+            {% elif order == 'branch' %}
+            <a href="{% url 'record_list' %}">Ordenar por hora</a>
+            {% endif %}
             <a href="{% url 'add_record' 'entry' %}">Nueva Entrada</a>
             <a href="{% url 'add_record' 'exit' %}">Nueva Salida</a>
         </div>
         {% for record in records %}
             <div class="record-item">
-                {% if record.typeof == 'entry' %}
-                <h2>Entrada</h2>
+                <h2>{% if record.typeof == 'entry' %}
+                Entrada
                 {% else %}
-                <h2>Salida</h2>
-                {% endif %}
+                Salida
+                {% endif %}</h2>
                 <p><strong>Fecha:</strong> {{ record.date }}</p>
                 <p><strong>Producto:</strong> {{ record.product.name }} - {{ record.product.variety }} x {{ record.quantity }} </p>
-                <p><strong>Sucursal:</strong> {{ record.branch }}</p>
-                <p><strong>Empleado:</strong> {{ record.employee.user.username }} - {{ record.employee.cuil }}</p>
+                <p{% if record.branch == employee.branch %} class="highlight" {% endif %}><strong>Sucursal:</strong> {{ record.branch }}</p>
+                <p{% if record.employee == employee %} class="highlight" {% endif %}><strong>Empleado:</strong> {{ record.employee.user.username }} - {{ record.employee.cuil }}</p>
             </div>
         {% empty %}
             <div class="record-item">
