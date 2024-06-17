@@ -194,6 +194,19 @@ def employee_list(req):
     return render(req, 'pages/employee_list.html', context)
 
 @login_required
+def branch_stock_list(req):
+    employee = Employee.objects.get(user=req.user)
+    branch = employee.branch
+    stock = BranchStock.objects.filter(branch=branch)
+    context = {
+        'title': 'Stock en la sucursal',
+        'stock': stock,
+        'branch': branch
+    }
+
+    return render(req, 'pages/stock_list.html', context)
+
+@login_required
 def administrate(req):
     context = {
         'title': 'Administrar'

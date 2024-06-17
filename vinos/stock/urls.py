@@ -13,5 +13,6 @@ urlpatterns = [
     path('branch/add/', views.register_branch, name='add_branch'),
     path('branch/list/', views.branch_list, name='branch_list'),
     path('employee/list/', views.employee_list, name='employee_list'),
+    path('stock/list/current/', views.branch_stock_list, name='stock_list_curr'),
     path('admin/', views.administrate, name='admin_page'),
 ]

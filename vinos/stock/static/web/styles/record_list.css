@@ -74,3 +74,8 @@ main {
 .record-item p.highlight strong {
     color: #6b00b3;
 }
+
+.record-item p.alert-text {
+    color: red;
+    font-weight: bold;
+}
