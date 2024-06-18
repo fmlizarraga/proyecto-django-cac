@@ -22,6 +22,7 @@ class Branch(models.Model):
     name = models.CharField(
         max_length=255, 
         verbose_name="Sucursal",
+        unique=True,
         validators=[RegexValidator(r'^\S+', 'Este campo no puede estar vacío.')]
     )
     address = models.CharField(
