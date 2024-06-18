@@ -113,11 +113,10 @@ def add_record(req, type):
     context['form'] = form
     return render(req, 'forms/add_record.html', context)
 
-class RecordsByBranch(LoginRequiredMixin, ListView):
+class BaseRecordsListView(LoginRequiredMixin, ListView):
     model = Record
     context_object_name = 'records'
     template_name = 'pages/record_list.html'
-    ordering = ['branch']
     
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -127,30 +126,26 @@ class RecordsByBranch(LoginRequiredMixin, ListView):
         except Employee.DoesNotExist:
             return redirect('index')  # Redirigir
 
-        context['title'] = 'Registros (Sucursal)'
         context['employee'] = employee
-        context['order'] = 'branch'
 
         return context
 
-class RecordsByTime(LoginRequiredMixin, ListView):
-    model = Record
-    context_object_name = 'records'
-    template_name = 'pages/record_list.html'
+class RecordsByBranch(BaseRecordsListView):
+    ordering = ['branch']
+    
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Registros (Sucursal)'
+        context['order'] = 'branch'
+        return context
+
+class RecordsByTime(BaseRecordsListView):
     ordering = ['date']
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-
-        try:
-            employee = Employee.objects.get(user=self.request.user)
-        except Employee.DoesNotExist:
-            return redirect('index')  # Redirigir
-
         context['title'] = 'Registros (Hora)'
-        context['employee'] = employee
         context['order'] = 'time'
-
         return context
 
 @login_required
