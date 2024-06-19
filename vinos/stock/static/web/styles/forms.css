@@ -109,3 +109,8 @@
     font-size: smaller;
     color: rgb(96, 58, 128);
 }
+
+.select2-container--default li.select2-results__option--highlighted.select2-results__option--selectable {
+    background-color: #6b00b3;
+    color: white;
+  }
