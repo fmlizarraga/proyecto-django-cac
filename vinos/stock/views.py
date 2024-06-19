@@ -8,6 +8,13 @@ from django.contrib.auth.decorators import login_required
 from .models import Product,Branch,Record,BranchStock,Employee
 from .forms import AddProductForm,AddRecordForm,RegisterBranch,LoginUser,RegisterUser
 
+def anonymous_required(view_func):
+    def _wrapped_view_func(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('index')
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view_func
+
 def index(req):
     context = {
         'title': 'Control de stock'
@@ -15,14 +22,17 @@ def index(req):
 
     return render(req, 'pages/index.html', context)
 
-def product_list(req):
-    products = Product.objects.all()
-    context = {
-        'title': 'Vinos disponibles',
-        'stock': products
-    }
+class ProductList(ListView):
+    model = Product
+    context_object_name = 'products'
+    ordering = ['-vintage','name']
+    template_name = 'pages/product_list.html'
 
-    return render(req, 'pages/product_list.html', context)
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Vinos disponibles'
+
+        return context
 
 def product_detail(req, pid):
     product = get_object_or_404(Product,pk=pid)
@@ -70,9 +80,9 @@ def add_record(req, type):
         return redirect('index')  # Redirigir a una página de error si el empleado no existe
     
     context = {}
-    if type == TYPE_CHOICES['entry']:
+    if type == Record.ENTRY:
         context['title'] = "Ingreso"
-    elif type == TYPE_CHOICES['exit']:
+    elif type == Record.EXIT:
         context['title'] = "Egreso"
     
     if req.method == 'POST':
@@ -209,6 +219,7 @@ def administrate(req):
 
     return render(req, 'pages/admin_page.html', context)
 
+@anonymous_required
 def register_user(req):
     if req.method == 'POST':
         form = RegisterUser(req.POST)
@@ -222,6 +233,7 @@ def register_user(req):
         form = RegisterUser()
     return render(req, 'forms/register.html', {'form': form})
 
+@anonymous_required
 def login_user(req):
     if req.method == 'POST':
         form = LoginUser(data=req.POST)

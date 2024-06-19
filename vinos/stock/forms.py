@@ -51,6 +51,10 @@ class AddProductForm(forms.ModelForm):
 class AddRecordForm(forms.ModelForm):
     product = forms.ModelChoiceField(queryset=Product.objects.all(), label="Producto")
 
+    MIN_QUANTITY = 1
+    ERROR_QUANTITY_MSG = "La cantidad debe ser al menos una unidad."
+    ERROR_STOCK_MSG = "No hay suficiente stock en la sucursal para registrar la salida."
+
     class Meta:
         model = Record
         fields = ['product', 'quantity', 'typeof']
@@ -58,37 +62,40 @@ class AddRecordForm(forms.ModelForm):
             'typeof': forms.HiddenInput(),
             'quantity': forms.TextInput(attrs={'class': 'input-short'}),
         }
-    
+
     def __init__(self, *args, **kwargs):
         self.employee = kwargs.pop('employee', None)
         super().__init__(*args, **kwargs)
-    
+
     def clean_quantity(self):
+        """Valida que la cantidad sea mayor o igual a la mínima permitida."""
         quantity = self.cleaned_data.get('quantity')
-        if quantity < 1:
-            raise ValidationError("La cantidad debe ser al menos una unidad.")
+        if quantity is None or quantity < self.MIN_QUANTITY:
+            raise ValidationError(self.ERROR_QUANTITY_MSG)
         return quantity
 
     def clean(self):
+        """Realiza validaciones adicionales y asegura que el stock sea suficiente para registrar la salida."""
         cleaned_data = super().clean()
         product = cleaned_data.get("product")
         quantity = cleaned_data.get("quantity")
         typeof = cleaned_data.get("typeof")
 
-        if not product or not quantity or not typeof:
+        if not all([product, quantity, typeof]):
             return cleaned_data
 
         branch = self.employee.branch
 
+        # Intentar obtener o crear el stock de la sucursal
         branch_stock, created = BranchStock.objects.get_or_create(product=product, branch=branch)
 
-        if typeof == Record.EXIT:
-            if branch_stock.stock < quantity:
-                raise ValidationError('No hay suficiente stock en la sucursal para registrar la salida.')
+        if typeof == Record.EXIT and branch_stock.stock < quantity:
+            raise ValidationError(self.ERROR_STOCK_MSG)
 
         return cleaned_data
-    
+
     def save(self, commit=True):
+        """Guarda el registro con el empleado asociado."""
         record = super().save(commit=False)
         record.employee = self.employee
         if commit:
@@ -136,10 +143,10 @@ class RegisterBranch(forms.ModelForm):
         return cleaned_data
 
 class RegisterUser(UserCreationForm):
-    username = forms.CharField(max_length=100, label="Nombre de usuario", required=True, help_text="Requerido. 150 caracteres o menos. Solo letras, numeros y @/./+/-/_.")
+    username = forms.CharField(max_length=100, label="Nombre de usuario", required=True, help_text="Requerido. 100 caracteres o menos. Solo letras, numeros y @/./+/-/_.")
     email = forms.EmailField(required=True, help_text="Requerido. Ingrese una dirección de email válida.")
-    first_name = forms.CharField(max_length=100)
-    last_name = forms.CharField(max_length=100)
+    first_name = forms.CharField(max_length=100, label="Nombre(s)")
+    last_name = forms.CharField(max_length=100,label="Apellido(s)")
     dni = forms.IntegerField(label="DNI")
     cuil = forms.CharField(max_length=13, label="CUIL", help_text="Formato: NN-NNNNNNNN-N")
     branch = forms.ModelChoiceField(queryset=Branch.objects.all(), label="Sucursal")
