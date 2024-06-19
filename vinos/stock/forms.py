@@ -49,7 +49,11 @@ class AddProductForm(forms.ModelForm):
         return product
 
 class AddRecordForm(forms.ModelForm):
-    product = forms.ModelChoiceField(queryset=Product.objects.all(), label="Producto")
+    product = forms.ModelChoiceField(
+        queryset=Product.objects.all(), 
+        label="Producto",
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
 
     MIN_QUANTITY = 1
     ERROR_QUANTITY_MSG = "La cantidad debe ser al menos una unidad."

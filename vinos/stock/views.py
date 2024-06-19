@@ -5,6 +5,7 @@ from django.views.generic import ListView
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from .models import Product,Branch,Record,BranchStock,Employee
 from .forms import AddProductForm,AddRecordForm,RegisterBranch,LoginUser,RegisterUser
 
@@ -114,7 +115,7 @@ def add_record(req, type):
             record.save()
 
             messages.success(req, '¡El registro se creó con éxito y el stock se actualizó!')
-            return redirect('index')
+            return redirect('record_list')
         else:
             messages.error(req, 'Error al crear el registro. Verifique los datos ingresados.')
     else:
@@ -122,6 +123,15 @@ def add_record(req, type):
 
     context['form'] = form
     return render(req, 'forms/add_record.html', context)
+
+@login_required
+def product_autocomplete(request):
+    if 'q' in request.GET:
+        q = request.GET['q']
+        products = Product.objects.filter(name__icontains=q)
+        results = [{'id': product.pk, 'text': product.name} for product in products]
+        return JsonResponse({'results': results})
+    return JsonResponse({'results': []})
 
 class BaseRecordsListView(LoginRequiredMixin, ListView):
     model = Record
