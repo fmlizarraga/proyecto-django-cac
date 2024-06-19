@@ -1,7 +1,7 @@
 {% extends "pages/base.html" %}
 {% load static %}
 
-{% block titulo %}{{title}}{% endblock %}
+{% block title %}{{title}}{% endblock %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'web/styles/product_list.css' %}"> 
@@ -9,13 +9,12 @@
 
 {% block main %}
     <div class="product-grid">
-        {% for product in stock %}
+        {% for product in products %}
             <div class="product-card">
                 <h2>{{ product.name }}</h2>
-                <p><strong>Disponibles:</strong> {{ product.quantity }} unidades</p>
                 <p><strong>Variedad:</strong> {{ product.variety }}</p>
                 <p><strong>Descripción:</strong> {{ product.description|truncatechars:30 }}</p>
-                <p><strong>Año:</strong> {{ product.vintage }}</p>
+                <p><strong>Cosecha:</strong> {{ product.vintage }}</p>
                 <a href="{% url 'product_detail' product.id %}">Ver Detalle</a>
             </div>
         {% empty %}

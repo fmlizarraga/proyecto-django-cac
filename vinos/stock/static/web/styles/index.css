@@ -1,7 +1,8 @@
 main {
     max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
+    margin-top: 200px;
+    margin-left: auto;
+    margin-right: auto;
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -18,24 +19,26 @@ main p {
     color: #333;
 }
 
+.sub-title {
+    font-size: 20px;
+    margin-top: 4px;
+    color: #695c70;
+}
+
+.link-sub {
+    text-decoration: none;
+    color: #7700ff;
+    font-size: 20px;
+}
+
+.link-sub:hover {
+    color: #6b00b3;
+}
+
 .text-right {
     text-align: right;
 }
 
 .text-center {
     text-align: center;
-}
-
-@media (max-width: 600px) {
-    main {
-        padding: 10px;
-    }
-
-    h2 {
-        font-size: 20px;
-    }
-
-    p {
-        font-size: 14px;
-    }
 }

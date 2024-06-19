@@ -1,0 +1,30 @@
+{% extends "pages/base.html" %}
+{% load static %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'web/styles/admin.css' %}">
+{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <h1 class="title">Herramientas Administrativas</h1>
+        <div class="admin-list">
+            <div class="admin-item">
+                <h2>Productos</h2>
+                <a href="{% url 'add_product' %}" class="button">Agregar Producto</a>
+                <a href="{% url 'product_list' %}" class="button">Ver Productos</a>
+            </div>
+            <div class="admin-item">
+                <h2>Empleados</h2>
+                <a href="{% url 'employee_list' %}" class="button">Ver Empleados</a>
+            </div>
+            <div class="admin-item">
+                <h2>Sucursales</h2>
+                <a href="{% url 'add_branch' %}" class="button">Agregar Sucursal</a>
+                <a href="{% url 'branch_list' %}" class="button">Ver Sucursales</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

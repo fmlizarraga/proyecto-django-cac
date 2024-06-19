@@ -1,0 +1,81 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    padding: 2em;
+    background-color: #f4f4f4;
+}
+
+.record-list {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.record-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.record-item h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.record-item p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.record-item p strong {
+    color: #000;
+}
+
+.record-item p:last-child {
+    margin-bottom: 0;
+}
+
+.record-item + .record-item {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.record-item a {
+    display: inline-block;
+    padding: 8px 16px;
+    text-decoration: none;
+    font-weight: bold;
+    border-color: #7700ff;
+    background-color: #fff;
+    color: #7700ff;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+    transition: background-color 0.3s ease;
+}
+
+.record-item a:hover {
+    background-color: #6b00b3;
+    color: #fff;
+    border-color: #333;
+}
+
+.record-item p.highlight,
+.record-item p.highlight strong {
+    color: #6b00b3;
+}
+
+.record-item p.alert-text {
+    color: red;
+    font-weight: bold;
+}

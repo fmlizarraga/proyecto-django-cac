@@ -1,5 +1,3 @@
-/* static/web/styles/form_styles.css */
-
 .form-container {
     max-width: 600px;
     margin: 0 auto;
@@ -27,6 +25,9 @@
 
 .form-container input[type="text"],
 .form-container input[type="number"],
+.form-container input[type="password"],
+.form-container input[type="email"],
+.form-container select,
 .form-container textarea {
     width: calc(100% - 22px);
     padding: 10px;
@@ -63,3 +64,53 @@
 .form-container a:hover {
     text-decoration: underline;
 }
+
+.form-container form p:has(.telephone-pre){
+    margin-bottom: 15px;
+    display: inline-block;
+    width: 15%;
+}
+.form-container form p:has(.telephone-sub) {
+    margin-bottom: 15px;
+    display: inline-block;
+    width: calc(85% - 1em);
+}
+
+.form-container form p:has(.input-short){
+    width: 30%;
+}
+
+.form-container ul {
+    font-size: smaller;
+    list-style-type: none;
+    color: orangered;
+    font-weight: bold;
+    background-color: rgb(255, 249, 221);
+    padding: 10px;
+    border: 1px solid orangered;
+    border-radius: 4px;
+}
+
+.errorlist.nonfield, .errorlist {
+    list-style-type: none;
+    color: red;
+    font-weight: bold;
+    background-color: #fdd;
+    padding: 10px;
+    border: 1px solid red;
+    border-radius: 4px;
+}
+
+/* .errorlist.nonfield, .errorlist li {
+    margin-bottom: 1em;
+} */
+
+.helptext {
+    font-size: smaller;
+    color: rgb(96, 58, 128);
+}
+
+.select2-container--default li.select2-results__option--highlighted.select2-results__option--selectable {
+    background-color: #6b00b3;
+    color: white;
+  }

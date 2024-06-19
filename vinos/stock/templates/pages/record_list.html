@@ -1,0 +1,40 @@
+{% extends "pages/base.html" %}
+{% load static %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'web/styles/record_list.css' %}"> 
+{% endblock %}
+
+{% block main %}
+    <div class="record-list">
+        <div class="record-item">
+            <h2>{{title}}</h2>
+            {% if order == 'time' %}
+            <a href="{% url 'record_list_branch' %}">Ordenar por sucursal</a>
+            {% elif order == 'branch' %}
+            <a href="{% url 'record_list' %}">Ordenar por hora</a>
+            {% endif %}
+            <a href="{% url 'add_record' 'entry' %}">Nueva Entrada</a>
+            <a href="{% url 'add_record' 'exit' %}">Nueva Salida</a>
+        </div>
+        {% for record in records %}
+            <div class="record-item">
+                <h2>{% if record.typeof == 'entry' %}
+                Entrada
+                {% else %}
+                Salida
+                {% endif %}</h2>
+                <p><strong>Fecha:</strong> {{ record.date }}</p>
+                <p><strong>Producto:</strong> {{ record.product.name }} - {{ record.product.variety }} x {{ record.quantity }} </p>
+                <p{% if record.branch == employee.branch %} class="highlight" {% endif %}><strong>Sucursal:</strong> {{ record.branch }}</p>
+                <p{% if record.employee == employee %} class="highlight" {% endif %}><strong>Empleado:</strong> {{ record.employee.user.username }} - {{ record.employee.cuil }}</p>
+            </div>
+        {% empty %}
+            <div class="record-item">
+                <p>No hay registros disponibles.</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

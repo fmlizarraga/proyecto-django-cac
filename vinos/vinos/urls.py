@@ -22,5 +22,8 @@ from stock import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('stock/', include('stock.urls')),
+    path('accounts/register/', views.register_user, name='register'),
+    path('accounts/login/', views.login_user, name='login'),
+    path('accounts/logout/', views.logout_user, name='logout'),
     path('', lambda request: redirect('stock/', permanent=True)),
 ]

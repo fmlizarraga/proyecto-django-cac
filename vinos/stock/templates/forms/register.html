@@ -1,19 +1,19 @@
 {% extends "pages/base.html" %}
 {% load static %}
 
-{% block title %}Ingresar{% endblock %}
+{% block title %}Registrar{% endblock %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'web/styles/forms.css' %}">
 {% endblock %}
 
 {% block main %}
   <div class="form-container">
-    <h2>Login</h2>
+    <h2>Registro</h2>
     <form method="POST">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit">Ingresar</button>
+      <button type="submit">Registrar</button>
     </form>
-    <a href="{% url 'register' %}">Aún no tengo una cuenta</a>
+    <a href="{% url 'login' %}">Ya tengo una cuenta</a>
   </div>
 {% endblock %}
