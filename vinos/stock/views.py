@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
 from .models import Product,Branch,Record,BranchStock,Employee
 from .forms import AddProductForm,AddRecordForm,RegisterBranch,LoginUser,RegisterUser
@@ -222,6 +222,7 @@ def branch_stock_list(req):
     return render(req, 'pages/stock_list.html', context)
 
 @login_required
+@permission_required('stock.change_employee', raise_exception=False)
 def administrate(req):
     context = {
         'title': 'Administrar'

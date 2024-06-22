@@ -2,7 +2,7 @@ from typing import Any
 from django import forms
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from datetime import datetime
 from .models import Product,Branch,Record,Employee,BranchStock
@@ -167,6 +167,10 @@ class RegisterUser(UserCreationForm):
         user.last_name = self.cleaned_data['last_name']
         if commit:
             user.save()
+
+            group, created = Group.objects.get_or_create(name='Workers')
+            user.groups.add(group)
+            
             Employee.objects.create(
                 user=user,
                 dni=self.cleaned_data['dni'],
