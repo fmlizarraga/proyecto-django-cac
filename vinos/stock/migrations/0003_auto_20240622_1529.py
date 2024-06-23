@@ -14,7 +14,7 @@ def add_users_to_grous(apps, schema_editor):
     user2 = User.objects.get(username='empleado2')
 
     bmanagers = Group.objects.get(name='System admins')
-    workers = Group.objects.get(name='System admins')
+    workers = Group.objects.get(name='Workers')
 
     bmanagers.user_set.add(user1)
     workers.user_set.add(user2)

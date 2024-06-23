@@ -13,6 +13,9 @@
         <p>Cosecha: {{ product.vintage }}</p>
         <p>Código: {{ product.id }}</p>
         <p>Descripción: {{ product.description }}</p>
+        <a class="btn" href="{% url 'edit_product' product.id %}">Editar</a>
+        <a class="btn btn_cancel" href="{% url 'product_list' %}">Eliminar</a>
+        <br>
         <a href="{% url 'product_list' %}">Volver a inventario</a>
     </div>
 {% endblock %}

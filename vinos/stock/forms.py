@@ -48,6 +48,13 @@ class AddProductForm(forms.ModelForm):
             self.save_m2m()
         return product
 
+class SelectProductForm(forms.Form):
+    product = forms.ModelChoiceField(
+        queryset=Product.objects.all(),
+        label="Producto",
+        widget=forms.Select(attrs={'class': 'select2'})
+    )
+
 class AddRecordForm(forms.ModelForm):
     product = forms.ModelChoiceField(
         queryset=Product.objects.all(), 

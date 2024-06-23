@@ -3,11 +3,12 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
 from django.shortcuts import render,redirect,get_object_or_404
+from django.urls import reverse
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
 from .models import Product,Branch,Record,BranchStock,Employee
-from .forms import AddProductForm,AddRecordForm,RegisterBranch,LoginUser,RegisterUser
+from .forms import AddProductForm,AddRecordForm,RegisterBranch,LoginUser,RegisterUser,SelectProductForm
 
 def anonymous_required(view_func):
     def _wrapped_view_func(request, *args, **kwargs):
@@ -63,6 +64,45 @@ def add_product(req):
     
     context['form'] = form
     return render(req, 'forms/add_product.html', context)
+
+@login_required
+def edit_product(req, pid):
+    context = {
+        'title': 'Editar Producto',
+    }
+
+    product = get_object_or_404(Product,pk=pid)
+
+    if req.method == 'POST':
+        form = AddProductForm(req.POST, instance=product)
+
+        if form.is_valid():
+            form.save()
+            return redirect('product_detail', pid=product.id)
+    else:
+        form = AddProductForm(instance=product)
+
+    context['form'] = form
+    return render(req, 'forms/add_product.html', context)
+
+@login_required
+def select_product(req):
+    context = {
+        'title': 'Seleccionar Producto'
+    }
+
+    if req.method == 'POST':
+        form = SelectProductForm(req.POST)
+
+        if form.is_valid():
+            product = form.cleaned_data['product']
+            product_id = product.pk
+            return redirect('edit_product', pid=product_id)
+    else:
+        form = SelectProductForm()
+    
+    context['form'] = form
+    return render(req, 'forms/select_product.html', context)
 
 @login_required
 def add_record(req, type):
@@ -209,23 +249,90 @@ def employee_list(req):
     return render(req, 'pages/employee_list.html', context)
 
 @login_required
-def branch_stock_list(req):
-    employee = Employee.objects.get(user=req.user)
-    branch = employee.branch
-    stock = BranchStock.objects.filter(branch=branch)
+def stock_list(req):
+    branches = Branch.objects.all()
+    branch_stock_map = []
+
+    for branch in branches:
+        stock_items = BranchStock.objects.filter(branch=branch)
+        branch_stock_map.append({
+            'branch': branch,
+            'stock_items': stock_items
+        })
+
     context = {
-        'title': 'Stock en la sucursal',
-        'stock': stock,
-        'branch': branch
+        'title': 'Inventario general',
+        'branch_stock_map': branch_stock_map
     }
 
     return render(req, 'pages/stock_list.html', context)
 
 @login_required
-@permission_required('stock.change_employee', raise_exception=False)
-def administrate(req):
+def branch_stock_list(req):
+    employee = Employee.objects.get(user=req.user)
+    branch = employee.branch
+    stock = BranchStock.objects.filter(branch=branch)
+    branch_stock_map = [{
+        'branch': branch,
+        'stock_items': stock
+    }]
     context = {
-        'title': 'Administrar'
+        'title': 'Stock en la sucursal',
+        'branch_stock_map': branch_stock_map
+    }
+
+    return render(req, 'pages/stock_list.html', context)
+
+@login_required
+@permission_required('stock.change_employee', raise_exception=True)
+def administrate(req):
+    print(req.user.groups)
+    admin_links = [
+        {
+            'title': 'Productos',
+            'links': [
+                {'url': reverse('add_product'), 'label': 'Agregar Producto'},
+                {'url': reverse('select_product'), 'label': 'Editar Producto'},
+                {'url': reverse('product_list'), 'label': 'Ver Productos'}
+            ]
+        },
+        {
+            'title': 'Empleados',
+            'links': [
+                {'url': reverse('employee_list'), 'label': 'Agregar Empleado'},
+                {'url': reverse('employee_list'), 'label': 'Modificar Empleado'},
+                {'url': reverse('employee_list'), 'label': 'Ver Empleados'}
+            ]
+        },
+        {
+            'title': 'Sucursales',
+            'links': [
+                {'url': reverse('add_branch'), 'label': 'Agregar Sucursal'},
+                {'url': reverse('add_branch'), 'label': 'Editar Sucursal'},
+                {'url': reverse('branch_list'), 'label': 'Ver Sucursales'}
+            ]
+        },
+        {
+            'title': 'Registros',
+            'links': [
+                {'url': reverse('record_list'), 'label': 'Agregar Registro'},
+                {'url': reverse('record_list'), 'label': 'Editar Registro'},
+                {'url': reverse('record_list'), 'label': 'Ver Registros'}
+            ]
+        },
+        {
+            'title': 'Inventario',
+            'links': [
+                {'url': reverse('record_list'), 'label': 'Agregar Item'},
+                {'url': reverse('record_list'), 'label': 'Editar Item'},
+                {'url': reverse('stock_list'), 'label': 'Ver Inventarios'}
+            ]
+        },
+    ]
+
+    context = {
+        'title': 'Administrar',
+        'admin_links': admin_links
     }
 
     return render(req, 'pages/admin_page.html', context)
