@@ -8,7 +8,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
 from .models import Product,Branch,Record,BranchStock,Employee
-from .forms import AddProductForm,AddRecordForm,RegisterBranch,LoginUser,RegisterUser,SelectProductForm
+from .forms import AddProductForm,AddRecordForm,RegisterBranch,LoginUser,RegisterUser,SelectProductForm,EditEmployeeForm
 
 def anonymous_required(view_func):
     def _wrapped_view_func(request, *args, **kwargs):
@@ -313,8 +313,6 @@ def administrate(req):
         {
             'title': 'Empleados',
             'links': [
-                {'url': reverse('employee_list'), 'label': 'Agregar Empleado'},
-                {'url': reverse('employee_list'), 'label': 'Modificar Empleado'},
                 {'url': reverse('employee_list'), 'label': 'Ver Empleados'}
             ]
         },
@@ -350,6 +348,44 @@ def administrate(req):
     }
 
     return render(req, 'pages/admin_page.html', context)
+
+@login_required
+@permission_required('stock.view_employee', raise_exception=True)
+def employee_detail(req, employee_id):
+    employee = get_object_or_404(Employee, id=employee_id)
+    context = {
+        'title': 'Datos de empleado',
+        'employee': employee
+    }
+
+    return render(req, 'pages/employee_detail.html', context)
+
+@login_required
+@permission_required('stock.change_employee', raise_exception=True)
+def edit_employee(req, employee_id):
+    employee = get_object_or_404(Employee, id=employee_id)
+    context = {
+        'title': 'Actualizar empleado'
+    }
+    
+    if req.method == 'POST':
+        form = EditEmployeeForm(req.POST, instance=employee)
+        if form.is_valid():
+            form.save()
+            return redirect('employee_detail', employee_id=employee.id)
+    else:
+        form = EditEmployeeForm(instance=employee)
+    
+    context['form'] = form
+    return render(req, 'forms/register_employee.html', context)
+
+@login_required
+@permission_required('stock.change_employee', raise_exception=True)
+def toggle_employee(req, employee_id):
+    employee = get_object_or_404(Employee, id=employee_id)
+    employee.is_active = not employee.is_active
+    employee.save()
+    return redirect('employee_detail', employee_id=employee.id)
 
 @anonymous_required
 def register_user(req):

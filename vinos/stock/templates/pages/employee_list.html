@@ -12,7 +12,7 @@
         <div class="branch-item">
             <a href="{% url 'admin_page' %}">Administrar</a>
         </div>
-        {% for e in employees %}
+        {% for e in employees|dictsort:"id" %}
             <div class="branch-item">
                 <h2>{{ e.full_name }}</h2>
                 <p><strong>Nombre de usuario:</strong> {{ e.user.username }}</p>
@@ -20,6 +20,7 @@
                 <p><strong>DNI:</strong> {{ e.dni }}</p>
                 <p><strong>CUIL:</strong> {{ e.cuil }}</p>
                 <p><strong>Sucursal:</strong> {{ e.branch }}</p>
+                <a href="{% url 'employee_detail' e.id  %}">Detalle</a>
             </div>
         {% empty %}
             <div class="branch-item">
