@@ -1,6 +1,6 @@
 from typing import Any
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 from django.views.generic import ListView
 from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse
@@ -24,11 +24,13 @@ def index(req):
 
     return render(req, 'pages/index.html', context)
 
-class ProductList(ListView):
+class ProductList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Product
     context_object_name = 'products'
     ordering = ['-vintage','name']
     template_name = 'pages/product_list.html'
+    permission_required = 'stock.view_product'
+    raise_exception = True
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -36,6 +38,8 @@ class ProductList(ListView):
 
         return context
 
+@login_required
+@permission_required('stock.view_product',raise_exception=True)
 def product_detail(req, pid):
     product = get_object_or_404(Product,pk=pid)
 
@@ -47,6 +51,7 @@ def product_detail(req, pid):
     return render(req, 'pages/product_detail.html', context)
 
 @login_required
+@permission_required('stock.add_product',raise_exception=True)
 def add_product(req):
     context = {
         'title': 'Nuevo Producto',
@@ -66,6 +71,7 @@ def add_product(req):
     return render(req, 'forms/add_product.html', context)
 
 @login_required
+@permission_required('stock.change_product',raise_exception=True)
 def edit_product(req, pid):
     context = {
         'title': 'Editar Producto',
@@ -86,6 +92,7 @@ def edit_product(req, pid):
     return render(req, 'forms/add_product.html', context)
 
 @login_required
+@permission_required('stock.view_product',raise_exception=True)
 def select_product(req):
     context = {
         'title': 'Seleccionar Producto'
@@ -105,6 +112,7 @@ def select_product(req):
     return render(req, 'forms/select_product.html', context)
 
 @login_required
+@permission_required('stock.add_record',raise_exception=True)
 def add_record(req, type):
     TYPE_CHOICES = {
         'entry': Record.ENTRY,
@@ -165,6 +173,7 @@ def add_record(req, type):
     return render(req, 'forms/add_record.html', context)
 
 @login_required
+@permission_required('stock.view_product',raise_exception=False)
 def product_autocomplete(request):
     if 'q' in request.GET:
         q = request.GET['q']
@@ -173,10 +182,12 @@ def product_autocomplete(request):
         return JsonResponse({'results': results})
     return JsonResponse({'results': []})
 
-class BaseRecordsListView(LoginRequiredMixin, ListView):
+class BaseRecordsListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Record
     context_object_name = 'records'
     template_name = 'pages/record_list.html'
+    permission_required = 'stock.view_record'
+    raise_exception = True
     
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -209,6 +220,7 @@ class RecordsByTime(BaseRecordsListView):
         return context
 
 @login_required
+@permission_required('stock.add_branch',raise_exception=True)
 def register_branch(req):
     context = {
         'title': 'Registrar Sucursal'
@@ -229,6 +241,7 @@ def register_branch(req):
     return render(req, 'forms/register_branch.html', context)
 
 @login_required
+@permission_required('stock.view_branch',raise_exception=True)
 def branch_list(req):
     branches = Branch.objects.all()
     context = {
@@ -239,6 +252,7 @@ def branch_list(req):
     return render(req, 'pages/branch_list.html', context)
 
 @login_required
+@permission_required('stock.view_employee',raise_exception=True)
 def employee_list(req):
     employees = Employee.objects.all()
     context = {

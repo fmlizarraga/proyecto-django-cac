@@ -186,6 +186,35 @@ class RegisterUser(UserCreationForm):
             )
         return user
 
+class EditEmployeeForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=100, label="Nombre(s)")
+    last_name = forms.CharField(max_length=100, label="Apellido(s)")
+    email = forms.EmailField(required=True, help_text="Requerido. Ingrese una dirección de email válida.")
+    dni = forms.IntegerField(label="DNI")
+    cuil = forms.CharField(max_length=13, label="CUIL", help_text="Formato: NN-NNNNNNNN-N")
+    branch = forms.ModelChoiceField(queryset=Branch.objects.all(), label="Sucursal")
+
+    class Meta:
+        model = Employee
+        fields = ['first_name', 'last_name', 'email', 'dni', 'cuil', 'branch']
+
+    def __init__(self, *args, **kwargs):
+        super(EditEmployeeForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].initial = self.instance.user.first_name
+        self.fields['last_name'].initial = self.instance.user.last_name
+        self.fields['email'].initial = self.instance.user.email
+
+    def save(self, commit=True):
+        employee = super().save(commit=False)
+        user = employee.user
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.save()
+            employee.save()
+        return employee
+
 class LoginUser(AuthenticationForm):
     username = forms.CharField(label="Nombre de usuario", max_length=100)
     password = forms.CharField(label="Contraseña", widget=forms.PasswordInput)
