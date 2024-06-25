@@ -25,5 +25,6 @@ urlpatterns = [
     path('accounts/register/', views.register_user, name='register'),
     path('accounts/login/', views.login_user, name='login'),
     path('accounts/logout/', views.logout_user, name='logout'),
+    path('accounts/inactive/', views.inactive_user, name='inactive_user'),
     path('', lambda request: redirect('stock/', permanent=True)),
 ]

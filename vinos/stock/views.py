@@ -9,13 +9,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
 from .models import Product,Branch,Record,BranchStock,Employee
 from .forms import AddProductForm,AddRecordForm,RegisterBranch,LoginUser,RegisterUser,SelectProductForm,EditEmployeeForm
-
-def anonymous_required(view_func):
-    def _wrapped_view_func(request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return redirect('index')
-        return view_func(request, *args, **kwargs)
-    return _wrapped_view_func
+from .decorators import active_employee_required,anonymous_required,ActiveEmployeeRequiredMixin
 
 def index(req):
     context = {
@@ -39,6 +33,7 @@ class ProductList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return context
 
 @login_required
+@active_employee_required
 @permission_required('stock.view_product',raise_exception=True)
 def product_detail(req, pid):
     product = get_object_or_404(Product,pk=pid)
@@ -50,7 +45,7 @@ def product_detail(req, pid):
 
     return render(req, 'pages/product_detail.html', context)
 
-@login_required
+@active_employee_required
 @permission_required('stock.add_product',raise_exception=True)
 def add_product(req):
     context = {
@@ -70,7 +65,7 @@ def add_product(req):
     context['form'] = form
     return render(req, 'forms/add_product.html', context)
 
-@login_required
+@active_employee_required
 @permission_required('stock.change_product',raise_exception=True)
 def edit_product(req, pid):
     context = {
@@ -91,7 +86,7 @@ def edit_product(req, pid):
     context['form'] = form
     return render(req, 'forms/add_product.html', context)
 
-@login_required
+@active_employee_required
 @permission_required('stock.view_product',raise_exception=True)
 def select_product(req):
     context = {
@@ -111,7 +106,7 @@ def select_product(req):
     context['form'] = form
     return render(req, 'forms/select_product.html', context)
 
-@login_required
+@active_employee_required
 @permission_required('stock.add_record',raise_exception=True)
 def add_record(req, type):
     TYPE_CHOICES = {
@@ -172,7 +167,7 @@ def add_record(req, type):
     context['form'] = form
     return render(req, 'forms/add_record.html', context)
 
-@login_required
+@active_employee_required
 @permission_required('stock.view_product',raise_exception=False)
 def product_autocomplete(request):
     if 'q' in request.GET:
@@ -182,7 +177,7 @@ def product_autocomplete(request):
         return JsonResponse({'results': results})
     return JsonResponse({'results': []})
 
-class BaseRecordsListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class BaseRecordsListView(LoginRequiredMixin, ActiveEmployeeRequiredMixin, PermissionRequiredMixin, ListView):
     model = Record
     context_object_name = 'records'
     template_name = 'pages/record_list.html'
@@ -219,7 +214,7 @@ class RecordsByTime(BaseRecordsListView):
         context['order'] = 'time'
         return context
 
-@login_required
+@active_employee_required
 @permission_required('stock.add_branch',raise_exception=True)
 def register_branch(req):
     context = {
@@ -240,7 +235,7 @@ def register_branch(req):
 
     return render(req, 'forms/register_branch.html', context)
 
-@login_required
+@active_employee_required
 @permission_required('stock.view_branch',raise_exception=True)
 def branch_list(req):
     branches = Branch.objects.all()
@@ -251,7 +246,7 @@ def branch_list(req):
 
     return render(req, 'pages/branch_list.html', context)
 
-@login_required
+@active_employee_required
 @permission_required('stock.view_employee',raise_exception=True)
 def employee_list(req):
     employees = Employee.objects.all()
@@ -262,7 +257,7 @@ def employee_list(req):
 
     return render(req, 'pages/employee_list.html', context)
 
-@login_required
+@active_employee_required
 def stock_list(req):
     branches = Branch.objects.all()
     branch_stock_map = []
@@ -281,7 +276,7 @@ def stock_list(req):
 
     return render(req, 'pages/stock_list.html', context)
 
-@login_required
+@active_employee_required
 def branch_stock_list(req):
     employee = Employee.objects.get(user=req.user)
     branch = employee.branch
@@ -297,10 +292,9 @@ def branch_stock_list(req):
 
     return render(req, 'pages/stock_list.html', context)
 
-@login_required
+@active_employee_required
 @permission_required('stock.change_employee', raise_exception=True)
 def administrate(req):
-    print(req.user.groups)
     admin_links = [
         {
             'title': 'Productos',
@@ -423,3 +417,10 @@ def logout_user(req):
     logout(req)
     messages.success(req, 'Has sido desconectado.')
     return redirect('login')
+
+def inactive_user(req):
+    context = {
+        'title': 'Usuario inactivo',
+        'message': 'Tu cuenta está inactiva. Contacta con el administrador.'
+    }
+    return render(req, 'pages/inactive_user.html', context)
