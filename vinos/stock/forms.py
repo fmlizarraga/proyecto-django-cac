@@ -136,6 +136,16 @@ class RegisterBranch(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['telephone'].required = False
 
+        if self.instance and self.instance.pk:
+            telephone = self.instance.telephone
+            if telephone:
+                # Suponiendo que el formato del telefono es "+54<area_code><phone_number>"
+                area_code = telephone[3:5]  # Extraer la parte del codigo de area
+                phone_number = telephone[5:]  # Extraer la parte del numero de telefono
+
+                self.fields['area_code'].initial = area_code
+                self.fields['phone_number'].initial = phone_number
+
     def clean(self):
         cleaned_data = super().clean()
         area_code = cleaned_data.get("area_code")
@@ -152,6 +162,11 @@ class RegisterBranch(forms.ModelForm):
         cleaned_data['telephone'] = full_phone_number
 
         return cleaned_data
+
+class SelectBranchForm(forms.Form):
+    branch = forms.ModelChoiceField(
+        queryset=Branch.objects.all(),
+    )
 
 class RegisterUser(UserCreationForm):
     username = forms.CharField(max_length=100, label="Nombre de usuario", required=True, help_text="Requerido. 100 caracteres o menos. Solo letras, numeros y @/./+/-/_.")

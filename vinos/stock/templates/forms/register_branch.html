@@ -13,7 +13,7 @@
             {% csrf_token %}
             {{ form.as_p }}
             <br>
-            <button type="submit">Guardar</button>
+            <button type="submit">{{ submit_btn }}</button>
         </form>
         <a href="{% url 'branch_list' %}">Volver a la lista</a>
     </div>

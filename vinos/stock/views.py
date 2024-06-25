@@ -8,7 +8,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
 from .models import Product,Branch,Record,BranchStock,Employee
-from .forms import AddProductForm,AddRecordForm,RegisterBranch,LoginUser,RegisterUser,SelectProductForm,EditEmployeeForm
+from .forms import AddProductForm,AddRecordForm,RegisterBranch,LoginUser,RegisterUser,SelectProductForm,EditEmployeeForm,SelectBranchForm
 from .decorators import active_employee_required,anonymous_required,ActiveEmployeeRequiredMixin
 
 def index(req):
@@ -218,7 +218,8 @@ class RecordsByTime(BaseRecordsListView):
 @permission_required('stock.add_branch',raise_exception=True)
 def register_branch(req):
     context = {
-        'title': 'Registrar Sucursal'
+        'title': 'Registrar Sucursal',
+        'submit_btn': 'Registrar'
     }
 
     if req.method == 'POST':
@@ -234,6 +235,53 @@ def register_branch(req):
     context['form'] = form
 
     return render(req, 'forms/register_branch.html', context)
+
+@active_employee_required
+@permission_required('stock.change_branch',raise_exception=True)
+def edit_branch(req,branch_name):
+    branch = get_object_or_404(Branch,name=branch_name)
+
+    context = {
+        'title': 'Actualizar Sucursal',
+        'submit_btn': 'Actualizar'
+    }
+
+    if req.method == 'POST':
+        form = RegisterBranch(req.POST,instance=branch)
+
+        if form.is_valid():
+            form.save()
+            messages.success(req, '¡La sucursal se actualizó con exito!')
+            return redirect('branch_list')
+    else:
+        form = RegisterBranch(instance=branch)
+    
+    context['form'] = form
+
+    return render(req, 'forms/register_branch.html', context)
+
+@active_employee_required
+@permission_required('stock.view_branch',raise_exception=True)
+def select_branch(req):
+    context = {
+        'title': 'Seleccionar Sucursal',
+        'submit_btn': 'Editar'
+    }
+
+    if req.method == 'POST':
+        form = SelectBranchForm(req.POST)
+
+        if form.is_valid():
+            branch = form.cleaned_data['branch']
+            branch_name = branch.name
+            return redirect('edit_branch', branch_name=branch_name)
+    else:
+        form = SelectBranchForm()
+    
+    context['form'] = form
+
+    return render(req, 'forms/register_branch.html', context)
+
 
 @active_employee_required
 @permission_required('stock.view_branch',raise_exception=True)
@@ -314,7 +362,7 @@ def administrate(req):
             'title': 'Sucursales',
             'links': [
                 {'url': reverse('add_branch'), 'label': 'Agregar Sucursal'},
-                {'url': reverse('add_branch'), 'label': 'Editar Sucursal'},
+                {'url': reverse('select_branch'), 'label': 'Editar Sucursal'},
                 {'url': reverse('branch_list'), 'label': 'Ver Sucursales'}
             ]
         },
