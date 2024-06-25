@@ -12,6 +12,7 @@ urlpatterns = [
     path('record/add/<str:type>/', views.add_record, name='add_record'),
     path('record/list/', views.RecordsByTime.as_view(), name='record_list'),
     path('record/list/branch/', views.RecordsByBranch.as_view(), name='record_list_branch'),
+    path('record/list/filter/', views.RecordListFilterView.as_view(), name='record_list_filter'),
     path('branch/select/', views.select_branch, name='select_branch'),
     path('branch/edit/<str:branch_name>/', views.edit_branch, name='edit_branch'),
     path('branch/add/', views.register_branch, name='add_branch'),

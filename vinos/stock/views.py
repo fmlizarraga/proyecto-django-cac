@@ -7,9 +7,11 @@ from django.urls import reverse
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
+from django_filters.views import FilterView
 from .models import Product,Branch,Record,BranchStock,Employee
 from .forms import AddProductForm,AddRecordForm,RegisterBranch,LoginUser,RegisterUser,SelectProductForm,EditEmployeeForm,SelectBranchForm
 from .decorators import active_employee_required,anonymous_required,ActiveEmployeeRequiredMixin
+from .filters import RecordFilter
 
 def index(req):
     context = {
@@ -214,6 +216,18 @@ class RecordsByTime(BaseRecordsListView):
         context['order'] = 'time'
         return context
 
+class RecordListFilterView(FilterView, ListView):
+    model = Record
+    template_name = 'pages/record_list_filter.html'
+    context_object_name = 'records'
+    filterset_class = RecordFilter
+    paginate_by = 10
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Lista de Registros'
+        return context
+
 @active_employee_required
 @permission_required('stock.add_branch',raise_exception=True)
 def register_branch(req):
@@ -370,7 +384,7 @@ def administrate(req):
             'title': 'Registros',
             'links': [
                 {'url': reverse('record_list'), 'label': 'Agregar Registro'},
-                {'url': reverse('record_list'), 'label': 'Editar Registro'},
+                {'url': reverse('record_list_filter'), 'label': 'Editar Registro'},
                 {'url': reverse('record_list'), 'label': 'Ver Registros'}
             ]
         },
