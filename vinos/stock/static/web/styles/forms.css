@@ -27,6 +27,7 @@
 .form-container input[type="number"],
 .form-container input[type="password"],
 .form-container input[type="email"],
+.form-container input[type="date"],
 .form-container select,
 .form-container textarea {
     width: calc(100% - 22px);
@@ -37,7 +38,8 @@
     font-size: 16px;
 }
 
-.form-container button {
+.form-container button,
+.btn-accept {
     display: inline-block;
     padding: 10px 20px;
     font-size: 16px;
@@ -49,7 +51,8 @@
     transition: background-color 0.3s ease;
 }
 
-.form-container button:hover {
+.form-container button:hover
+.btn-accept:hover {
     background-color: #6b00b3;
 }
 

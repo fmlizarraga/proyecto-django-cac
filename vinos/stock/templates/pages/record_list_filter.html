@@ -1,5 +1,6 @@
 {% extends "pages/base.html" %}
 {% load static %}
+{% load custom_tags %}
 
 {% block title %}{{ title }}{% endblock %}
 
@@ -10,60 +11,66 @@
 
 {% block main %}
     <h1>{{ title }}</h1>
-    <div class="form-container" >
+    <div class="form-container">
         <form method="get">
             {{ filter.form.as_p }}
             <button type="submit">Buscar</button>
             <a href="{% url 'record_list_filter' %}">Limpiar filtros</a>
         </form>
     </div>
-  
+
     <table>
         <thead>
-        <tr>
-            <th>Producto</th>
-            <th>Sucursal</th>
-            <th>Cantidad</th>
-            <th>Tipo</th>
-            <th>Empleado</th>
-            <th>Fecha</th>
-        </tr>
+            <tr>
+                <th>Producto</th>
+                <th>Sucursal</th>
+                <th>Cantidad</th>
+                <th>Tipo</th>
+                <th>Empleado</th>
+                <th>Fecha</th>
+                <th>Editar</th>
+            </tr>
         </thead>
         <tbody>
-        {% for record in records %}
-            <tr>
-            <td>{{ record.product.name }}</td>
-            <td>{{ record.branch.name }}</td>
-            <td>{{ record.quantity }}</td>
-            <td>{{ record.get_typeof_display }}</td>
-            <td>{{ record.employee.full_name }}</td>
-            <td>{{ record.date }}</td>
-            </tr>
-        {% empty %}
-            <tr>
-            <td colspan="6">No se encontraron registros.</td>
-            </tr>
-        {% endfor %}
+            {% for record in records %}
+                <tr>
+                    <td>{{ record.product.name }}</td>
+                    <td>{{ record.branch.name }}</td>
+                    <td>{{ record.quantity }}</td>
+                    <td>{{ record.get_typeof_display }}</td>
+                    <td>{{ record.employee.full_name }}</td>
+                    <td>{{ record.date }}</td>
+                    <td><a href="{% url 'edit_record' record.id %}">Editar</a></td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="7">No se encontraron registros.</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
-    {% if records.paginator.num_pages > 1 %}
-        <div class="pagination">
-            <span class="step-links">
-                {% if records.has_previous %}
-                <a href="?page=1">&laquo; primera</a>
-                <a href="?page={{ records.previous_page_number }}">anterior</a>
-                {% endif %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if records.has_previous %}
+                <a href="?{% param_replace page=1 %}">&laquo; primera</a>
+                <a href="?{% param_replace page=records.previous_page_number %}">anterior</a>
+            {% else %}
+                <span class="disabled">&laquo; primera</span>
+                <span class="disabled">anterior</span>
+            {% endif %}
 
-                <span class="current">
-                    Página {{ records.number }} de {{ records.paginator.num_pages }}.
-                </span>
-
-                {% if records.has_next %}
-                <a href="?page={{ records.next_page_number }}">siguiente</a>
-                <a href="?page={{ records.paginator.num_pages }}">última &raquo;</a>
-                {% endif %}
+            <span class="current">
+                Página {{ records.number }} de {{ records.paginator.num_pages }}.
             </span>
-        </div>
-    {% endif %}
+
+            {% if records.has_next %}
+                <a href="?{% param_replace page=records.next_page_number %}">siguiente</a>
+                <a href="?{% param_replace page=records.paginator.num_pages %}">última &raquo;</a>
+            {% else %}
+                <span class="disabled">siguiente</span>
+                <span class="disabled">última &raquo;</span>
+            {% endif %}
+        </span>
+    </div>
 {% endblock %}

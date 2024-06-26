@@ -1,3 +1,11 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: calc(100% - 150px - 75px);
+}
+
 h1 {
     font-size: 24px;
     margin-bottom: 20px;
@@ -27,29 +35,42 @@ table th {
 }
 
 .pagination {
-    margin-top: 20px;
-    text-align: center;
+    position: fixed;
+    bottom: 83px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    background-color: #e9e9ed;
+    border: 1px solid #ccc;
 }
 
-.pagination a, .pagination span {
+.step-links a,
+.step-links span {
     margin: 0 5px;
     padding: 5px 10px;
-    border: 1px solid #ddd;
     text-decoration: none;
-}
-
-.pagination a {
     color: #7700ff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
-.pagination .current {
-    background-color: #7700ff;
-    color: white;
-    border-color: #7700ff;
+.step-links .current {
+    margin: 0 5px;
+    padding: 5px 10px;
+}
+
+.step-links .disabled {
+    pointer-events: none;
+    color: #6c757d;
+    border: 1px solid #ddd;
+    background-color: #e9ecef;
 }
 
 .form-container {
-    max-width: 90%;
+    max-width: 80%;
     margin: 0 auto;
     padding: 20px;
     border: none;
@@ -63,12 +84,34 @@ table th {
     margin-top: 0;
 }
 
+.form-container form p:has(.typeof-select) {
+    width: 20%;
+    display: inline-block;
+}
+
+.form-container form p:has(.date-range) {
+    width: calc(80% - 2em);
+    display: inline-block;
+}
+
 #id_date_0,
 #id_date_1 {
-    width: 15%;
+    width: 30%;
     margin-right: 0.7em;
 }
 
 #id_date_1 {
     margin-left: 1em;
+}
+
+table td a {
+    display: inline-block;
+    /* margin-top: 20px; */
+    text-decoration: none;
+    color: #7700ff;
+    font-size: 16px;
+}
+
+table td a:hover {
+    text-decoration: underline;
 }

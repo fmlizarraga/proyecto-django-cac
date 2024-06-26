@@ -28,7 +28,7 @@
                 <li><a href="{% url 'index' %}">Inicio</a></li>
                 {% if user.is_authenticated %}
                 <li><a href="{% url 'product_list' %}">Catalogo</a></li>
-                <li><a href="{% url 'record_list' %}">Registros</a></li>
+                <li><a href="{% url 'record_list_branch' %}">Registros</a></li>
                 <li><a href="{% url 'stock_list_curr' %}">Inventario</a></li>
                 {% if user|has_group:"System admins" %}
                     <li><a href="{% url 'admin_page' %}">Herr. Admin.</a></li>
