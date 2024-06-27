@@ -2,6 +2,7 @@ from typing import Any
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.contrib import messages
+from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 from django.views.generic import ListView, UpdateView
 from django.shortcuts import render,redirect,get_object_or_404
@@ -429,53 +430,69 @@ def branch_stock_list(req):
     return render(req, 'pages/stock_list.html', context)
 
 @active_employee_required
-@permission_required('stock.change_employee', raise_exception=True)
-def administrate(req):
-    admin_links = [
-        {
-            'title': 'Productos',
-            'links': [
-                {'url': reverse('add_product'), 'label': 'Agregar Producto'},
-                {'url': reverse('select_product'), 'label': 'Editar Producto'},
-                {'url': reverse('product_list'), 'label': 'Ver Productos'}
+def administrate(request):
+    links_by_entity = {
+        'Empleados': {
+            'view_employee': [
+                {'url': reverse('employee_list'), 'label': 'Administrar Empleados'}
             ]
         },
-        {
-            'title': 'Empleados',
-            'links': [
-                {'url': reverse('employee_list'), 'label': 'Ver Empleados'}
-            ]
-        },
-        {
-            'title': 'Sucursales',
-            'links': [
-                {'url': reverse('add_branch'), 'label': 'Agregar Sucursal'},
-                {'url': reverse('select_branch', args=['edit_branch']), 'label': 'Editar Sucursal'},
-                {'url': reverse('branch_list'), 'label': 'Ver Sucursales'}
-            ]
-        },
-        {
-            'title': 'Registros',
-            'links': [
+        'Registros': {
+            'view_record': [
                 {'url': reverse('record_list'), 'label': 'Gestión Básica de Registros'},
                 {'url': reverse('record_list_filter'), 'label': 'Gestión Avanzada de Registros'}
             ]
         },
-        {
-            'title': 'Inventario',
-            'links': [
-                {'url': reverse('select_branch', args=['edit_branch_stock']), 'label': 'Editar Inventario'},
+        'Productos': {
+            'add_product': [
+                {'url': reverse('add_product'), 'label': 'Agregar Producto'}
+            ],
+            'change_product': [
+                {'url': reverse('select_product'), 'label': 'Editar Producto'}
+            ],
+            'view_product': [
+                {'url': reverse('product_list'), 'label': 'Ver Productos'}
+            ]
+        },
+        'Inventarios': {
+            'change_branchstock': [
+                {'url': reverse('select_branch', args=['edit_branch_stock']), 'label': 'Editar Inventario'}
+            ],
+            'view_branchstock': [
                 {'url': reverse('stock_list'), 'label': 'Ver Inventarios'}
             ]
         },
-    ]
+        'Sucursales': {
+            'add_branch': [
+                {'url': reverse('add_branch'), 'label': 'Agregar Sucursal'}
+            ],
+            'change_branch': [
+                {'url': reverse('select_branch', args=['edit_branch']), 'label': 'Editar Sucursal'}
+            ],
+            'view_branch': [
+                {'url': reverse('branch_list'), 'label': 'Ver Sucursales'}
+            ]
+        }
+    }
+
+    admin_links = []
+    for entity, perms in links_by_entity.items():
+        entity_links = []
+        for perm, links in perms.items():
+            if request.user.has_perm(f'stock.{perm}'):
+                entity_links.extend(links)
+        if entity_links:
+            admin_links.append({
+                'title': entity,
+                'links': entity_links
+            })
 
     context = {
         'title': 'Administrar',
         'admin_links': admin_links
     }
 
-    return render(req, 'pages/admin_page.html', context)
+    return render(request, 'pages/admin_page.html', context)
 
 @active_employee_required
 @permission_required('stock.view_employee', raise_exception=True)

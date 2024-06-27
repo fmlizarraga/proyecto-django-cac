@@ -8,15 +8,17 @@
 {% endblock %}
 
 {% block main %}
-    <div class="container">
+    <div class="admin-container">
         <h1 class="title">Herramientas Administrativas</h1>
-        <div class="admin-list">
-            {% for item in admin_links %}
+        <div class="admin-links">
+            {% for category in admin_links %}
                 <div class="admin-item">
-                    <h2>{{ item.title }}</h2>
-                    {% for link in item.links %}
-                        <a href="{{ link.url }}" class="button">{{ link.label }}</a>
+                    <h2>{{ category.title }}</h2>
+                    <ul>
+                    {% for link in category.links %}
+                        <li><a href="{{ link.url }}" >{{ link.label }}</a></li>
                     {% endfor %}
+                    </ul>
                 </div>
             {% endfor %}
         </div>

@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
-from stock.models import Branch, Employee, Product, Record
+from stock.models import Branch, Employee, Product, Record, BranchStock
 
 class Command(BaseCommand):
     help = 'Crear grupos y asignar permisos'
@@ -36,6 +36,7 @@ class Command(BaseCommand):
             'product': ContentType.objects.get_for_model(Product),
             'record': ContentType.objects.get_for_model(Record),
             'employee': ContentType.objects.get_for_model(Employee),
+            'branchstock': ContentType.objects.get_for_model(BranchStock)
         }
 
         permissions = {
@@ -58,6 +59,11 @@ class Command(BaseCommand):
             'add_employee': Permission.objects.get(codename='add_employee', content_type=content_types['employee']),
             'change_employee': Permission.objects.get(codename='change_employee', content_type=content_types['employee']),
             'delete_employee': Permission.objects.get(codename='delete_employee', content_type=content_types['employee']),
+
+            'view_branchstock': Permission.objects.get(codename='view_branchstock', content_type=content_types['branchstock']),
+            'add_branchstock': Permission.objects.get(codename='add_branchstock', content_type=content_types['branchstock']),
+            'change_branchstock': Permission.objects.get(codename='change_branchstock', content_type=content_types['branchstock']),
+            'delete_branchstock': Permission.objects.get(codename='delete_branchstock', content_type=content_types['branchstock']),
         }
 
         # Permisos de Admins
@@ -76,6 +82,9 @@ class Command(BaseCommand):
             permissions['add_employee'],
             permissions['change_employee'],
             permissions['delete_employee'],
+            permissions['add_branchstock'],
+            permissions['change_branchstock'],
+            permissions['view_branchstock'],
         ])
         self.stdout.write(self.style.SUCCESS(f'Permisos agregados a grupo "Managers".'))
 
@@ -91,6 +100,9 @@ class Command(BaseCommand):
             permissions['add_employee'],
             permissions['change_employee'],
             permissions['delete_employee'],
+            permissions['add_branchstock'],
+            permissions['change_branchstock'],
+            permissions['view_branchstock'],
         ])
         self.stdout.write(self.style.SUCCESS(f'Permisos agregados a grupo "Branch managers".'))
 
@@ -102,5 +114,6 @@ class Command(BaseCommand):
             permissions['add_record'],
             permissions['change_record'],
             permissions['view_employee'],
+            permissions['view_branchstock'],
         ])
         self.stdout.write(self.style.SUCCESS(f'Permisos agregados a grupo "Workers".'))
