@@ -96,11 +96,13 @@
                     },
                     language: "es",
                     minimumInputLength: 1,
+                    width: '100%',
                 });
             }
 
             initializeSelect2('.product-select', '{% url "product-autocomplete" %}');
             initializeSelect2('.employee-select', '{% url "employee-autocomplete" %}');
+            $('.select2-container').css('width', 'calc(100% - 22px)');
         });
     </script>
 {% endblock %}

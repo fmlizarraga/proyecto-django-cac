@@ -40,8 +40,9 @@
     font-family: sans-serif, 'Segoe UI', Tahoma, Verdana, Arial;
 }
 
-.select2-container {
+.form-container span.select2-container {
     margin-bottom: 10px;
+    width: calc(100% - 22px);
 }
 
 .form-container .select2-selection {

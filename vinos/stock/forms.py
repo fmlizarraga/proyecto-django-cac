@@ -52,14 +52,14 @@ class SelectProductForm(forms.Form):
     product = forms.ModelChoiceField(
         queryset=Product.objects.all(),
         label="Producto",
-        widget=forms.Select(attrs={'class': 'select2'})
+        widget=forms.Select(attrs={'class': 'product-select'})
     )
 
 class AddRecordForm(forms.ModelForm):
     product = forms.ModelChoiceField(
         queryset=Product.objects.all(),
         label="Producto",
-        widget=forms.Select(attrs={'class': 'select2'})
+        widget=forms.Select(attrs={'class': 'product-select'})
     )
 
     MIN_QUANTITY = 1
@@ -256,3 +256,37 @@ class EditEmployeeForm(forms.ModelForm):
 class LoginUser(AuthenticationForm):
     username = forms.CharField(label="Nombre de usuario", max_length=100)
     password = forms.CharField(label="Contraseña", widget=forms.PasswordInput)
+
+class BranchStockForm(forms.ModelForm):
+    product = forms.ChoiceField(
+        label="Producto",
+        widget=forms.Select(attrs={'class': 'product-select'})
+    )
+    stock = forms.IntegerField(
+        label="Stock",
+        min_value=0,
+        widget=forms.NumberInput(attrs={'id': 'id_stock'})
+    )
+
+    class Meta:
+        model = BranchStock
+        fields = ['product', 'stock']
+
+    def __init__(self, *args, **kwargs):
+        branch = kwargs.pop('branch', None)
+        super().__init__(*args, **kwargs)
+        self.branch = branch
+
+    def save(self, commit=True):
+        product = self.cleaned_data.get('product')
+        stock = self.cleaned_data.get('stock')
+        instance, created = BranchStock.objects.get_or_create(
+            product=product, 
+            branch=self.branch,
+            defaults={'stock': stock}
+        )
+        if not created:
+            instance.stock = stock
+            if commit:
+                instance.save()
+        return instance

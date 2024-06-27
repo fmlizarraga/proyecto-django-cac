@@ -10,9 +10,9 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
 from .models import Product,Branch,Record,BranchStock,Employee
-from .forms import AddProductForm,AddRecordForm,RegisterBranch,LoginUser,RegisterUser,SelectProductForm,EditEmployeeForm,SelectBranchForm
 from .decorators import active_employee_required,anonymous_required,ActiveEmployeeRequiredMixin
 from .filters import RecordFilter
+from .forms import AddProductForm,AddRecordForm,RegisterBranch,LoginUser,RegisterUser,SelectProductForm,EditEmployeeForm,SelectBranchForm,BranchStockForm
 
 def index(req):
     context = {
@@ -130,6 +130,17 @@ def employee_autocomplete(request):
         results = [{'id': employee.pk, 'text': employee.full_name()} for employee in employees]
         return JsonResponse({'results': results})
     return JsonResponse({'results': []})
+
+@active_employee_required
+def get_product_stock(req, branch_name, product_id):
+    branch = get_object_or_404(Branch,name=branch_name)
+    product = get_object_or_404(Product,pk=product_id)
+    try:
+        branch_stock = BranchStock.objects.get(branch=branch,product=product)
+        stock = branch_stock.stock
+    except BranchStock.DoesNotExist:
+        stock = 0
+    return JsonResponse({'stock': stock})
 
 @active_employee_required
 @permission_required('stock.add_record',raise_exception=True)
@@ -339,7 +350,7 @@ def edit_branch(req,branch_name):
 
 @active_employee_required
 @permission_required('stock.view_branch',raise_exception=True)
-def select_branch(req):
+def select_branch(req,action):
     context = {
         'title': 'Seleccionar Sucursal',
         'submit_btn': 'Editar'
@@ -351,7 +362,7 @@ def select_branch(req):
         if form.is_valid():
             branch = form.cleaned_data['branch']
             branch_name = branch.name
-            return redirect('edit_branch', branch_name=branch_name)
+            return redirect(action, branch_name=branch_name)
     else:
         form = SelectBranchForm()
     
@@ -439,23 +450,21 @@ def administrate(req):
             'title': 'Sucursales',
             'links': [
                 {'url': reverse('add_branch'), 'label': 'Agregar Sucursal'},
-                {'url': reverse('select_branch'), 'label': 'Editar Sucursal'},
+                {'url': reverse('select_branch', args=['edit_branch']), 'label': 'Editar Sucursal'},
                 {'url': reverse('branch_list'), 'label': 'Ver Sucursales'}
             ]
         },
         {
             'title': 'Registros',
             'links': [
-                {'url': reverse('record_list'), 'label': 'Agregar Registro'},
-                {'url': reverse('record_list_filter'), 'label': 'Editar Registro'},
-                {'url': reverse('record_list'), 'label': 'Ver Registros'}
+                {'url': reverse('record_list'), 'label': 'Gestión Básica de Registros'},
+                {'url': reverse('record_list_filter'), 'label': 'Gestión Avanzada de Registros'}
             ]
         },
         {
             'title': 'Inventario',
             'links': [
-                {'url': reverse('record_list'), 'label': 'Agregar Item'},
-                {'url': reverse('record_list'), 'label': 'Editar Item'},
+                {'url': reverse('select_branch', args=['edit_branch_stock']), 'label': 'Editar Inventario'},
                 {'url': reverse('stock_list'), 'label': 'Ver Inventarios'}
             ]
         },
@@ -468,7 +477,7 @@ def administrate(req):
 
     return render(req, 'pages/admin_page.html', context)
 
-@login_required
+@active_employee_required
 @permission_required('stock.view_employee', raise_exception=True)
 def employee_detail(req, employee_id):
     employee = get_object_or_404(Employee, id=employee_id)
@@ -479,7 +488,7 @@ def employee_detail(req, employee_id):
 
     return render(req, 'pages/employee_detail.html', context)
 
-@login_required
+@active_employee_required
 @permission_required('stock.change_employee', raise_exception=True)
 def edit_employee(req, employee_id):
     employee = get_object_or_404(Employee, id=employee_id)
@@ -498,13 +507,32 @@ def edit_employee(req, employee_id):
     context['form'] = form
     return render(req, 'forms/register_employee.html', context)
 
-@login_required
+@active_employee_required
 @permission_required('stock.change_employee', raise_exception=True)
 def toggle_employee(req, employee_id):
     employee = get_object_or_404(Employee, id=employee_id)
     employee.is_active = not employee.is_active
     employee.save()
     return redirect('employee_detail', employee_id=employee.id)
+
+@active_employee_required
+def edit_branch_stock(req, branch_name):
+    branch = get_object_or_404(Branch, name=branch_name)
+    
+    if req.method == "POST":
+        form = BranchStockForm(req.POST, branch=branch)
+        if form.is_valid():
+            form.save()
+            return redirect('stock_list')
+    else:
+        form = BranchStockForm(branch=branch)
+    
+    context = {
+        'title': f"Editar Stock de producto en {branch.name}",
+        'form': form,
+        'branch': branch
+    }
+    return render(req, 'forms/select_product.html', context)
 
 @anonymous_required
 def register_user(req):

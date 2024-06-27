@@ -18,26 +18,50 @@
     </div>
     <script>
         $(document).ready(function() {
-            $('.select2').select2({
-            ajax: {
-                url: '{% url "product-autocomplete" %}',
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                return {
-                    q: params.term,
-                };
+            $('.product-select').select2({
+                ajax: {
+                    url: '{% url "product-autocomplete" %}',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data.results
+                        };
+                    },
+                    cache: true
                 },
-                processResults: function (data) {
-                return {
-                    results: data.results
-                };
-                },
-                cache: true
-            },
-            language: "es",
-            minimumInputLength: 1,
+                language: "es",
+                minimumInputLength: 1,
+                width: '100%'
             });
+            {% if branch %}
+            $('.product-select').on('change', function() {
+                var product_id = $(this).val();
+                var branch_name = "{{ branch.name }}";
+                var url = '{% url "get_product_stock" 0 0 %}'.replace('0/0', branch_name + '/' + product_id);
+                
+                if (product_id) {
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        success: function(data) {
+                            $('#id_stock').val(data.stock);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error fetching stock:', error);
+                            $('#id_stock').val(0);
+                        }
+                    });
+                } else {
+                    $('#id_stock').val(0);
+                }
+            });
+            {% endif %}
         });
     </script>
 {% endblock %}
