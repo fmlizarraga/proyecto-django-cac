@@ -26,4 +26,5 @@ urlpatterns = [
     path('stock/list/current/', views.branch_stock_list, name='stock_list_curr'),
     path('admin/', views.administrate, name='admin_page'),
     path('product-autocomplete/', views.product_autocomplete, name='product-autocomplete'),
+    path('employee-autocomplete/', views.employee_autocomplete, name='employee-autocomplete'),
 ]

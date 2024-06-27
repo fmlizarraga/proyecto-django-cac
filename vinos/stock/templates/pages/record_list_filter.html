@@ -73,4 +73,34 @@
             {% endif %}
         </span>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            function initializeSelect2(selector, url) {
+                $(selector).select2({
+                    ajax: {
+                        url: url,
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                q: params.term, // search term
+                            };
+                        },
+                        processResults: function (data) {
+                            return {
+                                results: data.results
+                            };
+                        },
+                        cache: true
+                    },
+                    language: "es",
+                    minimumInputLength: 1,
+                });
+            }
+
+            initializeSelect2('.product-select', '{% url "product-autocomplete" %}');
+            initializeSelect2('.employee-select', '{% url "employee-autocomplete" %}');
+        });
+    </script>
 {% endblock %}

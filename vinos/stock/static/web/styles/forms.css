@@ -36,6 +36,39 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
+    color: #252525;
+    font-family: sans-serif, 'Segoe UI', Tahoma, Verdana, Arial;
+}
+
+.select2-container {
+    margin-bottom: 10px;
+}
+
+.form-container .select2-selection {
+    padding: 10px;
+    height: 45px;
+    background-color: #e9e9ed;
+    border: 1px solid #ccc;
+}
+
+.form-container .select2-container .select2-selection--single .select2-selection__rendered {
+    display: inline-block;
+    padding-left: 0px;
+    padding-right: 0px;
+    height: 100%;
+    width: 100%;
+    font-size: 16px;
+    color: #252525;
+    line-height: 20px;
+    font-family: sans-serif, 'Segoe UI', Tahoma, Verdana, Arial;
+  }
+
+.form-container .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 45px;
+}
+
+.select2-dropdown {
+    border: 1px solid #ccc;
 }
 
 .form-container button,

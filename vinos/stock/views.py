@@ -1,5 +1,6 @@
 from typing import Any
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 from django.views.generic import ListView, UpdateView
@@ -8,7 +9,6 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
-from django_filters.views import FilterView
 from .models import Product,Branch,Record,BranchStock,Employee
 from .forms import AddProductForm,AddRecordForm,RegisterBranch,LoginUser,RegisterUser,SelectProductForm,EditEmployeeForm,SelectBranchForm
 from .decorators import active_employee_required,anonymous_required,ActiveEmployeeRequiredMixin
@@ -116,6 +116,18 @@ def product_autocomplete(request):
         q = request.GET['q']
         products = Product.objects.filter(name__icontains=q)
         results = [{'id': product.pk, 'text': product.name} for product in products]
+        return JsonResponse({'results': results})
+    return JsonResponse({'results': []})
+
+@active_employee_required
+@permission_required('stock.view_employee', raise_exception=False)
+def employee_autocomplete(request):
+    if 'q' in request.GET:
+        q = request.GET['q']
+        employees = Employee.objects.filter(
+            Q(user__first_name__icontains=q) | Q(user__last_name__icontains=q)
+        )
+        results = [{'id': employee.pk, 'text': employee.full_name()} for employee in employees]
         return JsonResponse({'results': results})
     return JsonResponse({'results': []})
 
