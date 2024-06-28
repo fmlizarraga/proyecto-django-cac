@@ -1,32 +1,36 @@
 {% extends "pages/base.html" %}
 {% load static %}
 
-{% block title %}{{title}}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'web/styles/record_list.css' %}">
+    <link rel="stylesheet" href="{% static 'web/styles/branch_stock_list.css' %}">
 {% endblock %}
 
 {% block main %}
-    <div class="record-list">
+    <div class="stock-list">
         {% for branch_stock in branch_stock_map %}
-            <h2>Stock en {{ branch_stock.branch }}</h2>
-            {% for item in branch_stock.stock_items %}
-                <div class="record-item">
-                    <h2>{{ item.product.name }}</h2>
-                    <p><strong>Producto:</strong> Cod.: {{ item.product.pk }} - {{ item.product.name }} - {{ item.product.variety }}</p>
-                    {% if item.stock == 0 %}
-                        <p class="alert-text">Producto agotado.</p>
-                    {% else %}
-                        <p><strong>Cantidad:</strong> {{ item.stock }}</p>
+            <div class="branch-section">
+                <h2>Stock en {{ branch_stock.branch }}</h2>
+                <div class="branch-stock-items">
+                    {% for item in branch_stock.stock_items %}
+                        <div class="stock-item {% if item.stock == 0 %}out-of-stock{% endif %}">
+                            <h3>{{ item.product.name }}</h3>
+                            <p><strong>Producto:</strong> Cod.: {{ item.product.pk }} - {{ item.product.name }} - {{ item.product.variety }}</p>
+                            {% if item.stock == 0 %}
+                                <p class="alert-text">Producto agotado.</p>
+                            {% else %}
+                                <p><strong>Cantidad:</strong> {{ item.stock }}</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    {% if not branch_stock.stock_items %}
+                        <div class="stock-item">
+                            <p>No hay productos en el inventario.</p>
+                        </div>
                     {% endif %}
                 </div>
-            {% endfor %}
-            {% if not branch_stock.stock_items %}
-                <div class="record-item">
-                    <p>No hay productos en el inventario.</p>
-                </div>
-            {% endif %}
+            </div>
         {% endfor %}
     </div>
 {% endblock %}

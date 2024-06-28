@@ -25,17 +25,17 @@
         <h1>Bodega San Martin</h1>
         <nav>
             <ul>
-                <li><a href="{% url 'index' %}">Inicio</a></li>
+                <li class="{% if request.resolver_match.view_name == 'index' %}active{% endif %}"><a href="{% url 'index' %}">Inicio</a></li>
                 {% if user.is_authenticated %}
-                <li><a href="{% url 'product_list' %}">Catalogo</a></li>
-                <li><a href="{% url 'record_list_branch' %}">Registros</a></li>
-                <li><a href="{% url 'stock_list_curr' %}">Inventario</a></li>
+                <li class="{% if request.resolver_match.view_name == 'product_list' %}active{% endif %}"><a href="{% url 'product_list' %}">Catalogo</a></li>
+                <li class="{% if request.resolver_match.view_name == 'record_list_branch' %}active{% endif %}"><a href="{% url 'record_list_branch' %}">Registros</a></li>
+                <li class="{% if request.resolver_match.view_name == 'stock_list_curr' %}active{% endif %}"><a href="{% url 'stock_list_curr' %}">Inventario</a></li>
                 {% if user|has_group:"System admins" %}
-                    <li><a href="{% url 'admin_page' %}">Herr. Admin.</a></li>
+                    <li class="{% if request.resolver_match.view_name == 'admin_page' %}active{% endif %}"><a href="{% url 'admin_page' %}">Herr. Admin.</a></li>
                 {% elif user|has_group:"Managers" %}
-                    <li><a href="{% url 'admin_page' %}">Herr. G.G.</a></li>
+                    <li class="{% if request.resolver_match.view_name == 'admin_page' %}active{% endif %}"><a href="{% url 'admin_page' %}">Herr. G.G.</a></li>
                 {% elif user|has_group:"Branch managers" %}
-                    <li><a href="{% url 'admin_page' %}">Herr. G.S.</a></li>
+                    <li class="{% if request.resolver_match.view_name == 'admin_page' %}active{% endif %}"><a href="{% url 'admin_page' %}">Herr. G.S.</a></li>
                 {% endif %}
                 <li><a href="{% url 'logout' %}">Salir</a></li>
                 {% else %}
@@ -50,5 +50,6 @@
     <footer>
         <p>Bodega San Martin 2024 - Todos los derechos reservados</p>
     </footer>
+{% block extra_js %}{% endblock %}
 </body>
 </html>

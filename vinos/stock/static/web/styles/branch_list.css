@@ -18,7 +18,16 @@ main {
     border-radius: 8px;
 }
 
-.branch-item {
+.head-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f2eff5;
+    border: 1px solid #c5c5c5;
+    border-radius: 8px 8px 0 0;
+}
+
+.branch-item,
+.employee-item {
     margin-bottom: 20px;
     padding: 15px;
     background-color: #fff;
@@ -27,21 +36,34 @@ main {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.branch-item h2 {
+.employee-item {
+    cursor: pointer;
+    transition: transform 0.5s;
+}
+
+.employee-item:hover {
+    transform: scale(1.2);
+}
+
+.branch-item h2,
+.employee-item h2 {
     margin-top: 0;
     color: #333;
 }
 
-.branch-item p {
+.branch-item p,
+.employee-item p {
     margin: 5px 0;
     color: #555;
 }
 
-.branch-item p strong {
+.branch-item p strong,
+.employee-item p strong {
     color: #000;
 }
 
-.branch-item p {
+.branch-item p,
+.employee-item p {
     color: #888;
     text-align: center;
 }
@@ -50,12 +72,17 @@ main {
     margin-bottom: 0;
 }
 
+.employee-item p:last-child {
+    margin-bottom: 20px;
+}
+
 .branch-item + .branch-item {
     border-top: 1px solid #eee;
     padding-top: 20px;
 }
 
-.branch-item a {
+.branch-item a,
+.head-item a {
     display: inline-block;
     padding: 8px 16px;
     text-decoration: none;
@@ -69,7 +96,8 @@ main {
     transition: background-color 0.3s ease;
 }
 
-.branch-item a:hover {
+.branch-item a:hover,
+.head-item a:hover {
     background-color: #6b00b3;
     color: #fff;
     border-color: #333;

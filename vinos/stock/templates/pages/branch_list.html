@@ -9,9 +9,9 @@
 
 {% block main %}
     <div class="branch-list">
-        <div class="branch-item">
+        <div class="head-item">
             <a href="{% url 'add_branch' %}">Registrar nueva sucursal</a>
-            <a href="{% url 'select_branch' %}">Editar una sucursal</a>
+            <a href="{% url 'select_branch' 'edit_branch' %}">Editar una sucursal</a>
         </div>
         {% for branch in branches %}
             <div class="branch-item">

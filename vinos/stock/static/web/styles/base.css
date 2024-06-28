@@ -14,6 +14,7 @@ header {
 }
 
 header, footer {
+    z-index: 100;
     background-color: var(--corp-bg-color);
     color: var(--corp-fg-color);
     text-align: center;
@@ -35,8 +36,27 @@ header nav ul li {
 }
 
 header nav ul li a {
+    display: inline-block;
     color: var(--corp-fg-color);
     text-decoration: none;
+    transition: transform 0.3s, color 0.3s;
+}
+
+header nav ul li a:hover {
+    transform: scale(1.1);
+    color: #d8bbf3;
+}
+
+header nav .active a {
+    font-weight: bold;
+    color: #fcf2e8;
+}
+
+header nav .active a:hover {
+    transform: none;
+    color: #ffffff;
+    /* pointer-events: none; */
+    cursor: default;
 }
 
 main {

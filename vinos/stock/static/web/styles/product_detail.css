@@ -1,6 +1,6 @@
 .product-detail {
-    max-width: 600px;
-    margin: 0 auto;
+    max-width: 800px;
+    margin: 20px auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -9,46 +9,69 @@
 }
 
 .product-detail h1 {
-    font-size: 24px;
-    margin-bottom: 10px;
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
 }
 
 .product-detail p {
-    margin: 8px 0;
+    margin: 10px 0;
+    line-height: 1.5;
 }
 
-.btn {
+.product-detail h2 {
+    margin-top: 20px;
+    font-size: 24px;
+    color: #7700ff;
+    text-align: center;
+}
+
+.product-detail ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.product-detail ul li {
+    margin: 8px 0;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.product-detail a {
+    color: #7700ff;
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.product-detail a:hover {
+    text-decoration: underline;
+}
+
+.product-detail a.btn {
     display: inline-block;
     padding: 8px 16px;
-    margin-top: 16px;
+    margin: 8px 16px 8px 0px;
     text-decoration: none;
     background-color: #7700ff;
     color: #fff;
     border-radius: 4px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s;
 }
 
-.btn:hover {
+.product-detail a.btn:hover {
     background-color: #6b00b3;
     text-decoration: underline;
+    transform: scale(1.1);
 }
 
-a {
-    display: inline-block;
-    margin-top: 20px;
-    text-decoration: none;
-    color: #7700ff;
-    font-size: 16px;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-.btn_cancel {
+.product-detail a.btn_cancel {
     background-color: #ff3943;
 }
 
-.btn_cancel:hover {
+.product-detail a.btn_cancel:hover {
     background-color: #b31b00;
 }

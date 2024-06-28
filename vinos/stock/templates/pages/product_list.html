@@ -10,12 +10,11 @@
 {% block main %}
     <div class="product-grid">
         {% for product in products %}
-            <div class="product-card">
+            <div class="product-card" id="product-{{product.id}}" data-url="{% url 'product_detail' product.id %}">
                 <h2>{{ product.name }}</h2>
                 <p><strong>Variedad:</strong> {{ product.variety }}</p>
                 <p><strong>Descripción:</strong> {{ product.description|truncatechars:30 }}</p>
                 <p><strong>Cosecha:</strong> {{ product.vintage }}</p>
-                <a href="{% url 'product_detail' product.id %}">Ver Detalle</a>
             </div>
         {% empty %}
             <div class="product-card">
@@ -23,4 +22,18 @@
             </div>
         {% endfor %}
     </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const productCards = document.querySelectorAll('.product-card');
+            productCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const url = this.getAttribute('data-url');
+                    window.location.href = url;
+                });
+            });
+        });
+    </script>
 {% endblock %}

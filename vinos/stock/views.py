@@ -400,7 +400,7 @@ def stock_list(req):
     branch_stock_map = []
 
     for branch in branches:
-        stock_items = BranchStock.objects.filter(branch=branch)
+        stock_items = BranchStock.objects.filter(branch=branch).order_by('product')
         branch_stock_map.append({
             'branch': branch,
             'stock_items': stock_items
@@ -417,7 +417,7 @@ def stock_list(req):
 def branch_stock_list(req):
     employee = Employee.objects.get(user=req.user)
     branch = employee.branch
-    stock = BranchStock.objects.filter(branch=branch)
+    stock = BranchStock.objects.filter(branch=branch).order_by('product')
     branch_stock_map = [{
         'branch': branch,
         'stock_items': stock

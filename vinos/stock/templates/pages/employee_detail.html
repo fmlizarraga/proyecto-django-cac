@@ -2,21 +2,22 @@
 {% load static %}
 
 {% block title %}{{ employee.full_name }}{% endblock %}
+
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'web/styles/employee_detail.css' %}"> 
+    <link rel="stylesheet" href="{% static 'web/styles/employee_detail.css' %}">
 {% endblock %}
 
 {% block main %}
     <div class="employee-detail">
         <h1>{{ employee.full_name }}</h1>
-        <p>Nombre de usuario: {{ employee.user.username }}</p>
-        <p>Nivel de acceso: {{ employee.user.groups.first }}</p>
-        <p>Super Usuario: {{ employee.user.is_staff|yesno:"Si,No,Desconocido" }}</p>
-        <p>Email: {{ employee.user.email }}</p>
-        <p>DNI: {{ employee.dni }}</p>
-        <p>CUIL: {{ employee.cuil }}</p>
-        <p>Sucursal: {{ employee.branch }}</p>
-        <p>Suspendido: {{ employee.is_active|yesno:"No,Si,Desconocido" }}</p>
+        <p><strong>Nombre de usuario:</strong> {{ employee.user.username }}</p>
+        <p><strong>Nivel de acceso:</strong> {{ employee.user.groups.first }}</p>
+        <p><strong>Super Usuario:</strong> {{ employee.user.is_staff|yesno:"Si,No,Desconocido" }}</p>
+        <p><strong>Email:</strong> {{ employee.user.email }}</p>
+        <p><strong>DNI:</strong> {{ employee.dni }}</p>
+        <p><strong>CUIL:</strong> {{ employee.cuil }}</p>
+        <p><strong>Sucursal:</strong> {{ employee.branch }}</p>
+        <p><strong>Suspendido:</strong> {{ employee.is_active|yesno:"No,Si,Desconocido" }}</p>
         <a class="btn" href="{% url 'edit_employee' employee.id %}">Editar</a>
         <a class="btn btn_cancel" href="{% url 'toggle_employee' employee.id %}">{{ employee.is_active|yesno:"Suspender,Habilitar,-" }}</a>
         <br>

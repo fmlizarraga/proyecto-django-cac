@@ -9,18 +9,17 @@
 
 {% block main %}
     <div class="branch-list">
-        <div class="branch-item">
+        <div class="head-item">
             <a href="{% url 'admin_page' %}">Administrar</a>
         </div>
         {% for e in employees|dictsort:"id" %}
-            <div class="branch-item">
+            <div class="employee-item" data-url="{% url 'employee_detail' e.id  %}">
                 <h2>{{ e.full_name }}</h2>
                 <p><strong>Nombre de usuario:</strong> {{ e.user.username }}</p>
                 <p><strong>Email:</strong> {{ e.user.email }}</p>
                 <p><strong>DNI:</strong> {{ e.dni }}</p>
                 <p><strong>CUIL:</strong> {{ e.cuil }}</p>
                 <p><strong>Sucursal:</strong> {{ e.branch }}</p>
-                <a href="{% url 'employee_detail' e.id  %}">Detalle</a>
             </div>
         {% empty %}
             <div class="branch-item">
@@ -28,4 +27,18 @@
             </div>
         {% endfor %}
     </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const employees = document.querySelectorAll('.employee-item');
+            employees.forEach(emp => {
+                emp.addEventListener('click', function() {
+                    const url = this.getAttribute('data-url');
+                    window.location.href = url;
+                });
+            });
+        });
+    </script>
 {% endblock %}

@@ -1,21 +1,28 @@
 {% extends "pages/base.html" %}
 {% load static %}
 
-{% block title %}{{ product.name }}{% endblock %}
+{% block title %}{{ product.name }} - {{ product.variety }}{% endblock %}
+
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'web/styles/product_detail.css' %}"> 
+    <link rel="stylesheet" href="{% static 'web/styles/product_detail.css' %}">
 {% endblock %}
 
 {% block main %}
     <div class="product-detail">
-        <h1>{{ product.name }}</h1>
-        <p>Varietal: {{ product.variety }}</p>
-        <p>Cosecha: {{ product.vintage }}</p>
-        <p>Código: {{ product.id }}</p>
-        <p>Descripción: {{ product.description }}</p>
+        <h1>{{ product.name }} - {{ product.variety }}</h1>
+        <p><strong>Descripción:</strong> {{ product.description }}</p>
+        <p><strong>Cosecha:</strong> {{ product.vintage }}</p>
+        <h2>Sucursales Disponibles</h2>
+        <ul>
+            {% for branch_stock in product.branchstock_set.all %}
+                <li>{{ branch_stock.branch.name }}: {{ branch_stock.stock }} unidades</li>
+            {% empty %}
+                <li>No disponible en ninguna sucursal.</li>
+            {% endfor %}
+        </ul>
         <a class="btn" href="{% url 'edit_product' product.id %}">Editar</a>
-        <a class="btn btn_cancel" href="{% url 'product_list' %}">Eliminar</a>
+        <!-- <a class="btn btn_cancel" href="">Eliminar</a> -->
         <br>
-        <a href="{% url 'product_list' %}">Volver a inventario</a>
+        <a href="{% url 'product_list' %}">Volver a lista</a>
     </div>
 {% endblock %}
