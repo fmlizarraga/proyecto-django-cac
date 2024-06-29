@@ -2,7 +2,6 @@ from typing import Any
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.contrib import messages
-from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 from django.views.generic import ListView, UpdateView
 from django.shortcuts import render,redirect,get_object_or_404
@@ -12,7 +11,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
 from .models import Product,Branch,Record,BranchStock,Employee
 from .decorators import active_employee_required,anonymous_required,ActiveEmployeeRequiredMixin
-from .filters import RecordFilter
+from .filters import RecordFilter,ProductFilter
 from .forms import AddProductForm,AddRecordForm,RegisterBranch,LoginUser,RegisterUser,SelectProductForm,EditEmployeeForm,SelectBranchForm,BranchStockForm
 
 def index(req):
@@ -25,16 +24,22 @@ def index(req):
 class ProductList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Product
     context_object_name = 'products'
-    ordering = ['-vintage','name']
+    ordering = ['-vintage', 'name']
     template_name = 'pages/product_list.html'
     permission_required = 'stock.view_product'
     raise_exception = True
     paginate_by = 9
+    paginate_orphans = 2
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = ProductFilter(self.request.GET, queryset=queryset)
+        return self.filterset.qs
+
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Vinos disponibles'
-
+        context['filterset'] = self.filterset
         return context
 
 @login_required

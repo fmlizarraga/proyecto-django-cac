@@ -1,17 +1,22 @@
 {% extends "pages/base.html" %}
 {% load static %}
+{% load custom_tags %}
 
-{% block title %}{{title}}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'web/styles/product_list.css' %}">
-    <link rel="stylesheet" href="{% static 'web/styles/paginator.css' %}">
+<link rel="stylesheet" href="{% static 'web/styles/product_list.css' %}">
+<link rel="stylesheet" href="{% static 'web/styles/paginator.css' %}">
 {% endblock %}
 
 {% block main %}
+    <form method="get" class="search-form">
+        {{ filterset.form.search }}<button type="submit">Buscar</button>
+    </form>
+
     <div class="product-grid">
         {% for product in products %}
-            <div class="product-card" id="product-{{product.id}}" data-url="{% url 'product_detail' product.id %}">
+            <div class="product-card" id="product-{{ product.id }}" data-url="{% url 'product_detail' product.id %}">
                 <h2>{{ product.name }}</h2>
                 <p><strong>Variedad:</strong> {{ product.variety }}</p>
                 <p><strong>Descripción:</strong> {{ product.description|truncatechars:30 }}</p>
@@ -27,8 +32,8 @@
     <div class="pagination">
         <span class="step-links">
             {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; primera</a>
-                <a href="?page={{ page_obj.previous_page_number }}">anterior</a>
+                <a href="?{% param_replace page=1 %}">&laquo; primera</a>
+                <a href="?{% param_replace page=page_obj.previous_page_number %}">anterior</a>
             {% else %}
                 <span class="disabled">&laquo; primera</span>
                 <span class="disabled">anterior</span>
@@ -39,8 +44,8 @@
             </span>
 
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">siguiente</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">última &raquo;</a>
+                <a href="?{% param_replace page=page_obj.next_page_number %}">siguiente</a>
+                <a href="?{% param_replace page=page_obj.paginator.num_pages %}">última &raquo;</a>
             {% else %}
                 <span class="disabled">siguiente</span>
                 <span class="disabled">última &raquo;</span>

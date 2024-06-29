@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models import Q
 import django_filters
 from django_filters import DateTimeFromToRangeFilter
 from django_filters.widgets import RangeWidget
@@ -53,3 +54,21 @@ class RecordFilter(django_filters.FilterSet):
                 self.filters['employee'].queryset = Employee.objects.filter(id=employee_id)
             except (ValueError, TypeError):
                 pass
+
+class ProductFilter(django_filters.FilterSet):
+    search = django_filters.CharFilter(
+        method='custom_filter',
+        label='Buscar',
+        widget=forms.TextInput(attrs={'placeholder': 'Buscar', 'class': 'search-input'})
+    )
+
+    class Meta:
+        model = Product
+        fields = ['search']
+
+    def custom_filter(self, queryset, name, value):
+        return queryset.filter(
+            Q(name__icontains=value) |
+            Q(description__icontains=value) |
+            Q(variety__icontains=value)
+        )

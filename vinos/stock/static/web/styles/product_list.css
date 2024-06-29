@@ -47,3 +47,31 @@ main {
 .product-card p strong {
     color: #6b00b3;
 }
+
+.search-form {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.search-form input,
+.search-form button {
+    border: 1px solid #ccc;
+}
+
+.search-form input {
+    padding: 8px 16px;
+    width: 200px;
+    border-radius: 20px 0 0 20px;
+}
+
+.search-form button {
+    padding: 8px 16px;
+    background-color: #7700ff;
+    color: white;
+    border-radius: 0 20px 20px 0;
+    cursor: pointer;
+}
+
+.search-form button:hover {
+    background-color: #6b00b3;
+}
