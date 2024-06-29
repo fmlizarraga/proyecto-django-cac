@@ -24,12 +24,12 @@ class RecordFilter(django_filters.FilterSet):
         widget=forms.Select(attrs={'class': 'branch-select'})
     )
     product = django_filters.ModelChoiceFilter(
-        queryset=Product.objects.all(), 
+        queryset=Product.objects.none(),
         label="Producto",
         widget=forms.Select(attrs={'class': 'product-select'})
     )
     employee = django_filters.ModelChoiceFilter(
-        queryset=Employee.objects.all(), 
+        queryset=Employee.objects.none(),
         label="Empleado",
         widget=forms.Select(attrs={'class': 'employee-select'})
     )
@@ -38,3 +38,18 @@ class RecordFilter(django_filters.FilterSet):
         model = Record
         fields = ['typeof','date', 'branch', 'product', 'employee']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'product' in self.data:
+            try:
+                product_id = int(self.data.get('product'))
+                self.filters['product'].queryset = Product.objects.filter(id=product_id)
+            except (ValueError, TypeError):
+                pass
+
+        if 'employee' in self.data:
+            try:
+                employee_id = int(self.data.get('employee'))
+                self.filters['employee'].queryset = Employee.objects.filter(id=employee_id)
+            except (ValueError, TypeError):
+                pass

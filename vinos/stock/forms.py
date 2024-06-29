@@ -50,14 +50,29 @@ class AddProductForm(forms.ModelForm):
 
 class SelectProductForm(forms.Form):
     product = forms.ModelChoiceField(
-        queryset=Product.objects.all(),
+        queryset=Product.objects.none(),  # No cargamos productos aquí
         label="Producto",
         widget=forms.Select(attrs={'class': 'product-select'})
     )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'product' in self.data:
+            try:
+                product_id = int(self.data.get('product'))
+                self.fields['product'].queryset = Product.objects.filter(id=product_id)
+            except (ValueError, TypeError):
+                pass  # en caso de que el ID no sea válido
+
+    def clean_product(self):
+        product = self.cleaned_data.get('product')
+        if not product:
+            raise forms.ValidationError("Seleccione un producto válido.")
+        return product
+
 class AddRecordForm(forms.ModelForm):
     product = forms.ModelChoiceField(
-        queryset=Product.objects.all(),
+        queryset=Product.objects.none(),
         label="Producto",
         widget=forms.Select(attrs={'class': 'product-select'})
     )
@@ -77,6 +92,12 @@ class AddRecordForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.employee = kwargs.pop('employee', None)
         super().__init__(*args, **kwargs)
+        if 'product' in self.data:
+            try:
+                product_id = int(self.data.get('product'))
+                self.fields['product'].queryset = Product.objects.filter(id=product_id)
+            except (ValueError, TypeError):
+                pass  # en caso de que el ID no sea válido
         """Mantener el producto seleccionado disponible en el queryset"""
         if self.instance and self.instance.pk:
             self.fields['product'].queryset = Product.objects.filter(pk=self.instance.product.pk) | Product.objects.all()
@@ -87,6 +108,12 @@ class AddRecordForm(forms.ModelForm):
         if quantity is None or quantity < self.MIN_QUANTITY:
             raise ValidationError(self.ERROR_QUANTITY_MSG)
         return quantity
+    
+    def clean_product(self):
+        product = self.cleaned_data.get('product')
+        if not product:
+            raise forms.ValidationError("Seleccione un producto válido.")
+        return product
 
     def clean(self):
         """Realiza validaciones adicionales y asegura que el stock sea suficiente para registrar la salida."""
@@ -258,7 +285,8 @@ class LoginUser(AuthenticationForm):
     password = forms.CharField(label="Contraseña", widget=forms.PasswordInput)
 
 class BranchStockForm(forms.ModelForm):
-    product = forms.ChoiceField(
+    product = forms.ModelChoiceField(
+        queryset=Product.objects.none(),
         label="Producto",
         widget=forms.Select(attrs={'class': 'product-select'})
     )
@@ -276,6 +304,18 @@ class BranchStockForm(forms.ModelForm):
         branch = kwargs.pop('branch', None)
         super().__init__(*args, **kwargs)
         self.branch = branch
+        if 'product' in self.data:
+            try:
+                product_id = int(self.data.get('product'))
+                self.fields['product'].queryset = Product.objects.filter(id=product_id)
+            except (ValueError, TypeError):
+                pass  # en caso de que el ID no sea válido
+    
+    def clean_product(self):
+        product = self.cleaned_data.get('product')
+        if not product:
+            raise forms.ValidationError("Seleccione un producto válido.")
+        return product
 
     def save(self, commit=True):
         product = self.cleaned_data.get('product')
