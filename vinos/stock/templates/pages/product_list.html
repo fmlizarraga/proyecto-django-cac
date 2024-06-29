@@ -4,7 +4,8 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'web/styles/product_list.css' %}"> 
+    <link rel="stylesheet" href="{% static 'web/styles/product_list.css' %}">
+    <link rel="stylesheet" href="{% static 'web/styles/paginator.css' %}">
 {% endblock %}
 
 {% block main %}
@@ -21,6 +22,30 @@
                 <p>No hay productos disponibles.</p>
             </div>
         {% endfor %}
+    </div>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; primera</a>
+                <a href="?page={{ page_obj.previous_page_number }}">anterior</a>
+            {% else %}
+                <span class="disabled">&laquo; primera</span>
+                <span class="disabled">anterior</span>
+            {% endif %}
+
+            <span class="current">
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">siguiente</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">última &raquo;</a>
+            {% else %}
+                <span class="disabled">siguiente</span>
+                <span class="disabled">última &raquo;</span>
+            {% endif %}
+        </span>
     </div>
 {% endblock %}
 

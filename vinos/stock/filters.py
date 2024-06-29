@@ -5,12 +5,16 @@ from django_filters.widgets import RangeWidget
 from .models import Record,Branch,Product,Employee
 
 class RecordFilter(django_filters.FilterSet):
+    RECORD_CHOICES = [
+        (Record.ENTRY, 'Entrada'),
+        (Record.EXIT, 'Salida')
+    ]
     date = DateTimeFromToRangeFilter(
         label="Fecha (rango)",
         widget=RangeWidget(attrs={'type': 'date', 'class': 'date-range'})
     )
     typeof = django_filters.ChoiceFilter(
-        choices=Record.TYPE_CHOICES,
+        choices=RECORD_CHOICES,
         label="Tipo",
         widget=forms.Select(attrs={'class': 'typeof-select'})
     )

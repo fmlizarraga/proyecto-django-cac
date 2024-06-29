@@ -10,11 +10,12 @@ main {
 
 .product-grid {
     width: 80%;
+    max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.3em;
+    gap: 3em;
     justify-content: center;
 }
 

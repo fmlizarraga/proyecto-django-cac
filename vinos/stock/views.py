@@ -29,6 +29,7 @@ class ProductList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'pages/product_list.html'
     permission_required = 'stock.view_product'
     raise_exception = True
+    paginate_by = 9
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)

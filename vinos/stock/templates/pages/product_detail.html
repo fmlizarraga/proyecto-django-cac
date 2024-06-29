@@ -1,5 +1,6 @@
 {% extends "pages/base.html" %}
 {% load static %}
+{% load custom_tags %}
 
 {% block title %}{{ product.name }} - {{ product.variety }}{% endblock %}
 
@@ -20,9 +21,11 @@
                 <li>No disponible en ninguna sucursal.</li>
             {% endfor %}
         </ul>
+        {% if user|has_group:"System admins" or user|has_group:"Managers" %}
         <a class="btn" href="{% url 'edit_product' product.id %}">Editar</a>
         <!-- <a class="btn btn_cancel" href="">Eliminar</a> -->
         <br>
+        {% endif %}
         <a href="{% url 'product_list' %}">Volver a lista</a>
     </div>
 {% endblock %}
