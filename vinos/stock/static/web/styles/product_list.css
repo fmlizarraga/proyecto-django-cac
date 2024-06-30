@@ -28,10 +28,7 @@ main {
     text-align: center;
     transition: all 0.5s;
     cursor: pointer;
-}
-
-.product-card:hover {
-    transform: scale(1.1);
+    position: relative;
 }
 
 .product-card h2 {
@@ -48,20 +45,66 @@ main {
     color: #6b00b3;
 }
 
+.product-card .indicator_info {
+    font-size: 3em;
+    transform: translateY(-1.2em);
+    text-align: end;
+    position: absolute;
+    width: 100%;
+    top: 93%;
+    left: 0;
+    padding-right: 1em;
+    box-sizing: border-box;
+    color: #00000000;
+    transition: all 0.3s;
+}
+
+.product-card:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0px 10px rgba(119, 0, 255, 0.5);
+    border: 1px solid #7700ff59;
+    .indicator_info {
+        color: #44075098;
+        text-shadow: 0 1px 4px #7700ff;
+    }
+}
+
 .search-form {
     margin-bottom: 40px;
+    display: flex;
     text-align: center;
+    align-items: center;
+    justify-content: center; /* Centra horizontalmente los contenidos */
 }
 
-.search-form input,
+.search-form .search-input-container,
 .search-form button {
-    border: 1px solid #ccc;
+    border: 1px solid #b1b1b1;
 }
 
-.search-form input {
-    padding: 8px 16px;
+.search-form .search-input-container {
+    padding: 0 0 0 16px;
     width: 200px;
     border-radius: 20px 0 0 20px;
+    transition: all 0.3s;
+    border-right: none;
+    background: #fff;
+}
+
+.search-form .search-input-container input {
+    padding: 8px 0;
+    border: none;
+    outline: none;
+    background-color: #ffffff00;
+}
+
+.search-form .search-input-container a {
+    color: #44075088;
+    transition: color 0.3s;
+}
+
+.search-form .search-input-container a:hover {
+    color: #440750;
 }
 
 .search-form button {
@@ -70,8 +113,19 @@ main {
     color: white;
     border-radius: 0 20px 20px 0;
     cursor: pointer;
+    height: calc(1.5em + 16px);
+    transition: color 0.3s, background-color 0.3s;
+}
+
+.search-form button i {
+    margin-right: 0.4em;
 }
 
 .search-form button:hover {
     background-color: #6b00b3;
+}
+
+.search-form .search-input-container:focus-within {
+    border: 1px solid #7700ff;
+    box-shadow: 0 0 5px rgba(119, 0, 255, 0.5);
 }

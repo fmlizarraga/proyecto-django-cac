@@ -1,19 +1,38 @@
 {% extends "pages/base.html" %}
 {% load static %}
 
-{% block title %}Ingresar{% endblock %}
+{% block title %}Ingreso{% endblock %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'web/styles/forms.css' %}">
 {% endblock %}
 
 {% block main %}
   <div class="form-container">
-    <h2>Login</h2>
+    <h2><i class="fa-solid fa-address-card"></i> Ingresar al sistema</h2>
     <form method="POST">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit">Ingresar</button>
+      <button type="submit"><i class="fa-solid fa-user-check"></i> Ingresar</button>
     </form>
-    <a href="{% url 'register' %}">Aún no tengo una cuenta</a>
+    <a href="{% url 'register' %}"><i class="fa-solid fa-user-plus"></i> Aún no tengo una cuenta</a>
   </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const usernameLabel = document.querySelector('label[for="id_username"]');
+      const usernameIcon = document.createElement('i');
+      usernameIcon.className = 'fa-solid fa-user';
+      usernameLabel.insertBefore(usernameIcon, usernameLabel.firstChild);
+
+      const passwordLabel = document.querySelector('label[for="id_password"]');
+      const passwordIcon = document.createElement('i');
+      passwordIcon.className = 'fa-solid fa-lock';
+      passwordLabel.insertBefore(passwordIcon, passwordLabel.firstChild);
+
+      usernameIcon.style.marginRight = '8px';
+      passwordIcon.style.marginRight = '8px';
+    });
+  </script>
 {% endblock %}

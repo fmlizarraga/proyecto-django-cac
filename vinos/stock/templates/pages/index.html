@@ -10,10 +10,10 @@
     <h2>Bienvenido al sistema de control de inventario</h2>
     {% if user.is_authenticated %}
     <p class="sub-title" >
-        Estás conectado como {{user.username}}
+        Estás conectado como <i class="fa-solid fa-user"></i><strong>{{user.username}}</strong>
     </p>
     {% else %}
-    <a class="link-sub" href="{% url 'login' %}">Iniciar sesión</a>
+    <a class="link-sub" href="{% url 'login' %}"><i class="fa-solid fa-user-shield"></i> Iniciar sesión</a>
     {% endif %}
     <p>
         En Bodega San Martin, gestionamos con precisión y eficiencia nuestro inventario de vinos.

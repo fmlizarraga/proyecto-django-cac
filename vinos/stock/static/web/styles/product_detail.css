@@ -62,9 +62,15 @@
     transition: background-color 0.3s ease, transform 0.3s;
 }
 
+.product-detail ul li a {
+    color: #333;
+    text-decoration: underline;
+    transition: color 0.3s;
+}
+
 .product-detail a.btn:hover {
     background-color: #6b00b3;
-    text-decoration: underline;
+    text-decoration: none;
     transform: scale(1.1);
 }
 
@@ -74,4 +80,8 @@
 
 .product-detail a.btn_cancel:hover {
     background-color: #b31b00;
+}
+
+.product-detail ul li a:hover {
+    color: #6b00b3;
 }

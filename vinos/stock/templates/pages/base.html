@@ -10,10 +10,13 @@
     {% comment %} SELECT2 CDN {% endcomment %}
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Select2 -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- Select2 Spanish Language -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/es.js"></script>
+    <!-- Font Aweme -->
+    <script src="https://kit.fontawesome.com/d385ce05bf.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="{% static 'web/styles/base.css' %}">
 
@@ -25,21 +28,39 @@
         <h1>Bodega San Martin</h1>
         <nav>
             <ul>
-                <li class="{% if request.resolver_match.view_name == 'index' %}active{% endif %}"><a href="{% url 'index' %}">Inicio</a></li>
+                <li class="{% if request.resolver_match.view_name == 'index' %}active{% endif %}">
+                    <a href="{% url 'index' %}"><i class="fa-solid fa-house-chimney"></i> Inicio</a>
+                </li>
                 {% if user.is_authenticated %}
-                <li class="{% if request.resolver_match.view_name == 'product_list' %}active{% endif %}"><a href="{% url 'product_list' %}">Catalogo</a></li>
-                <li class="{% if request.resolver_match.view_name == 'record_list_branch' %}active{% endif %}"><a href="{% url 'record_list_branch' %}">Registros</a></li>
-                <li class="{% if request.resolver_match.view_name == 'stock_list_curr' %}active{% endif %}"><a href="{% url 'stock_list_curr' %}">Inventario</a></li>
+                <li class="{% if request.resolver_match.view_name == 'product_list' %}active{% endif %}">
+                    <a href="{% url 'product_list' %}"><i class="fa-solid fa-list"></i> Catalogo</a>
+                </li>
+                <li class="{% if request.resolver_match.view_name == 'record_list_branch' %}active{% endif %}">
+                    <a href="{% url 'record_list_branch' %}"><i class="fa-solid fa-book"></i> Registros</a>
+                </li>
+                <li class="{% if request.resolver_match.view_name == 'stock_list_curr' %}active{% endif %}">
+                    <a href="{% url 'stock_list_curr' %}"><i class="fa-solid fa-clipboard-list"></i> Inventario</a>
+                </li>
                 {% if user|has_group:"System admins" %}
-                    <li class="{% if request.resolver_match.view_name == 'admin_page' %}active{% endif %}"><a href="{% url 'admin_page' %}">Herr. Admin.</a></li>
+                    <li class="{% if request.resolver_match.view_name == 'admin_page' %}active{% endif %}">
+                        <a href="{% url 'admin_page' %}"><i class="fa-solid fa-gear"></i> Herr. Admin.</a>
+                    </li>
                 {% elif user|has_group:"Managers" %}
-                    <li class="{% if request.resolver_match.view_name == 'admin_page' %}active{% endif %}"><a href="{% url 'admin_page' %}">Herr. G.G.</a></li>
+                    <li class="{% if request.resolver_match.view_name == 'admin_page' %}active{% endif %}">
+                        <a href="{% url 'admin_page' %}"><i class="fa-solid fa-screwdriver-wrench"></i> Herr. G.G.</a>
+                    </li>
                 {% elif user|has_group:"Branch managers" %}
-                    <li class="{% if request.resolver_match.view_name == 'admin_page' %}active{% endif %}"><a href="{% url 'admin_page' %}">Herr. G.S.</a></li>
+                    <li class="{% if request.resolver_match.view_name == 'admin_page' %}active{% endif %}">
+                        <a href="{% url 'admin_page' %}"><i class="fa-solid fa-wrench"></i> Herr. G.S.</a>
+                    </li>
                 {% endif %}
-                <li><a href="{% url 'logout' %}">Salir</a></li>
+                <li>
+                    <a href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Salir</a>
+                </li>
                 {% else %}
-                <li><a href="{% url 'login' %}">Ingresar</a></li>
+                <li>
+                    <a href="{% url 'login' %}"><i class="fa-solid fa-user-shield"></i> Ingresar</a>
+                </li>
                 {% endif %}
             </ul>
         </nav>
@@ -48,7 +69,7 @@
         {% block main %}{% endblock %}
     </main>
     <footer>
-        <p>Bodega San Martin 2024 - Todos los derechos reservados</p>
+        <p><i class="fa-regular fa-copyright"></i> Bodega San Martin 2024 - Todos los derechos reservados</p>
     </footer>
 {% block extra_js %}{% endblock %}
 </body>

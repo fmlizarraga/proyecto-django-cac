@@ -11,28 +11,28 @@
 {% block main %}
     <div class="record-list">
         <div class="record-item">
-            <h2>{{title}}</h2>
-            <a href="{{ btn_order.url }}">{{ btn_order.label }}</a>
+            <h2><i class="fa-solid fa-clock"></i> {{title}}</h2>
+            <a href="{{ btn_order.url }}"><i class="fa-solid fa-bars-staggered"></i> {{ btn_order.label }}</a>
             {% if not user|has_group:"Managers" %}
-            <a href="{% url 'add_record' 'entry' %}">Nueva Entrada</a>
-            <a href="{% url 'add_record' 'exit' %}">Nueva Salida</a>
+            <a href="{% url 'add_record' 'entry' %}"><i class="fa-solid fa-arrow-right-to-bracket"></i> Nueva Entrada</a>
+            <a href="{% url 'add_record' 'exit' %}"><i class="fa-solid fa-arrow-right-from-bracket"></i> Nueva Salida</a>
             {% endif %}
         </div>
         {% for record in records %}
             <div class="record-item">
                 <h2>{% if record.typeof == 'entry' %}
-                Entrada
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrada
                 {% else %}
-                Salida
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Salida
                 {% endif %}</h2>
-                <p><strong>Fecha:</strong> {{ record.date }}</p>
-                <p><strong>Producto:</strong> Cod.: {{ record.product.id }} {{ record.product.name }} - {{ record.product.variety }} x {{ record.quantity }} </p>
-                <p{% if record.branch == employee.branch %} class="highlight" {% endif %}><strong>Sucursal:</strong> {{ record.branch }}</p>
-                <p{% if record.employee == employee %} class="highlight" {% endif %}><strong>Empleado:</strong> {{ record.employee.user.username }} - {{ record.employee.user.email }}</p>
+                <p><strong><i class="fa-solid fa-calendar-day"></i> Fecha:</strong> {{ record.date }}</p>
+                <p><strong><i class="fa-solid fa-wine-bottle"></i> Producto:</strong> Cod.: {{ record.product.id }} {{ record.product.name }} - {{ record.product.variety }} x {{ record.quantity }} </p>
+                <p{% if record.branch == employee.branch %} class="highlight" {% endif %}><strong><i class="fa-solid fa-house-flag"></i> Sucursal:</strong> {{ record.branch }}</p>
+                <p{% if record.employee == employee %} class="highlight" {% endif %}><strong><i class="fa-solid fa-user"></i> Empleado:</strong> {{ record.employee.user.username }} - {{ record.employee.user.email }}</p>
             </div>
         {% empty %}
             <div class="record-item">
-                <p>No hay registros disponibles.</p>
+                <p><i class="fa-solid fa-xmark"></i> No hay registros disponibles.</p>
             </div>
         {% endfor %}
     </div>

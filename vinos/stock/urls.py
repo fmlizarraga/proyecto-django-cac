@@ -29,7 +29,8 @@ urlpatterns = [
     path('employee/toggle/<int:employee_id>/', views.toggle_employee, name='toggle_employee'),
     # inventarios
     path('stock/list/', views.stock_list, name='stock_list'),
-    path('stock/list/current/', views.branch_stock_list, name='stock_list_curr'),
+    path('stock/list/current/', views.current_branch_stock_list, name='stock_list_curr'),
+    path('stock/list/<int:branch_id>/', views.branch_stock_list, name='stock_list_branch'),
     path('branch/stock/edit/<str:branch_name>/', views.edit_branch_stock, name='edit_branch_stock'),
     # utilidades
     path('admin/', views.administrate, name='admin_page'),

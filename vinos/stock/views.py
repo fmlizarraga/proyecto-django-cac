@@ -420,7 +420,22 @@ def stock_list(req):
     return render(req, 'pages/stock_list.html', context)
 
 @active_employee_required
-def branch_stock_list(req):
+def branch_stock_list(req, branch_id):
+    branch = get_object_or_404(Branch, pk=branch_id)
+    stock = BranchStock.objects.filter(branch=branch).order_by('product')
+    branch_stock_map = [{
+        'branch': branch,
+        'stock_items': stock
+    }]
+    context = {
+        'title': 'Stock en la sucursal',
+        'branch_stock_map': branch_stock_map
+    }
+
+    return render(req, 'pages/stock_list.html', context)
+
+@active_employee_required
+def current_branch_stock_list(req):
     employee = Employee.objects.get(user=req.user)
     branch = employee.branch
     stock = BranchStock.objects.filter(branch=branch).order_by('product')

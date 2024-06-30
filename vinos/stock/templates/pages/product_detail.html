@@ -10,22 +10,26 @@
 
 {% block main %}
     <div class="product-detail">
-        <h1>{{ product.name }} - {{ product.variety }}</h1>
-        <p><strong>Descripción:</strong> {{ product.description }}</p>
-        <p><strong>Cosecha:</strong> {{ product.vintage }}</p>
-        <h2>Sucursales Disponibles</h2>
+        <h1>{{ product.name }} <i class="fa-solid fa-champagne-glasses"></i> {{ product.variety }}</h1>
+        <p><strong><i class="fa-solid fa-clipboard"></i> Descripción:</strong> {{ product.description }}</p>
+        <p><strong><i class="fa-solid fa-calendar"></i> Cosecha:</strong> {{ product.vintage }}</p>
+        <h2><i class="fa-solid fa-house-circle-check"></i> Disponible en Sucursales</h2>
         <ul>
             {% for branch_stock in product.branchstock_set.all %}
-                <li>{{ branch_stock.branch.name }}: {{ branch_stock.stock }} unidades</li>
+                <li>
+                    <i class="fa-solid fa-house"></i> <a href="{% url 'stock_list_branch' branch_stock.branch.id %}">
+                        {{ branch_stock.branch.name }}
+                    </a>: <i class="fa-solid fa-wine-bottle"></i> {{ branch_stock.stock }} unidades
+                </li>
             {% empty %}
-                <li>No disponible en ninguna sucursal.</li>
+                <li><i class="fa-solid fa-house-circle-xmark"></i> No disponible en ninguna sucursal.</li>
             {% endfor %}
         </ul>
         {% if user|has_group:"System admins" or user|has_group:"Managers" %}
-        <a class="btn" href="{% url 'edit_product' product.id %}">Editar</a>
+        <a class="btn" href="{% url 'edit_product' product.id %}"><i class="fa-solid fa-pen"></i> Editar</a>
         <!-- <a class="btn btn_cancel" href="">Eliminar</a> -->
         <br>
         {% endif %}
-        <a href="{% url 'product_list' %}">Volver a lista</a>
+        <a href="{% url 'product_list' %}"><i class="fa-solid fa-arrow-rotate-left"></i> Volver a lista</a>
     </div>
 {% endblock %}
