@@ -12,23 +12,43 @@
     <div class="record-list">
         <div class="record-item">
             <h2><i class="fa-solid fa-clock"></i> {{title}}</h2>
-            <a href="{{ btn_order.url }}"><i class="fa-solid fa-bars-staggered"></i> {{ btn_order.label }}</a>
+            <a href="{{ btn_order.url }}" class="btn"><i class="fa-solid fa-bars-staggered"></i> {{ btn_order.label }}</a>
             {% if not user|has_group:"Managers" %}
-            <a href="{% url 'add_record' 'entry' %}"><i class="fa-solid fa-arrow-right-to-bracket"></i> Nueva Entrada</a>
-            <a href="{% url 'add_record' 'exit' %}"><i class="fa-solid fa-arrow-right-from-bracket"></i> Nueva Salida</a>
+            <a href="{% url 'add_record' 'entry' %}" class="btn"><i class="fa-solid fa-arrow-right-to-bracket"></i> Nueva Entrada</a>
+            <a href="{% url 'add_record' 'exit' %}" class="btn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Nueva Salida</a>
             {% endif %}
         </div>
         {% for record in records %}
             <div class="record-item">
-                <h2>{% if record.typeof == 'entry' %}
-                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrada
-                {% else %}
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Salida
-                {% endif %}</h2>
-                <p><strong><i class="fa-solid fa-calendar-day"></i> Fecha:</strong> {{ record.date }}</p>
-                <p><strong><i class="fa-solid fa-wine-bottle"></i> Producto:</strong> Cod.: {{ record.product.id }} {{ record.product.name }} - {{ record.product.variety }} x {{ record.quantity }} </p>
-                <p{% if record.branch == employee.branch %} class="highlight" {% endif %}><strong><i class="fa-solid fa-house-flag"></i> Sucursal:</strong> {{ record.branch }}</p>
-                <p{% if record.employee == employee %} class="highlight" {% endif %}><strong><i class="fa-solid fa-user"></i> Empleado:</strong> {{ record.employee.user.username }} - {{ record.employee.user.email }}</p>
+                <h2>
+                    <a href="{% url 'record_list_filter' %}?typeof={{ record.typeof }}">
+                        {% if record.typeof == 'entry' %}
+                            <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrada
+                        {% else %}
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Salida
+                        {% endif %}
+                    </a>
+                </h2>
+                <p>
+                    <a href="{% url 'record_list_filter' %}?date_min={{ record.date|date:'Y-m-d' }}&date_max={{ record.date|next_day|date:'Y-m-d' }}">
+                        <strong><i class="fa-solid fa-calendar-day"></i> Fecha: </strong>{{ record.date|date:"Y-m-d" }}
+                    </a>
+                </p>
+                <p>
+                    <a href="{% url 'product_detail' record.product.id %}">
+                        <strong><i class="fa-solid fa-wine-bottle"></i> Producto: </strong>Cod.: {{ record.product.id }} {{ record.product.name }} - {{ record.product.variety }} x {{ record.quantity }}
+                    </a>
+                </p>
+                <p class="{% if record.branch == employee.branch %}highlight{% endif %}">
+                    <a href="{% url 'stock_list_branch' record.branch.id %}">
+                        <strong><i class="fa-solid fa-building-flag"></i> Sucursal: </strong>{{ record.branch }}
+                    </a>
+                </p>
+                <p class="{% if record.employee == employee %}highlight{% endif %}">
+                    <a href="{% url 'employee_detail' record.employee.id %}">
+                        <strong><i class="fa-solid fa-user"></i> Empleado:</strong> {{ record.employee.user.username }} - {{ record.employee.user.email }}
+                    </a>
+                </p>
             </div>
         {% empty %}
             <div class="record-item">

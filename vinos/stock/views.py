@@ -402,19 +402,34 @@ def employee_list(req):
 
 @active_employee_required
 def stock_list(req):
-    branches = Branch.objects.all()
-    branch_stock_map = []
+    form = SelectBranchForm(req.GET or None)
+    branch_stock = None
+    paginator = None
 
-    for branch in branches:
-        stock_items = BranchStock.objects.filter(branch=branch).order_by('product')
-        branch_stock_map.append({
-            'branch': branch,
-            'stock_items': stock_items
-        })
+    if form.is_valid():
+        branch = form.cleaned_data.get('branch')
+        if branch:
+            stock_items = BranchStock.objects.filter(branch=branch).order_by('product')
+            paginator = Paginator(stock_items, 8)
+
+            page = req.GET.get('page')
+            try:
+                stock_items = paginator.page(page)
+            except PageNotAnInteger:
+                stock_items = paginator.page(1)
+            except EmptyPage:
+                stock_items = paginator.page(paginator.num_pages)
+
+            branch_stock = {
+                'branch': branch,
+                'stock_items': stock_items
+            }
 
     context = {
         'title': 'Inventario general',
-        'branch_stock_map': branch_stock_map
+        'form': form,
+        'branch_stock': branch_stock,
+        'paginator': paginator,
     }
 
     return render(req, 'pages/stock_list.html', context)
@@ -422,14 +437,23 @@ def stock_list(req):
 @active_employee_required
 def branch_stock_list(req, branch_id):
     branch = get_object_or_404(Branch, pk=branch_id)
-    stock = BranchStock.objects.filter(branch=branch).order_by('product')
-    branch_stock_map = [{
+    stock_items = BranchStock.objects.filter(branch=branch).order_by('product')
+    paginator = Paginator(stock_items, 8)
+    page = req.GET.get('page')
+    try:
+        stock_items = paginator.page(page)
+    except PageNotAnInteger:
+        stock_items = paginator.page(1)
+    except EmptyPage:
+        stock_items = paginator.page(paginator.num_pages)
+    branch_stock = {
         'branch': branch,
-        'stock_items': stock
-    }]
+        'stock_items': stock_items
+    }
     context = {
         'title': 'Stock en la sucursal',
-        'branch_stock_map': branch_stock_map
+        'branch_stock': branch_stock,
+        'paginator': paginator,
     }
 
     return render(req, 'pages/stock_list.html', context)
@@ -438,14 +462,23 @@ def branch_stock_list(req, branch_id):
 def current_branch_stock_list(req):
     employee = Employee.objects.get(user=req.user)
     branch = employee.branch
-    stock = BranchStock.objects.filter(branch=branch).order_by('product')
-    branch_stock_map = [{
+    stock_items = BranchStock.objects.filter(branch=branch).order_by('product')
+    paginator = Paginator(stock_items, 8)
+    page = req.GET.get('page')
+    try:
+        stock_items = paginator.page(page)
+    except PageNotAnInteger:
+        stock_items = paginator.page(1)
+    except EmptyPage:
+        stock_items = paginator.page(paginator.num_pages)
+    branch_stock = {
         'branch': branch,
-        'stock_items': stock
-    }]
+        'stock_items': stock_items
+    }
     context = {
         'title': 'Stock en la sucursal',
-        'branch_stock_map': branch_stock_map
+        'branch_stock': branch_stock,
+        'paginator': paginator,
     }
 
     return render(req, 'pages/stock_list.html', context)

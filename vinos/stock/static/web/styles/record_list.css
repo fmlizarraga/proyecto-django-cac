@@ -25,19 +25,30 @@ main {
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: default;
 }
 
-.record-item h2 {
+.record-item h2,
+.record-item h2 a {
     margin-top: 0;
     color: #333;
+    text-decoration: none;
 }
 
-.record-item p {
+.record-item p,
+.record-item p a {
     margin: 5px 0;
     color: #555;
+    text-decoration: none;
 }
 
-.record-item p strong {
+.record-item p a:hover,
+.record-item h2 a:hover {
+    text-decoration: underline;
+}
+
+.record-item p strong,
+.record-item p a strong {
     color: #000;
 }
 
@@ -50,7 +61,7 @@ main {
     padding-top: 20px;
 }
 
-.record-item a {
+.record-item a.btn {
     display: inline-block;
     padding: 8px 16px;
     text-decoration: none;
@@ -64,7 +75,7 @@ main {
     transition: background-color 0.3s ease;
 }
 
-.record-item a:hover {
+.record-item a.btn:hover {
     background-color: #6b00b3;
     color: #fff;
     border-color: #333;

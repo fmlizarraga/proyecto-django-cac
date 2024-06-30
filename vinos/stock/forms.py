@@ -207,6 +207,7 @@ class RegisterBranch(forms.ModelForm):
 class SelectBranchForm(forms.Form):
     branch = forms.ModelChoiceField(
         queryset=Branch.objects.all(),
+        label="Sucursal"
     )
 
 class RegisterUser(UserCreationForm):

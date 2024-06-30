@@ -1,5 +1,6 @@
 {% extends "pages/base.html" %}
 {% load static %}
+{% load custom_tags %}
 
 {% block title %}{{ employee.full_name }}{% endblock %}
 
@@ -9,18 +10,20 @@
 
 {% block main %}
     <div class="employee-detail">
-        <h1>{{ employee.full_name }}</h1>
-        <p><strong>Nombre de usuario:</strong> {{ employee.user.username }}</p>
-        <p><strong>Nivel de acceso:</strong> {{ employee.user.groups.first }}</p>
-        <p><strong>Super Usuario:</strong> {{ employee.user.is_staff|yesno:"Si,No,Desconocido" }}</p>
-        <p><strong>Email:</strong> {{ employee.user.email }}</p>
-        <p><strong>DNI:</strong> {{ employee.dni }}</p>
-        <p><strong>CUIL:</strong> {{ employee.cuil }}</p>
-        <p><strong>Sucursal:</strong> {{ employee.branch }}</p>
-        <p><strong>Suspendido:</strong> {{ employee.is_active|yesno:"No,Si,Desconocido" }}</p>
-        <a class="btn" href="{% url 'edit_employee' employee.id %}">Editar</a>
-        <a class="btn btn_cancel" href="{% url 'toggle_employee' employee.id %}">{{ employee.is_active|yesno:"Suspender,Habilitar,-" }}</a>
+        <h1><i class="fa-solid fa-circle-user"></i> {{ employee.full_name }}</h1>
+        <p><strong><i class="fa-solid fa-user"></i> Nombre de usuario:</strong> {{ employee.user.username }}</p>
+        <p><strong><i class="fa-solid fa-user-group"></i> Grupo:</strong> {{ employee.user.groups.first }}</p>
+        <p><strong><i class="fa-solid fa-user-gear"></i> Super Usuario:</strong> {{ employee.user.is_staff|yesno:"Si,No,Desconocido" }}</p>
+        <p><strong><i class="fa-solid fa-envelope"></i> Email:</strong> {{ employee.user.email }}</p>
+        <p><strong><i class="fa-solid fa-id-card"></i> DNI:</strong> {{ employee.dni }}</p>
+        <p><strong><i class="fa-solid fa-id-badge"></i> CUIL:</strong> {{ employee.cuil }}</p>
+        <p><strong><i class="fa-solid fa-building-user"></i> Sucursal:</strong> {{ employee.branch }}</p>
+        <p><strong><i class="fa-solid fa-person-circle-question"></i> Estado:</strong> {{ employee.is_active|yesno:"Habilitado,Suspendido,Desconocido" }}</p>
+        {% if user|has_group:"System admins" or user|has_group:"Managers" or user|has_group:"Branch managers" %}
+        <a class="btn" href="{% url 'edit_employee' employee.id %}"><i class="fa-solid fa-pen"></i> Editar</a>
+        <a class="btn btn_cancel" href="{% url 'toggle_employee' employee.id %}"><i class="fa-solid fa-user-{{ employee.is_active|yesno:'xmark,check,clock' }}"></i> {{ employee.is_active|yesno:"Suspender,Habilitar,-" }}</a>
         <br>
-        <a href="{% url 'employee_list' %}">Volver a lista</a>
+        {% endif %}
+        <a href="{% url 'employee_list' %}"><i class="fa-solid fa-arrow-rotate-left"></i> Volver a lista</a>
     </div>
 {% endblock %}

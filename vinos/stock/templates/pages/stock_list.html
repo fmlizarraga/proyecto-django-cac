@@ -1,36 +1,87 @@
 {% extends "pages/base.html" %}
 {% load static %}
+{% load custom_tags %}
 
 {% block title %}{{ title }}{% endblock %}
 
 {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'web/styles/forms.css' %}">
     <link rel="stylesheet" href="{% static 'web/styles/branch_stock_list.css' %}">
+    <link rel="stylesheet" href="{% static 'web/styles/paginator.css' %}">
 {% endblock %}
 
 {% block main %}
     <div class="stock-list">
-        {% for branch_stock in branch_stock_map %}
-            <div class="branch-section">
-                <h2>Stock en {{ branch_stock.branch }}</h2>
+        {% if form %}
+        <div class="form-container">
+            <h2><i class="fa-solid fa-building-circle-arrow-right"></i> Seleccione una sucursal</h2>
+            <form method="get" action="{% url 'stock_list' %}">
+                {{ form.as_p }}
+                <button type="submit" class="btn-accept"><i class="fa-solid fa-clipboard-question"></i> Mostrar Inventario</button>
+            </form>
+        </div>
+        {% endif %}
+        <div class="branch-section">
+            <div class="branch-info">
+                <h2><i class="fa-solid fa-building"></i> Sucursal: {{ branch_stock.branch }}</h2>
+                <p><strong><i class="fa-solid fa-location-dot"></i> Dirección:</strong> {{ branch_stock.branch.address }}</p>
+                <p><strong><i class="fa-solid fa-phone"></i> Teléfono:</strong> {{ branch_stock.branch.telephone }}</p>
+            </div>
+            <div class="branch-stock">
+                <h3><i class="fa-solid fa-clipboard-list"></i> Stock en {{ branch_stock.branch }}</h3>
                 <div class="branch-stock-items">
                     {% for item in branch_stock.stock_items %}
                         <div class="stock-item {% if item.stock == 0 %}out-of-stock{% endif %}">
-                            <h3>{{ item.product.name }}</h3>
-                            <p><strong>Producto:</strong> Cod.: {{ item.product.pk }} - {{ item.product.name }} - {{ item.product.variety }}</p>
+                            <h4>
+                                <a href="{% url 'product_detail' item.product.id %}">
+                                    <i class="fa-solid fa-chevron-right"></i> {{ item.product.name }}
+                                </a>
+                            </h4>
+                            <p>
+                                <strong><i class="fa-solid fa-box"></i> Producto:</strong> <i class="fa-solid fa-barcode"></i> Cod.: {{ item.product.pk }}:
+                                {{ item.product.name }} <i class="fa-solid fa-champagne-glasses"></i> {{ item.product.variety }}
+                            </p>
                             {% if item.stock == 0 %}
-                                <p class="alert-text">Producto agotado.</p>
+                                <p class="alert-text"><i class="fa-solid fa-wine-glass-empty"></i> Producto agotado.</p>
                             {% else %}
-                                <p><strong>Cantidad:</strong> {{ item.stock }}</p>
+                                <p>
+                                    <strong>
+                                        <i class="fa-solid fa-wine-glass"></i> Cantidad:
+                                    </strong> {{ item.stock }} <i class="fa-solid fa-wine-bottle"></i> unidades
+                                </p>
                             {% endif %}
                         </div>
                     {% endfor %}
                     {% if not branch_stock.stock_items %}
-                        <div class="stock-item">
-                            <p>No hay productos en el inventario.</p>
+                        <div class="stock-item no-inventory">
+                            <p><i class="fa-solid fa-box-open"></i> No hay productos en el inventario.</p>
                         </div>
                     {% endif %}
                 </div>
             </div>
-        {% endfor %}
+        </div>
+    </div>
+    <div class="pagination">
+        <span class="step-links">
+            {% if branch_stock.stock_items.has_previous %}
+                <a href="?{% param_replace page=1 %}">&laquo; primera</a>
+                <a href="?{% param_replace page=branch_stock.stock_items.previous_page_number %}">anterior</a>
+            {% else %}
+                <span class="disabled">&laquo; primera</span>
+                <span class="disabled">anterior</span>
+            {% endif %}
+
+            <span class="current">
+                Página {{ branch_stock.stock_items.number }} de {{ branch_stock.stock_items.paginator.num_pages }}.
+            </span>
+
+            {% if branch_stock.stock_items.has_next %}
+                <a href="?{% param_replace page=branch_stock.stock_items.next_page_number %}">siguiente</a>
+                <a href="?{% param_replace page=branch_stock.stock_items.paginator.num_pages %}">última &raquo;</a>
+            {% else %}
+                <span class="disabled">siguiente</span>
+                <span class="disabled">última &raquo;</span>
+            {% endif %}
+        </span>
     </div>
 {% endblock %}

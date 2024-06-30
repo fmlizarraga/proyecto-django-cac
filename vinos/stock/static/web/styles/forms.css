@@ -40,6 +40,12 @@
     font-family: sans-serif, 'Segoe UI', Tahoma, Verdana, Arial;
 }
 
+.form-container select option:hover,
+.form-container select option:focus {
+    background-color: #7700ff;
+    color: fff;
+}
+
 .form-container span.select2-container {
     margin-bottom: 10px;
     width: calc(100% - 22px);
@@ -84,7 +90,7 @@
     transition: background-color 0.3s ease;
 }
 
-.form-container button:hover
+.form-container button:hover,
 .btn-accept:hover {
     background-color: #6b00b3;
 }

@@ -6,12 +6,15 @@
     border-radius: 5px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: default;
 }
 
-.product-detail h1 {
+.product-detail h1,
+.product-detail h1 a {
     font-size: 28px;
     color: #333;
     margin-bottom: 15px;
+    text-decoration: none;
     text-align: center;
 }
 
@@ -20,7 +23,8 @@
     line-height: 1.5;
 }
 
-.product-detail h2 {
+.product-detail h2,
+.product-detail h2 a {
     margin-top: 20px;
     font-size: 24px;
     color: #7700ff;
