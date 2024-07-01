@@ -36,26 +36,36 @@
             {% for record in records %}
                 <tr>
                     <td>
-                        <i class="fa-solid fa-wine-bottle"></i> {{ record.product.name }}
+                        <a href="{% url 'record_list_filter' %}?product={{ record.product.id }}">
+                            <i class="fa-solid fa-wine-bottle"></i> {{ record.product.name }}
+                        </a>
                     </td>
                     <td>
-                        <i class="fa-solid fa-building"></i> {{ record.branch.name }}
+                        <a href="{% url 'record_list_filter' %}?branch={{ record.branch.id }}">
+                            <i class="fa-solid fa-building"></i> {{ record.branch.name }}
+                        </a>
                     </td>
                     <td>
                         <i class="fa-solid fa-wine-glass"></i> {{ record.quantity }} unidades
                     </td>
                     <td>
-                        {% if record.get_typeof_display == 'Entry' %}
-                        <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrada
-                        {% elif record.get_typeof_display == 'Exit' %}
-                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Salida
-                        {% endif %}
+                        <a href="{% url 'record_list_filter' %}?typeof={{ record.typeof }}">
+                            {% if record.get_typeof_display == 'Entry' %}
+                            <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrada
+                            {% elif record.get_typeof_display == 'Exit' %}
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Salida
+                            {% endif %}
+                        </a>
                     </td>
                     <td>
-                        <i class="fa-solid fa-user"></i> {{ record.employee.full_name }}
+                        <a href="{% url 'record_list_filter' %}?employee={{ record.employee.id }}">
+                            <i class="fa-solid fa-user"></i> {{ record.employee.full_name }}
+                        </a>
                     </td>
                     <td>
+                    <a href="{% url 'record_list_filter' %}?date_min={{ record.date|date:'Y-m-d' }}&date_max={{ record.date|next_day|date:'Y-m-d' }}">
                         <i class="fa-solid fa-clock"></i> {{ record.date }}
+                    </a>
                     </td>
                     <td>
                         <a href="{% url 'edit_record' record.id %}"><i class="fa-solid fa-square-pen"></i> Editar</a>

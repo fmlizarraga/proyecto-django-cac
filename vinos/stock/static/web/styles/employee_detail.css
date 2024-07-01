@@ -20,6 +20,16 @@
     line-height: 1.5;
 }
 
+.employee-detail .warning-msg {
+    margin-top: 16px;
+    font-size: 18px;
+    background-color: rgb(252, 237, 197);
+    border: solid rgb(245, 216, 137) 1px;
+    color: #694312;
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
 .employee-detail a {
     display: inline-block;
     margin-top: 20px;

@@ -25,6 +25,7 @@ urlpatterns = [
     # empleados
     path('employee/<int:employee_id>/', views.employee_detail, name='employee_detail'),
     path('employee/list/', views.employee_list, name='employee_list'),
+    path('employee/list/at/<int:branch_id>', views.employee_at_branch_list, name='employee_list_branch'),
     path('employee/edit/<int:employee_id>/', views.edit_employee, name='edit_employee'),
     path('employee/toggle/<int:employee_id>/', views.toggle_employee, name='toggle_employee'),
     # inventarios

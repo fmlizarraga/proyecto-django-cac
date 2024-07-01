@@ -81,8 +81,8 @@ class Product(models.Model):
         return f"Cod.: {self.pk} - {self.name} - {self.variety} {self.vintage}"
 
 class BranchStock(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='branch_stocks')
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='branch_stocks')
     stock = models.IntegerField(verbose_name="Stock en Sucursal", default=0)
 
     def __str__(self):

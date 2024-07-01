@@ -26,6 +26,9 @@
                 <h2><i class="fa-solid fa-building"></i> Sucursal: {{ branch_stock.branch }}</h2>
                 <p><strong><i class="fa-solid fa-location-dot"></i> Dirección:</strong> {{ branch_stock.branch.address }}</p>
                 <p><strong><i class="fa-solid fa-phone"></i> Teléfono:</strong> {{ branch_stock.branch.telephone }}</p>
+                <p><strong><i class="fa-solid fa-users"></i> Número de empleados: </strong>{{ branch_stock.num_employees }}</p>
+                <p><strong><i class="fa-solid fa-boxes-stacked"></i> Número de productos en stock: </strong>{{ branch_stock.num_products }}</p>
+
             </div>
             <div class="branch-stock">
                 <h3><i class="fa-solid fa-clipboard-list"></i> Stock en {{ branch_stock.branch }}</h3>

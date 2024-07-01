@@ -1,6 +1,6 @@
 from typing import Any
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Q
+from django.db.models import Q, Count, Subquery, OuterRef
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 from django.views.generic import ListView, UpdateView
@@ -379,15 +379,22 @@ def select_branch(req,action):
 
 
 @active_employee_required
-@permission_required('stock.view_branch',raise_exception=True)
-def branch_list(req):
-    branches = Branch.objects.all()
+@permission_required('stock.view_branch', raise_exception=True)
+def branch_list(request):
+    employee_count = Employee.objects.filter(branch=OuterRef('pk')).values('branch').annotate(count=Count('id')).values('count')
+    product_count = BranchStock.objects.filter(branch=OuterRef('pk')).values('branch').annotate(count=Count('id')).values('count')
+
+    branches = Branch.objects.annotate(
+        num_employees=Subquery(employee_count),
+        num_products=Subquery(product_count)
+    )
+
     context = {
         'title': 'Sucursales',
         'branches': branches
     }
 
-    return render(req, 'pages/branch_list.html', context)
+    return render(request, 'pages/branch_list.html', context)
 
 @active_employee_required
 @permission_required('stock.view_employee',raise_exception=True)
@@ -395,6 +402,18 @@ def employee_list(req):
     employees = Employee.objects.all()
     context = {
         'title': 'Empleados',
+        'employees': employees
+    }
+
+    return render(req, 'pages/employee_list.html', context)
+
+@active_employee_required
+@permission_required('stock.view_employee',raise_exception=True)
+def employee_at_branch_list(req, branch_id):
+    branch = get_object_or_404(Branch, pk=branch_id)
+    employees = Employee.objects.filter(branch=branch)
+    context = {
+        'title': f'Empleados en {branch}',
         'employees': employees
     }
 
@@ -409,6 +428,9 @@ def stock_list(req):
     if form.is_valid():
         branch = form.cleaned_data.get('branch')
         if branch:
+            num_employees = Employee.objects.filter(branch=branch).count()
+            num_products = BranchStock.objects.filter(branch=branch).count()
+
             stock_items = BranchStock.objects.filter(branch=branch).order_by('product')
             paginator = Paginator(stock_items, 8)
 
@@ -422,7 +444,9 @@ def stock_list(req):
 
             branch_stock = {
                 'branch': branch,
-                'stock_items': stock_items
+                'stock_items': stock_items,
+                'num_employees': num_employees,
+                'num_products': num_products
             }
 
     context = {
@@ -438,6 +462,10 @@ def stock_list(req):
 def branch_stock_list(req, branch_id):
     branch = get_object_or_404(Branch, pk=branch_id)
     stock_items = BranchStock.objects.filter(branch=branch).order_by('product')
+
+    num_employees = Employee.objects.filter(branch=branch).count()
+    num_products = BranchStock.objects.filter(branch=branch).count()
+
     paginator = Paginator(stock_items, 8)
     page = req.GET.get('page')
     try:
@@ -448,7 +476,9 @@ def branch_stock_list(req, branch_id):
         stock_items = paginator.page(paginator.num_pages)
     branch_stock = {
         'branch': branch,
-        'stock_items': stock_items
+        'stock_items': stock_items,
+        'num_employees': num_employees,
+        'num_products': num_products
     }
     context = {
         'title': 'Stock en la sucursal',
@@ -462,6 +492,10 @@ def branch_stock_list(req, branch_id):
 def current_branch_stock_list(req):
     employee = Employee.objects.get(user=req.user)
     branch = employee.branch
+
+    num_employees = Employee.objects.filter(branch=branch).count()
+    num_products = BranchStock.objects.filter(branch=branch).count()
+
     stock_items = BranchStock.objects.filter(branch=branch).order_by('product')
     paginator = Paginator(stock_items, 8)
     page = req.GET.get('page')
@@ -473,7 +507,9 @@ def current_branch_stock_list(req):
         stock_items = paginator.page(paginator.num_pages)
     branch_stock = {
         'branch': branch,
-        'stock_items': stock_items
+        'stock_items': stock_items,
+        'num_employees': num_employees,
+        'num_products': num_products
     }
     context = {
         'title': 'Stock en la sucursal',

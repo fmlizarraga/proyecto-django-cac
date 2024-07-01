@@ -7,6 +7,7 @@ body {
 main {
     padding: 2em;
     background-color: #f4f4f4;
+    cursor: default;
 }
 
 .branch-list {
@@ -16,6 +17,10 @@ main {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 8px;
+}
+
+.branch-list h1 {
+    margin-top: 0;
 }
 
 .head-item {
@@ -46,9 +51,17 @@ main {
 }
 
 .branch-item h2,
-.employee-item h2 {
+.employee-item h2,
+.branch-item h2 a {
     margin-top: 0;
     color: #333;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.branch-item h2 a:hover {
+    color: #6b00b3;
+    text-decoration: underline;
 }
 
 .branch-item p,
@@ -59,17 +72,27 @@ main {
 
 .branch-item p strong,
 .employee-item p strong {
-    color: #000;
+    color: #333;
+    transition: all 0.3s;
 }
 
 .branch-item p,
-.employee-item p {
-    color: #888;
+.employee-item p,
+.branch-item p a {
+    color: #3c3c3c;
     text-align: center;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.branch-item p a:hover,
+.branch-item p a strong:hover {
+    color: #6b00b3;
+    text-decoration: underline;
 }
 
 .branch-item p:last-child {
-    margin-bottom: 0;
+    margin-bottom: 10px;
 }
 
 .employee-item p:last-child {
@@ -81,7 +104,6 @@ main {
     padding-top: 20px;
 }
 
-.branch-item a,
 .head-item a {
     display: inline-block;
     padding: 8px 16px;
@@ -96,7 +118,6 @@ main {
     transition: background-color 0.3s ease;
 }
 
-.branch-item a:hover,
 .head-item a:hover {
     background-color: #6b00b3;
     color: #fff;
