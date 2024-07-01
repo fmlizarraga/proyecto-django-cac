@@ -8,16 +8,6 @@ def validate_positive(value):
     if value <= 0:
         raise ValidationError("El valor debe ser positivo")
 
-class Person(models.Model):
-    dni = models.IntegerField(
-        verbose_name="DNI", 
-        unique=True,
-        validators=[validate_positive]
-    )
-
-    class Meta:
-        abstract = True
-
 class Branch(models.Model):
     name = models.CharField(
         max_length=255, 
@@ -38,6 +28,41 @@ class Branch(models.Model):
 
     def __str__(self):
         return self.name
+
+class Person(models.Model):
+    dni = models.IntegerField(
+        verbose_name="DNI", 
+        unique=True,
+        validators=[validate_positive]
+    )
+
+    class Meta:
+        abstract = True
+
+class Employee(Person):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Usuario", related_name="employee")
+    is_active = models.BooleanField(
+        verbose_name="En actividad",
+        default=True
+    )
+    cuil = models.CharField(
+        verbose_name="CUIL", 
+        unique=True,
+        max_length=13,
+        validators=[
+            RegexValidator(
+                regex=r'^\d{2}-\d{7,8}-\d$',
+                message='El CUIL debe estar en el formato NN-NNNNNNNN-N'
+            )
+        ]
+    )
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name="Sucursal")
+
+    def full_name(self):
+        return self.user.get_full_name()
+
+    def __str__(self):
+        return f"Empleado: {self.user.get_full_name()} - DNI: {self.dni} - CUIL: {self.cuil} - Sucursal: {self.branch} - En actividad: {'Si' if self.is_active else 'No'}"
 
 class Product(models.Model):
     MALBEC = 'Malbec'
@@ -87,32 +112,6 @@ class BranchStock(models.Model):
 
     def __str__(self):
         return f"Sucursal: {self.branch.name} - Producto: {self.product.name} - Stock: {self.stock}"
-
-
-class Employee(Person):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Usuario", related_name="employee")
-    is_active = models.BooleanField(
-        verbose_name="En actividad",
-        default=True
-    )
-    cuil = models.CharField(
-        verbose_name="CUIL", 
-        unique=True,
-        max_length=13,
-        validators=[
-            RegexValidator(
-                regex=r'^\d{2}-\d{7,8}-\d$',
-                message='El CUIL debe estar en el formato NN-NNNNNNNN-N'
-            )
-        ]
-    )
-    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name="Sucursal")
-
-    def full_name(self):
-        return self.user.get_full_name()
-
-    def __str__(self):
-        return f"Empleado: {self.user.get_full_name()} - DNI: {self.dni} - CUIL: {self.cuil} - Sucursal: {self.branch} - En actividad: {'Si' if self.is_active else 'No'}"
 
 class Record(models.Model):
     ENTRY = 'entry'
