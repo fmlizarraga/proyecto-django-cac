@@ -19,7 +19,7 @@
         <p><strong><i class="fa-solid fa-calendar"></i> Cosecha:</strong> {{ product.vintage }}</p>
         <h2><i class="fa-solid fa-building-circle-check"></i> Disponible en Sucursales</h2>
         <ul>
-            {% for branch_stock in product.branchstock_set.all %}
+            {% for branch_stock in product.branch_stocks.all %}
                 <li>
                     <i class="fa-solid fa-building"></i> <a href="{% url 'stock_list_branch' branch_stock.branch.id %}">
                         {{ branch_stock.branch.name }}
