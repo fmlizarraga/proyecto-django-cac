@@ -9,14 +9,19 @@
 
 {% block main %}
     <div class="admin-container">
-        <h1 class="title">Herramientas Administrativas</h1>
+        <h1 class="title"><i class="fa-solid fa-screwdriver-wrench"></i> Herramientas Administrativas</h1>
         <div class="admin-links">
             {% for category in admin_links %}
                 <div class="admin-item">
                     <h2>{{ category.title }}</h2>
                     <ul>
                     {% for link in category.links %}
-                        <li><a href="{{ link.url }}" >{{ link.label }}</a></li>
+                        <li>
+                            <a href="{{ link.url }}">
+                                <i class="{{ link.icon_class }}"></i>
+                                {{ link.label }}
+                            </a>
+                        </li>
                     {% endfor %}
                     </ul>
                 </div>

@@ -291,7 +291,7 @@ def record_list_filter(request):
     record_filter = RecordFilter(request.GET, queryset=records)
     filtered_records = record_filter.qs
 
-    paginator = Paginator(filtered_records, 10)  # 10 registros por página
+    paginator = Paginator(filtered_records, 10)
     page = request.GET.get('page')
     
     try:
@@ -302,7 +302,7 @@ def record_list_filter(request):
         paginated_records = paginator.page(paginator.num_pages)
 
     context = {
-        'title': 'Lista de Registros',
+        'title': 'Administración de Registros',
         'records': paginated_records,
         'filter': record_filter
     }
@@ -488,43 +488,43 @@ def administrate(request):
     links_by_entity = {
         'Empleados': {
             'view_employee': [
-                {'url': reverse('employee_list'), 'label': 'Administrar Empleados'}
+                {'url': reverse('employee_list'), 'label': 'Administrar Empleados', 'icon_class': 'fa-solid fa-users-gear'}
             ]
         },
         'Registros': {
             'view_record': [
-                {'url': reverse('record_list'), 'label': 'Gestión Básica de Registros'},
-                {'url': reverse('record_list_filter'), 'label': 'Gestión Avanzada de Registros'}
+                {'url': reverse('record_list'), 'label': 'Gestión Básica de Registros', 'icon_class': 'fa-solid fa-file-alt'},
+                {'url': reverse('record_list_filter'), 'label': 'Gestión Avanzada de Registros', 'icon_class': 'fa-solid fa-filter'}
             ]
         },
         'Productos': {
             'add_product': [
-                {'url': reverse('add_product'), 'label': 'Agregar Producto'}
+                {'url': reverse('add_product'), 'label': 'Agregar Producto', 'icon_class': 'fa-solid fa-plus'}
             ],
             'change_product': [
-                {'url': reverse('select_product'), 'label': 'Editar Producto'}
+                {'url': reverse('select_product'), 'label': 'Editar Producto', 'icon_class': 'fa-solid fa-edit'}
             ],
             'view_product': [
-                {'url': reverse('product_list'), 'label': 'Ver Productos'}
+                {'url': reverse('product_list'), 'label': 'Ver Productos', 'icon_class': 'fa-solid fa-eye'}
             ]
         },
         'Inventarios': {
             'change_branchstock': [
-                {'url': reverse('select_branch', args=['edit_branch_stock']), 'label': 'Editar Inventario'}
+                {'url': reverse('select_branch', args=['edit_branch_stock']), 'label': 'Editar Inventario', 'icon_class': 'fa-solid fa-warehouse'}
             ],
             'view_branchstock': [
-                {'url': reverse('stock_list'), 'label': 'Ver Inventarios'}
+                {'url': reverse('stock_list'), 'label': 'Ver Inventarios', 'icon_class': 'fa-solid fa-boxes'}
             ]
         },
         'Sucursales': {
             'add_branch': [
-                {'url': reverse('add_branch'), 'label': 'Agregar Sucursal'}
+                {'url': reverse('add_branch'), 'label': 'Agregar Sucursal', 'icon_class': 'fa-solid fa-building-circle-arrow-right'}
             ],
             'change_branch': [
-                {'url': reverse('select_branch', args=['edit_branch']), 'label': 'Editar Sucursal'}
+                {'url': reverse('select_branch', args=['edit_branch']), 'label': 'Editar Sucursal', 'icon_class': 'fa-solid fa-building-circle-exclamation'}
             ],
             'view_branch': [
-                {'url': reverse('branch_list'), 'label': 'Ver Sucursales'}
+                {'url': reverse('branch_list'), 'label': 'Ver Sucursales', 'icon_class': 'fa-solid fa-building'}
             ]
         }
     }

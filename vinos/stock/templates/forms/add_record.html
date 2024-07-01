@@ -8,11 +8,11 @@
 
 {% block main %}
     <div class="form-container">
-        <h1>{{ title }}</h1>
+        <h1><i class="fa-solid fa-plus"></i> {{ title }}</h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Guardar</button>
+            <button type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
         </form>
         <a href="{% url 'product_list' %}">Volver al inventario</a>
     </div>

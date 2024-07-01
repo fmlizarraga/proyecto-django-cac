@@ -11,47 +11,59 @@
 {% endblock %}
 
 {% block main %}
-    <h1>{{ title }}</h1>
+    <h1><i class="fa-solid fa-book"></i> {{ title }}</h1>
     <div class="form-container">
         <form method="get">
             {{ filter.form.as_p }}
-            <button type="submit">Buscar</button>
-            <a href="{% url 'record_list_filter' %}">Limpiar filtros</a>
+            <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> Buscar</button>
+            <a href="{% url 'record_list_filter' %}"><i class="fa-solid fa-broom"></i> Limpiar filtros</a>
         </form>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th>Producto</th>
-                <th>Sucursal</th>
-                <th>Cantidad</th>
-                <th>Tipo</th>
-                <th>Empleado</th>
-                <th>Fecha</th>
-                <th>Editar</th>
+                <th><i class="fa-solid fa-box"></i> Producto</th>
+                <th><i class="fa-solid fa-building-flag"></i> Sucursal</th>
+                <th><i class="fa-solid fa-champagne-glasses"></i> Cantidad</th>
+                <th><i class="fa-solid fa-arrow-right-arrow-left"></i> Tipo</th>
+                <th><i class="fa-solid fa-clipboard-user"></i> Empleado</th>
+                <th><i class="fa-solid fa-calendar-day"></i> Fecha</th>
+                <th><i class="fa-solid fa-pen-to-square"></i> Editar</th>
             </tr>
         </thead>
         <tbody>
             {% for record in records %}
                 <tr>
-                    <td>{{ record.product.name }}</td>
-                    <td>{{ record.branch.name }}</td>
-                    <td>{{ record.quantity }}</td>
+                    <td>
+                        <i class="fa-solid fa-wine-bottle"></i> {{ record.product.name }}
+                    </td>
+                    <td>
+                        <i class="fa-solid fa-building"></i> {{ record.branch.name }}
+                    </td>
+                    <td>
+                        <i class="fa-solid fa-wine-glass"></i> {{ record.quantity }} unidades
+                    </td>
                     <td>
                         {% if record.get_typeof_display == 'Entry' %}
-                        Entrada
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrada
                         {% elif record.get_typeof_display == 'Exit' %}
-                        Salida
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Salida
                         {% endif %}
                     </td>
-                    <td>{{ record.employee.full_name }}</td>
-                    <td>{{ record.date }}</td>
-                    <td><a href="{% url 'edit_record' record.id %}">Editar</a></td>
+                    <td>
+                        <i class="fa-solid fa-user"></i> {{ record.employee.full_name }}
+                    </td>
+                    <td>
+                        <i class="fa-solid fa-clock"></i> {{ record.date }}
+                    </td>
+                    <td>
+                        <a href="{% url 'edit_record' record.id %}"><i class="fa-solid fa-square-pen"></i> Editar</a>
+                    </td>
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="7">No se encontraron registros.</td>
+                    <td colspan="7"><i class="fa-solid fa-xmark"></i> No se encontraron registros.</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -60,11 +72,11 @@
     <div class="pagination">
         <span class="step-links">
             {% if records.has_previous %}
-                <a href="?{% param_replace page=1 %}">&laquo; primera</a>
-                <a href="?{% param_replace page=records.previous_page_number %}">anterior</a>
+                <a href="?{% param_replace page=1 %}"><i class="fa-solid fa-angles-left"></i> primera</a>
+                <a href="?{% param_replace page=records.previous_page_number %}"><i class="fa-solid fa-chevron-left"></i> anterior</a>
             {% else %}
-                <span class="disabled">&laquo; primera</span>
-                <span class="disabled">anterior</span>
+                <span class="disabled"><i class="fa-solid fa-angles-left"></i> primera</span>
+                <span class="disabled"><i class="fa-solid fa-chevron-left"></i> anterior</span>
             {% endif %}
 
             <span class="current">
@@ -72,11 +84,11 @@
             </span>
 
             {% if records.has_next %}
-                <a href="?{% param_replace page=records.next_page_number %}">siguiente</a>
-                <a href="?{% param_replace page=records.paginator.num_pages %}">última &raquo;</a>
+                <a href="?{% param_replace page=records.next_page_number %}">siguiente <i class="fa-solid fa-chevron-right"></i></a>
+                <a href="?{% param_replace page=records.paginator.num_pages %}">última <i class="fa-solid fa-angles-right"></i></a>
             {% else %}
-                <span class="disabled">siguiente</span>
-                <span class="disabled">última &raquo;</span>
+                <span class="disabled">siguiente <i class="fa-solid fa-chevron-right"></i></span>
+                <span class="disabled">última <i class="fa-solid fa-angles-right"></i></span>
             {% endif %}
         </span>
     </div>

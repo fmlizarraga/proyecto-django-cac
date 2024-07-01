@@ -8,13 +8,13 @@
 
 {% block main %}
     <div class="form-container">
-        <h1>{{ title }}</h1>
+        <h1><i class="fa-solid fa-circle-plus"></i> {{ title }}</h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
             <br>
-            <button type="submit">Guardar</button>
+            <button type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
         </form>
-        <a href="{% url 'employee_list' %}">Volver a la lista</a>
+        <a href="{% url 'employee_list' %}"><i class="fa-solid fa-rotate-left"></i> Volver a la lista</a>
     </div>
 {% endblock %}

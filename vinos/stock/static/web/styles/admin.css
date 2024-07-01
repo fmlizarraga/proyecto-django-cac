@@ -1,4 +1,4 @@
-:root{
+:root {
     --corp-bg-color: #440750;
     --corp-fg-color: #fce5ca;
     --corp-item-color: #7700ff;
@@ -40,25 +40,35 @@
 }
 
 .admin-container ul li a {
+    display: flex;
+    align-items: center;
     text-decoration: none;
     color: var(--corp-item-color);
-    padding: 10px;
+    padding: 16px 24px;
     border: 1px solid var(--corp-item-color);
     border-radius: 4px;
     margin-left: 20px;
-    display: inline-block;
-    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+    margin-right: 20px;
+    transition: all 0.3s;
+}
+
+.admin-container ul li a i {
+    margin-right: 10px;
+    font-size: 1.2em;
+    transition: all 0.3s;
 }
 
 .admin-container ul li a:hover {
     background-color: var(--corp-item-color-selected);
     color: #fff;
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
-.admin-container .admin-item:hover {
-    h2 {
-        color: var(--corp-item-color-selected);
-        border-bottom: 2px solid var(--corp-item-color-selected);
-    }
+.admin-container ul li a:hover i {
+    transform: scale(1.2);
+}
+
+.admin-container .admin-item:hover h2 {
+    color: var(--corp-item-color-selected);
+    border-bottom: 2px solid var(--corp-item-color-selected);
 }

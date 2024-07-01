@@ -34,11 +34,11 @@
     <div class="pagination">
         <span class="step-links">
             {% if page_obj.has_previous %}
-                <a href="?{% param_replace page=1 %}">&laquo; primera</a>
-                <a href="?{% param_replace page=page_obj.previous_page_number %}">anterior</a>
+                <a href="?{% param_replace page=1 %}"><i class="fa-solid fa-angles-left"></i> primera</a>
+                <a href="?{% param_replace page=page_obj.previous_page_number %}"><i class="fa-solid fa-chevron-left"></i> anterior</a>
             {% else %}
-                <span class="disabled">&laquo; primera</span>
-                <span class="disabled">anterior</span>
+                <span class="disabled"><i class="fa-solid fa-angles-left"></i> primera</span>
+                <span class="disabled"><i class="fa-solid fa-chevron-left"></i> anterior</span>
             {% endif %}
 
             <span class="current">
@@ -46,11 +46,11 @@
             </span>
 
             {% if page_obj.has_next %}
-                <a href="?{% param_replace page=page_obj.next_page_number %}">siguiente</a>
-                <a href="?{% param_replace page=page_obj.paginator.num_pages %}">última &raquo;</a>
+                <a href="?{% param_replace page=page_obj.next_page_number %}">siguiente <i class="fa-solid fa-chevron-right"></i></a>
+                <a href="?{% param_replace page=page_obj.paginator.num_pages %}">última <i class="fa-solid fa-angles-right"></i></a>
             {% else %}
-                <span class="disabled">siguiente</span>
-                <span class="disabled">última &raquo;</span>
+                <span class="disabled">siguiente <i class="fa-solid fa-chevron-right"></i></span>
+                <span class="disabled">última <i class="fa-solid fa-angles-right"></i></span>
             {% endif %}
         </span>
     </div>

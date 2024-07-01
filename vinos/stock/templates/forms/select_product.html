@@ -8,13 +8,13 @@
 
 {% block main %}
     <div class="form-container">
-        <h1>{{ title }}</h1>
+        <h1><i class="fa-solid fa-bolt"></i> {{ title }}</h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Editar</button>
+            <button type="submit"><i class="fa-solid fa-pen-to-square"></i> Editar</button>
         </form>
-        <a href="{% url 'admin_page' %}">Volver a herramientas administrativas</a>
+        <a href="{% url 'admin_page' %}"><i class="fa-solid fa-rotate-left"></i> Volver a herramientas administrativas</a>
     </div>
     <script>
         $(document).ready(function() {
