@@ -20,6 +20,7 @@
                     <a href="{% url 'stock_list_branch' branch.id %}">
                         <i class="fa-solid fa-building"></i> {{ branch.name }}
                     </a>
+                    <a href="{% url 'edit_branch' branch.name %}"><i class="fa-solid fa-edit"></i></a>
                 </h2>
                 <p><strong><i class="fa-solid fa-location-dot"></i> Direccion:</strong> {{ branch.address }}</p>
                 <p><strong><i class="fa-solid fa-phone"></i> Telefono:</strong> {{ branch.telephone }}</p>

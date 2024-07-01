@@ -5,9 +5,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Bodega San Martin - {% block title %}{% endblock %}</title>
+    <title> {{ company_name }} - {% block title %}{% endblock %}</title>
     <link rel="shortcut icon" href="{% static 'web/pictures/wine_barrel.png' %}" type="image/x-icon">
-    {% comment %} SELECT2 CDN {% endcomment %}
+    {% comment %} CDNs {% endcomment %}
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Select2 -->
@@ -15,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- Select2 Spanish Language -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/es.js"></script>
-    <!-- Font Aweme -->
+    <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/d385ce05bf.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="{% static 'web/styles/base.css' %}">
@@ -25,42 +25,43 @@
 </head>
 <body>
     <header>
-        <h1>Bodega San Martin</h1>
+        <h1>
+            <a href="{% url 'index' %}">
+                {{ company_name }}
+            </a>
+        </h1>
         <nav>
             <ul>
-                <li class="{% if request.resolver_match.view_name == 'index' %}active{% endif %}">
-                    <a href="{% url 'index' %}"><i class="fa-solid fa-house-chimney"></i> Inicio</a>
-                </li>
                 {% if user.is_authenticated %}
-                <li class="{% if request.resolver_match.view_name == 'product_list' %}active{% endif %}">
-                    <a href="{% url 'product_list' %}"><i class="fa-solid fa-list"></i> Catalogo</a>
-                </li>
-                <li class="{% if request.resolver_match.view_name == 'record_list_branch' %}active{% endif %}">
-                    <a href="{% url 'record_list_branch' %}"><i class="fa-solid fa-book"></i> Registros</a>
-                </li>
-                <li class="{% if request.resolver_match.view_name == 'stock_list_curr' %}active{% endif %}">
-                    <a href="{% url 'stock_list_curr' %}"><i class="fa-solid fa-clipboard-list"></i> Inventario</a>
-                </li>
-                {% if user|has_group:"System admins" %}
-                    <li class="{% if request.resolver_match.view_name == 'admin_page' %}active{% endif %}">
-                        <a href="{% url 'admin_page' %}"><i class="fa-solid fa-gear"></i> Herr. Admin.</a>
+                    <li class="{% if request.resolver_match.view_name == 'product_list' %}active{% endif %}">
+                        <a href="{% url 'product_list' %}"><i class="fa-solid fa-list"></i> Catalogo</a>
                     </li>
-                {% elif user|has_group:"Managers" %}
-                    <li class="{% if request.resolver_match.view_name == 'admin_page' %}active{% endif %}">
-                        <a href="{% url 'admin_page' %}"><i class="fa-solid fa-screwdriver-wrench"></i> Herr. G.G.</a>
+                    <li class="{% if request.resolver_match.view_name == 'record_list_branch' %}active{% endif %}">
+                        <a href="{% url 'record_list_branch' %}"><i class="fa-solid fa-book"></i> Registros</a>
                     </li>
-                {% elif user|has_group:"Branch managers" %}
-                    <li class="{% if request.resolver_match.view_name == 'admin_page' %}active{% endif %}">
-                        <a href="{% url 'admin_page' %}"><i class="fa-solid fa-wrench"></i> Herr. G.S.</a>
+                    <li class="{% if request.resolver_match.view_name == 'stock_list_curr' %}active{% endif %}">
+                        <a href="{% url 'stock_list_curr' %}"><i class="fa-solid fa-clipboard-list"></i> Inventario</a>
                     </li>
-                {% endif %}
-                <li>
-                    <a href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Salir</a>
-                </li>
-                {% else %}
-                <li>
-                    <a href="{% url 'login' %}"><i class="fa-solid fa-user-shield"></i> Ingresar</a>
-                </li>
+                    {% if user|has_group:"System admins" %}
+                        <li class="{% if request.resolver_match.view_name == 'admin_page' %}active{% endif %}">
+                            <a href="{% url 'admin_page' %}"><i class="fa-solid fa-gear"></i> Admin.</a>
+                        </li>
+                    {% elif user|has_group:"Managers" %}
+                        <li class="{% if request.resolver_match.view_name == 'admin_page' %}active{% endif %}">
+                            <a href="{% url 'admin_page' %}"><i class="fa-solid fa-screwdriver-wrench"></i> Gerente</a>
+                        </li>
+                    {% elif user|has_group:"Branch managers" %}
+                        <li class="{% if request.resolver_match.view_name == 'admin_page' %}active{% endif %}">
+                            <a href="{% url 'admin_page' %}"><i class="fa-solid fa-wrench"></i> G. Sucursal</a>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <a href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Salir</a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a href="{% url 'login' %}"><i class="fa-solid fa-user-shield"></i> Ingresar</a>
+                    </li>
                 {% endif %}
             </ul>
         </nav>
@@ -69,7 +70,12 @@
         {% block main %}{% endblock %}
     </main>
     <footer>
-        <p><i class="fa-regular fa-copyright"></i> Bodega San Martin 2024 - Todos los derechos reservados</p>
+        <p>
+            <i class="fa-regular fa-copyright"></i>
+            <span>{{ company_name }} {% now "Y" %} - Todos los derechos reservados</span>
+            <span>|</span>
+            <a href="https://github.com/fmlizarraga/proyecto-django-cac"><i class="fa-brands fa-github"></i></a>
+        </p>
     </footer>
 {% block extra_js %}{% endblock %}
 </body>

@@ -10,20 +10,11 @@
     <h2>Bienvenido al sistema de control de inventario</h2>
     {% if user.is_authenticated %}
     <p class="sub-title" >
-        Estás conectado como <i class="fa-solid fa-user"></i><strong>{{user.username}}</strong>
+        Estás conectado como <i class="fa-solid fa-user"></i><strong>{{ user.username }}</strong>
     </p>
     {% else %}
     <a class="link-sub" href="{% url 'login' %}"><i class="fa-solid fa-user-shield"></i> Iniciar sesión</a>
     {% endif %}
-    <p>
-        En Bodega San Martin, gestionamos con precisión y eficiencia nuestro inventario de vinos.
-        Este sistema está diseñado exclusivamente para el uso del personal de la bodega,
-        permite realizar registros detallados de entradas y salidas,
-        así como consultar el inventario actual en cualquier momento.
-        Nuestro objetivo es garantizar la mejor organización y control para ofrecer siempre
-        la más alta calidad en nuestros productos.
-    </p>
-    <p class="text-center" >
-        ¡Gracias por su dedicación y esfuerzo continuo!
-    </p>
+    <p>{{ company_greeter }}</p>
+    <p class="text-center" >{{ company_msg }}</p>
 {% endblock %}

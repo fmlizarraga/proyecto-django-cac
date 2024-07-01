@@ -19,16 +19,20 @@ main {
     justify-content: center;
 }
 
-.product-card {
-    background: linear-gradient(to bottom, #440750, #6b00b3 25%, #ffffff 40%, #ffffff);
+.product-card, .product-card-empty {
+    background: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 1em;
     text-align: center;
-    transition: all 0.5s;
-    cursor: pointer;
     position: relative;
+}
+
+.product-card {
+    cursor: pointer;
+    background: linear-gradient(to bottom, #440750, #6b00b3 25%, #ffffff 40%, #ffffff);
+    transition: all 0.5s;
 }
 
 .product-card h2 {
@@ -84,7 +88,7 @@ main {
 
 .search-form .search-input-container {
     padding: 0 0 0 16px;
-    width: 200px;
+    width: 600px;
     border-radius: 20px 0 0 20px;
     transition: all 0.3s;
     border-right: none;
@@ -96,11 +100,14 @@ main {
     border: none;
     outline: none;
     background-color: #ffffff00;
+    width: calc(100% - 3em - 8px);
 }
 
 .search-form .search-input-container a {
+    display: inline-block;
     color: #44075088;
     transition: color 0.3s;
+    width: 3em;
 }
 
 .search-form .search-input-container a:hover {

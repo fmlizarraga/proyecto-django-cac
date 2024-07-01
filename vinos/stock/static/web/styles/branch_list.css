@@ -59,6 +59,10 @@ main {
     transition: all 0.3s;
 }
 
+.branch-item h2 a {
+    margin-right: 0.8em;
+}
+
 .branch-item h2 a:hover {
     color: #6b00b3;
     text-decoration: underline;
