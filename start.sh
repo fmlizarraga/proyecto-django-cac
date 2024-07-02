@@ -74,4 +74,4 @@ fi
 
 # Iniciar el servidor de Django
 echo "Iniciando el servidor de Django en el puerto $PORT..."
-python manage.py runserver $PORT
+python manage.py runserver 0.0.0.0:$PORT
