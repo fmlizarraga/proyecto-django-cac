@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -138,14 +138,14 @@ USE_TZ = True
 # STATIC_URL = 'static/'
 
 # Ruta donde se recopilan los archivos estaticos
-STATIC_ROOT = '/var/spool/vinos/staticfiles'
+STATIC_ROOT = config('STATIC_ROOT')
 
 # URL que usa Django para servir los archivos estaticos
-STATIC_URL = '/static/'
+STATIC_URL = config('STATIC_URL')
 
 # Ubicaciones adicionales para archivos estaticos
 STATICFILES_DIRS = [
-    '/var/spool/vinos/static',
+    config('STATICFILES_EXTRA'),
 ]
 
 # Default primary key field type
