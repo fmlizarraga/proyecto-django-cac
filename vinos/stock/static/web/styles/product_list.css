@@ -65,8 +65,7 @@ main {
 
 .product-card:hover {
     transform: scale(1.1);
-    box-shadow: 0 0px 10px rgba(119, 0, 255, 0.5);
-    border: 1px solid #7700ff59;
+    box-shadow: 0 0 1em rgba(119, 0, 255, 0.582);
     .indicator_info {
         color: #44075098;
         text-shadow: 0 1px 4px #7700ff;
@@ -88,11 +87,11 @@ main {
 
 .search-form .search-input-container {
     padding: 0 0 0 16px;
-    width: 600px;
+    width: 300px;
     border-radius: 20px 0 0 20px;
-    transition: all 0.3s;
     border-right: none;
     background: #fff;
+    transition: all 0.3s;
 }
 
 .search-form .search-input-container input {
@@ -134,5 +133,6 @@ main {
 
 .search-form .search-input-container:focus-within {
     border: 1px solid #7700ff;
+    border-right: none;
     box-shadow: 0 0 5px rgba(119, 0, 255, 0.5);
 }

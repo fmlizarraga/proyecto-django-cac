@@ -40,6 +40,10 @@
     font-family: sans-serif, 'Segoe UI', Tahoma, Verdana, Arial;
 }
 
+.product-form select {
+    width: 100%;
+}
+
 .form-container select option:hover,
 .form-container select option:focus {
     background-color: #7700ff;

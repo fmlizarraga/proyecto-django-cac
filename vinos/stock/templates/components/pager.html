@@ -1,0 +1,24 @@
+{% load custom_tags %}
+<div class="pagination">
+    <span class="step-links">
+        {% if pages.has_previous %}
+            <a href="?{% param_replace page=1 %}"><i class="fa-solid fa-angles-left"></i> primera</a>
+            <a href="?{% param_replace page=pages.previous_page_number %}"><i class="fa-solid fa-chevron-left"></i> anterior</a>
+        {% else %}
+            <span class="disabled"><i class="fa-solid fa-angles-left"></i> primera</span>
+            <span class="disabled"><i class="fa-solid fa-chevron-left"></i> anterior</span>
+        {% endif %}
+
+        <span class="current">
+            Página {{ pages.number }} de {{ pages.paginator.num_pages }}.
+        </span>
+
+        {% if pages.has_next %}
+            <a href="?{% param_replace page=pages.next_page_number %}">siguiente <i class="fa-solid fa-chevron-right"></i></a>
+            <a href="?{% param_replace page=pages.paginator.num_pages %}">última <i class="fa-solid fa-angles-right"></i></a>
+        {% else %}
+            <span class="disabled">siguiente <i class="fa-solid fa-chevron-right"></i></span>
+            <span class="disabled">última <i class="fa-solid fa-angles-right"></i></span>
+        {% endif %}
+    </span>
+</div>

@@ -36,12 +36,12 @@
             {% for record in records %}
                 <tr>
                     <td>
-                        <a href="{% url 'record_list_filter' %}?product={{ record.product.id }}">
+                        <a href="?{% param_replace product=record.product.id %}">
                             <i class="fa-solid fa-wine-bottle"></i> {{ record.product.name }}
                         </a>
                     </td>
                     <td>
-                        <a href="{% url 'record_list_filter' %}?branch={{ record.branch.id }}">
+                        <a href="?{% param_replace branch=record.branch.id %}">
                             <i class="fa-solid fa-building"></i> {{ record.branch.name }}
                         </a>
                     </td>
@@ -49,7 +49,7 @@
                         <i class="fa-solid fa-wine-glass"></i> {{ record.quantity }} unidades
                     </td>
                     <td>
-                        <a href="{% url 'record_list_filter' %}?typeof={{ record.typeof }}">
+                        <a href="?{% param_replace typeof=record.typeof %}">
                             {% if record.get_typeof_display == 'Entry' %}
                             <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrada
                             {% elif record.get_typeof_display == 'Exit' %}
@@ -58,14 +58,14 @@
                         </a>
                     </td>
                     <td>
-                        <a href="{% url 'record_list_filter' %}?employee={{ record.employee.id }}">
+                        <a href="?{% param_replace employee=record.employee.id %}">
                             <i class="fa-solid fa-user"></i> {{ record.employee.full_name }}
                         </a>
                     </td>
                     <td>
-                    <a href="{% url 'record_list_filter' %}?date_min={{ record.date|date:'Y-m-d' }}&date_max={{ record.date|next_day|date:'Y-m-d' }}">
-                        <i class="fa-solid fa-clock"></i> {{ record.date }}
-                    </a>
+                        <a href="?{% param_replace date_min=record.date|date:'Y-m-d' date_max=record.date|next_day|date:'Y-m-d' %}">
+                            <i class="fa-solid fa-clock"></i> {{ record.date }}
+                        </a>                        
                     </td>
                     <td>
                         <a href="{% url 'edit_record' record.id %}"><i class="fa-solid fa-square-pen"></i> Editar</a>
@@ -79,29 +79,8 @@
         </tbody>
     </table>
 
-    <div class="pagination">
-        <span class="step-links">
-            {% if records.has_previous %}
-                <a href="?{% param_replace page=1 %}"><i class="fa-solid fa-angles-left"></i> primera</a>
-                <a href="?{% param_replace page=records.previous_page_number %}"><i class="fa-solid fa-chevron-left"></i> anterior</a>
-            {% else %}
-                <span class="disabled"><i class="fa-solid fa-angles-left"></i> primera</span>
-                <span class="disabled"><i class="fa-solid fa-chevron-left"></i> anterior</span>
-            {% endif %}
+    {% include "components/pager.html" with pages=records %}
 
-            <span class="current">
-                Página {{ records.number }} de {{ records.paginator.num_pages }}.
-            </span>
-
-            {% if records.has_next %}
-                <a href="?{% param_replace page=records.next_page_number %}">siguiente <i class="fa-solid fa-chevron-right"></i></a>
-                <a href="?{% param_replace page=records.paginator.num_pages %}">última <i class="fa-solid fa-angles-right"></i></a>
-            {% else %}
-                <span class="disabled">siguiente <i class="fa-solid fa-chevron-right"></i></span>
-                <span class="disabled">última <i class="fa-solid fa-angles-right"></i></span>
-            {% endif %}
-        </span>
-    </div>
 {% endblock %}
 
 {% block extra_js %}

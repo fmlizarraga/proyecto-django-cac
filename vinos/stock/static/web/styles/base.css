@@ -28,6 +28,13 @@ header, footer {
 header h1 a {
     color: var(--corp-fg-color);
     text-decoration: none;
+    transition: all 0.5s;
+}
+
+header h1 a:hover {
+    transform: scale(1.05);
+    color: #faf3eb;
+    text-shadow: 0px 0px 6px #ffffffab;
 }
 
 header nav ul {
@@ -50,6 +57,10 @@ header nav ul li a {
 header nav ul li a:hover {
     transform: scale(1.1);
     color: #d8bbf3;
+}
+
+header nav ul li a.exit:hover {
+    color: rgb(209, 69, 69);
 }
 
 header nav .active a {
