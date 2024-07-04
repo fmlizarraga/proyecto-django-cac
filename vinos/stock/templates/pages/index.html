@@ -7,14 +7,16 @@
 {% endblock %}
 
 {% block main %}
-    <h2>Bienvenido al sistema de control de inventario</h2>
-    {% if user.is_authenticated %}
-    <p class="sub-title" >
-        Estás conectado como <i class="fa-solid fa-user"></i><strong>{{ user.username }}</strong>
-    </p>
-    {% else %}
-    <a class="link-sub" href="{% url 'login' %}"><i class="fa-solid fa-user-shield"></i> Iniciar sesión</a>
-    {% endif %}
-    <p>{{ company_greeter }}</p>
-    <p class="text-center" >{{ company_msg }}</p>
+    <div class="animate__animated animate__fadeIn">
+        <h2>Bienvenido al sistema de control de inventario</h2>
+        {% if user.is_authenticated %}
+        <p class="sub-title" >
+            Estás conectado como <i class="fa-solid fa-user"></i><strong>{{ user.username }}</strong>
+        </p>
+        {% else %}
+        <a class="link-sub" href="{% url 'login' %}"><i class="fa-solid fa-user-shield"></i> Iniciar sesión</a>
+        {% endif %}
+        <p>{{ company_greeter }}</p>
+        <p class="text-center" >{{ company_msg }}</p>
+    </div>
 {% endblock %}

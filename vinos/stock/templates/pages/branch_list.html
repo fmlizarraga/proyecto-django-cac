@@ -8,14 +8,14 @@
 {% endblock %}
 
 {% block main %}
-    <div class="branch-list">
-        <h1>{{ title }}</h1>
-        <div class="head-item">
+    <div class="branch-list branch-info animate__animated animate__fadeIn">
+        <div class="head-item animate__animated animate__flipInX">
+            <h1>{{ title }}</h1>
             <a href="{% url 'add_branch' %}"><i class="fa-solid fa-building-circle-arrow-right"></i> Registrar nueva sucursal</a>
             <a href="{% url 'select_branch' 'edit_branch' %}"><i class="fa-solid fa-building-circle-exclamation"></i> Editar una sucursal</a>
         </div>
         {% for branch in branches %}
-            <div class="branch-item">
+            <div class="branch-item animate__animated animate__slideInDown">
                 <h2>
                     <a href="{% url 'stock_list_branch' branch.id %}">
                         <i class="fa-solid fa-building"></i> {{ branch.name }}

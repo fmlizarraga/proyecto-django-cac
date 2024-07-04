@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block main %}
-    <div class="employee-detail">
+    <div class="employee-detail animate__animated animate__fadeIn">
         <h1><i class="fa-solid fa-circle-user"></i> {{ employee.full_name }}</h1>
         <p><strong><i class="fa-solid fa-user"></i> Nombre de usuario:</strong> {{ employee.user.username }}</p>
         <p><strong><i class="fa-solid fa-user-group"></i> Grupo:</strong> {{ employee.user.groups.first }}</p>

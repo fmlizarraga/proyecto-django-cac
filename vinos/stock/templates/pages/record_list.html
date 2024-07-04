@@ -5,12 +5,13 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'web/styles/branch_list.css' %}"> 
     <link rel="stylesheet" href="{% static 'web/styles/record_list.css' %}"> 
 {% endblock %}
 
 {% block main %}
-    <div class="record-list">
-        <div class="record-item">
+    <div class="record-list animate__animated animate__fadeIn">
+        <div class="head-item animate__animated animate__flipInX">
             <h2><i class="fa-solid fa-clock"></i> {{title}}</h2>
             <a href="{{ btn_order.url }}" class="btn"><i class="fa-solid fa-bars-staggered"></i> {{ btn_order.label }}</a>
             {% if not user|has_group:"Managers" %}
@@ -19,7 +20,7 @@
             {% endif %}
         </div>
         {% for record in records %}
-            <div class="record-item">
+            <div class="record-item animate__animated animate__slideInDown">
                 <h2>
                     <a href="{% url 'record_list_filter' %}?typeof={{ record.typeof }}">
                         {% if record.typeof == 'entry' %}

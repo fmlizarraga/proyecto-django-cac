@@ -9,14 +9,16 @@
 {% endblock %}
 
 {% block main %}
-    <div class="product-detail">
+    <div class="product-detail animate__animated animate__fadeIn">
         <h1>
             {{ product.name }}
             <i class="fa-solid fa-champagne-glasses"></i>
             <a href="{% url 'product_list' %}?search={{ product.variety|lower }}">{{ product.variety }}</a>
         </h1>
-        <p><strong><i class="fa-solid fa-clipboard"></i> Descripción:</strong> {{ product.description }}</p>
-        <p><strong><i class="fa-solid fa-calendar"></i> Cosecha:</strong> {{ product.vintage }}</p>
+        <div class="product-about">
+            <p>{{ product.description }}</p>
+            <p>Cosecha {{ product.vintage }}</p>
+        </div>
         <h2><i class="fa-solid fa-building-circle-check"></i> Disponible en Sucursales</h2>
         <ul>
             {% for branch_stock in product.branch_stocks.all %}

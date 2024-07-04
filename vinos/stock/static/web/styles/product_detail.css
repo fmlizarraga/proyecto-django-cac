@@ -28,7 +28,6 @@
     margin-top: 20px;
     font-size: 24px;
     color: #7700ff;
-    text-align: center;
 }
 
 .product-detail ul {
@@ -88,4 +87,15 @@
 
 .product-detail ul li a:hover {
     color: #6b00b3;
+}
+
+.product-about {
+    text-align: center;
+    font-size: larger;
+    font-weight: 400;
+    /* margin-bottom: 20px; */
+}
+
+.product-detail h2 {
+    margin-bottom: 0;
 }

@@ -7,8 +7,8 @@
 {% endblock %}
 
 {% block main %}
-    <div class="form-container product-form">
-        <h1><i class="fa-solid fa-pen-to-square"></i> {{ title }}</h1>
+    <div class="form-container product-form animate__animated animate__bounceIn">
+        <h1><i class="fa-solid fa-wine-bottle"></i> {{ title }}</h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
@@ -16,4 +16,27 @@
         </form>
         <a href="{% url 'product_list' %}"><i class="fa-solid fa-arrow-rotate-left"></i> Volver a la lista</a>
     </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+        const fields = [
+            { id: 'id_name', icon: 'fa-champagne-glasses' },
+            { id: 'id_variety', icon: 'fa-bottle-droplet' },
+            { id: 'id_description', icon: 'fa-align-left' },
+            { id: 'id_vintage', icon: 'fa-calendar-check' }
+        ];
+
+        fields.forEach(field => {
+            const label = document.querySelector(`label[for="${field.id}"]`);
+            if (label) {
+            const icon = document.createElement('i');
+            icon.className = `fa-solid ${field.icon}`;
+            label.insertBefore(icon, label.firstChild);
+            icon.style.marginRight = '8px';
+            }
+        });
+        });
+    </script>
 {% endblock %}

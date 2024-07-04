@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block main %}
-    <form method="get" class="search-form">
+    <form method="get" class="search-form animate__animated animate__fadeInDown">
         <div class="search-input-container">{{ filterset.form.search }}<a href="{% url 'product_list' %}">
                 <i class="fa-solid fa-delete-left"></i>
             </a>
@@ -18,13 +18,13 @@
         <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
     </form>
 
-    <div class="product-grid">
+    <div class="product-grid animate__animated animate__fadeIn">
         {% for product in products %}
             <div class="product-card" id="product-{{ product.id }}" data-url="{% url 'product_detail' product.id %}">
                 <h2> {{ product.name }}</h2>
                 <p><strong><i class="fa-solid fa-bottle-droplet"></i> Variedad:</strong> {{ product.variety }}</p>
-                <p><strong><i class="fa-solid fa-clipboard"></i> Descripción:</strong> {{ product.description|truncatechars:30 }}</p>
-                <p><strong><i class="fa-solid fa-calendar"></i> Cosecha:</strong> {{ product.vintage }}</p>
+                <p><strong><i class="fa-solid fa-align-left"></i> Descripción:</strong> {{ product.description|truncatechars:30 }}</p>
+                <p><strong><i class="fa-solid fa-calendar-check"></i> Cosecha:</strong> {{ product.vintage }}</p>
                 <div class="indicator_info"><i class="fa-solid fa-circle-info"></i></div>
             </div>
         {% empty %}

@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block main %}
-    <div class="admin-container">
+    <div class="admin-container animate__animated animate__fadeIn">
         <h1 class="title"><i class="fa-solid fa-screwdriver-wrench"></i> Herramientas Administrativas</h1>
         <div class="admin-links">
             {% for category in admin_links %}
@@ -16,7 +16,7 @@
                     <h2>{{ category.title }}</h2>
                     <ul>
                     {% for link in category.links %}
-                        <li>
+                        <li class="animate__animated animate__flipInX">
                             <a href="{{ link.url }}">
                                 <i class="{{ link.icon_class }}"></i>
                                 {{ link.label }}

@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block main %}
-    <div class="form-container">
+    <div class="form-container animate__animated animate__fadeInDown">
         <h1><i class="fa-solid fa-bolt"></i> {{ title }}</h1>
         <form method="post">
             {% csrf_token %}
@@ -16,52 +16,73 @@
         </form>
         <a href="{% url 'admin_page' %}"><i class="fa-solid fa-rotate-left"></i> Volver a herramientas administrativas</a>
     </div>
-    <script>
-        $(document).ready(function() {
-            $('.product-select').select2({
-                ajax: {
-                    url: '{% url "product-autocomplete" %}',
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            q: params.term, // search term
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data.results
-                        };
-                    },
-                    cache: true
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        $('.product-select').select2({
+            ajax: {
+                url: '{% url "product-autocomplete" %}',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                    };
                 },
-                language: "es",
-                minimumInputLength: 1,
-                width: '100%'
-            });
-            {% if branch %}
-            $('.product-select').on('change', function() {
-                var product_id = $(this).val();
-                var branch_name = "{{ branch.name }}";
-                var url = '{% url "get_product_stock" 0 0 %}'.replace('0/0', branch_name + '/' + product_id);
-                
-                if (product_id) {
-                    $.ajax({
-                        url: url,
-                        type: 'GET',
-                        success: function(data) {
-                            $('#id_stock').val(data.stock);
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Error fetching stock:', error);
-                            $('#id_stock').val(0);
-                        }
-                    });
-                } else {
-                    $('#id_stock').val(0);
-                }
-            });
-            {% endif %}
+                processResults: function (data) {
+                    return {
+                        results: data.results
+                    };
+                },
+                cache: true
+            },
+            language: "es",
+            minimumInputLength: 1,
+            width: '100%'
         });
-    </script>
+        {% if branch %}
+        $('.product-select').on('change', function() {
+            var product_id = $(this).val();
+            var branch_name = "{{ branch.name }}";
+            var url = '{% url "get_product_stock" 0 0 %}'.replace('0/0', branch_name + '/' + product_id);
+            
+            if (product_id) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(data) {
+                        $('#id_stock').val(data.stock);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching stock:', error);
+                        $('#id_stock').val(0);
+                    }
+                });
+            } else {
+                $('#id_stock').val(0);
+            }
+        });
+        {% endif %}
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const fields = [
+        { id: 'id_product', icon: 'fa-wine-bottle' },
+        { id: 'id_stock', icon: 'fa-wine-glass' }
+    ];
+
+    fields.forEach(field => {
+        const label = document.querySelector(`label[for="${field.id}"]`);
+        if (label) {
+        const icon = document.createElement('i');
+        icon.className = `fa-solid ${field.icon}`;
+        label.insertBefore(icon, label.firstChild);
+        icon.style.marginRight = '8px';
+        }
+    });
+    });
+</script>
 {% endblock %}

@@ -13,7 +13,7 @@
 {% block main %}
     <div class="stock-list">
         {% if form %}
-        <div class="form-container">
+        <div class="form-container animate__animated animate__bounceIn">
             <h2><i class="fa-solid fa-building-circle-arrow-right"></i> Seleccione una sucursal</h2>
             <form method="get" action="{% url 'stock_list' %}">
                 {{ form.as_p }}
@@ -22,7 +22,7 @@
         </div>
         {% endif %}
         <div class="branch-section">
-            <div class="branch-info">
+            <div class="branch-info animate__animated animate__fadeIn">
                 <h2><i class="fa-solid fa-building"></i> Sucursal: {{ branch_stock.branch }}</h2>
                 <p><strong><i class="fa-solid fa-location-dot"></i> Dirección:</strong> {{ branch_stock.branch.address }}</p>
                 <p><strong><i class="fa-solid fa-phone"></i> Teléfono:</strong> {{ branch_stock.branch.telephone }}</p>
@@ -31,10 +31,10 @@
 
             </div>
             <div class="branch-stock">
-                <h3><i class="fa-solid fa-clipboard-list"></i> Stock en {{ branch_stock.branch }}</h3>
+                <h3 class="animate__animated animate__fadeInDown" ><i class="fa-solid fa-clipboard-list"></i> Stock en {{ branch_stock.branch }}</h3>
                 <div class="branch-stock-items">
                     {% for item in branch_stock.stock_items %}
-                        <div class="stock-item {% if item.stock == 0 %}out-of-stock{% endif %}">
+                        <div class="stock-item {% if item.stock == 0 %}out-of-stock{% endif %} animate__animated animate__zoomIn">
                             <h4>
                                 <a href="{% url 'product_detail' item.product.id %}">
                                     <i class="fa-solid fa-chevron-right"></i> {{ item.product.name }}
@@ -67,4 +67,24 @@
 
     {% include "components/pager.html" with pages=branch_stock.stock_items %}
 
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+        const fields = [
+            { id: 'id_branch', icon: 'fa-building' },
+        ];
+
+        fields.forEach(field => {
+            const label = document.querySelector(`label[for="${field.id}"]`);
+            if (label) {
+            const icon = document.createElement('i');
+            icon.className = `fa-solid ${field.icon}`;
+            label.insertBefore(icon, label.firstChild);
+            icon.style.marginRight = '8px';
+            }
+        });
+        });
+    </script>
 {% endblock %}

@@ -9,10 +9,6 @@ body {
     background-color: #f4f4f4;
 }
 
-header {
-    top: 0;
-}
-
 header, footer {
     z-index: 100;
     background-color: var(--corp-bg-color);
@@ -107,4 +103,19 @@ footer a {
 
 .pagination {
     bottom: calc(40px + 16px * 2);
+}
+
+header {
+    top: 0;
+    /* background: linear-gradient(to top, #00000000, var(--corp-bg-color) 15%, var(--corp-bg-color)); */
+    padding: 1em;
+    height: calc(110px - 2em);
+}
+
+header h1 {
+    margin-top: 0;
+}
+
+main {
+    margin-top: 110px;
 }

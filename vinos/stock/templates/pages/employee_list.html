@@ -8,22 +8,24 @@
 {% endblock %}
 
 {% block main %}
-    <div class="branch-list">
-        <h1>{{ title }}</h1>
-        <div class="head-item">
+    <div class="branch-list record-list animate__animated animate__fadeIn">
+        <div class="head-item animate__animated animate__flipInX">
+            <h1>{{ title }}</h1>
             <a href="{% url 'admin_page' %}"><i class="fa-solid fa-screwdriver-wrench"></i> Administrar</a>
         </div>
         {% for e in employees|dictsort:"id" %}
-            <div class="employee-item" data-url="{% url 'employee_detail' e.id  %}">
-                <h2><i class="fa-solid fa-circle-user"></i> {{ e.full_name }}</h2>
-                <p><strong><i class="fa-solid fa-user"></i> Nombre de usuario:</strong> {{ e.user.username }}</p>
-                <p><strong><i class="fa-solid fa-envelope"></i> Email:</strong> {{ e.user.email }}</p>
-                <p><strong><i class="fa-solid fa-id-card"></i> DNI:</strong> {{ e.dni }}</p>
-                <p><strong><i class="fa-solid fa-id-badge"></i> CUIL:</strong> {{ e.cuil }}</p>
-                <p><strong><i class="fa-solid fa-building-user"></i> Sucursal:</strong> {{ e.branch }}</p>
+            <div class="record-item animate__animated animate__slideInDown">
+                <div class="employee-item" data-url="{% url 'employee_detail' e.id  %}">
+                    <h2><i class="fa-solid fa-circle-user"></i> {{ e.full_name }}</h2>
+                    <p><strong><i class="fa-solid fa-user"></i> Nombre de usuario:</strong> {{ e.user.username }}</p>
+                    <p><strong><i class="fa-solid fa-envelope"></i> Email:</strong> {{ e.user.email }}</p>
+                    <p><strong><i class="fa-solid fa-id-card"></i> DNI:</strong> {{ e.dni }}</p>
+                    <p><strong><i class="fa-solid fa-id-badge"></i> CUIL:</strong> {{ e.cuil }}</p>
+                    <p><strong><i class="fa-solid fa-building-user"></i> Sucursal:</strong> {{ e.branch }}</p>
+                </div>
             </div>
         {% empty %}
-            <div class="branch-item">
+            <div class="branch-item record-item animate__animated animate__slideInDown">
                 <p>No hay empleados disponibles.</p>
             </div>
         {% endfor %}

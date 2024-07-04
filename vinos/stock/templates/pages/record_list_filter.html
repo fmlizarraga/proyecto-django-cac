@@ -11,8 +11,8 @@
 {% endblock %}
 
 {% block main %}
-    <h1><i class="fa-solid fa-book"></i> {{ title }}</h1>
-    <div class="form-container">
+    <h1 class="animate__animated animate__fadeInDown"><i class="fa-solid fa-book"></i> {{ title }}</h1>
+    <div class="form-container animate__animated animate__bounceIn">
         <form method="get">
             {{ filter.form.as_p }}
             <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> Buscar</button>
@@ -20,7 +20,7 @@
         </form>
     </div>
 
-    <table>
+    <table class="animate__animated animate__fadeIn">
         <thead>
             <tr>
                 <th><i class="fa-solid fa-box"></i> Producto</th>
