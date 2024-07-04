@@ -12,14 +12,21 @@ CREATE_VENV_CMD="python3 -m venv $VENV_DIR"
 # Comando para activar el entorno virtual
 ACTIVATE_VENV_CMD="source $VENV_DIR/bin/activate"
 
-# Puerto por defecto para el servidor Django
+# Puerto y host por defecto para el servidor Django
 DEFAULT_PORT=8000
+DEFAULT_HOST="127.0.0.1"
 
-# Si se proporciona un puerto como argumento, usar ese puerto
-if [ $# -eq 1 ]; then
+# Si se proporciona un puerto y/o host como argumento, usarlos
+if [ $# -ge 1 ]; then
     PORT=$1
 else
     PORT=$DEFAULT_PORT
+fi
+
+if [ $# -ge 2 ]; then
+    HOST=$2
+else
+    HOST=$DEFAULT_HOST
 fi
 
 # Verificar si el entorno virtual existe
@@ -72,6 +79,16 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# Recopilar archivos estáticos
+echo "Recopilando archivos estáticos..."
+python manage.py collectstatic --noinput
+
+# Verificar si la recopilación de archivos estáticos fue exitosa
+if [ $? -ne 0 ]; then
+    echo "Error: No se pudieron recopilar los archivos estáticos."
+    exit 1
+fi
+
 # Iniciar el servidor de Django
-echo "Iniciando el servidor de Django en el puerto $PORT..."
-python manage.py runserver $PORT
+echo "Iniciando el servidor de Django en $HOST:$PORT..."
+python manage.py runserver $HOST:$PORT

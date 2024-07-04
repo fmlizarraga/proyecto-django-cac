@@ -31,7 +31,13 @@
                     </a>
                 </h2>
                 <p>
-                    <a href="{% url 'record_list_filter' %}?date_min={{ record.date|date:'Y-m-d' }}&date_max={{ record.date|next_day|date:'Y-m-d' }}">
+                    <a href=
+                        "{% if user|has_group:'Workers' %}
+                        #
+                        {% else %}
+                        {% url 'record_list_filter' %}?date_min={{ record.date|date:'Y-m-d' }}&date_max={{ record.date|next_day|date:'Y-m-d' }}
+                        {% endif %}"
+                    >
                         <strong><i class="fa-solid fa-calendar-day"></i> Fecha: </strong>{{ record.date|date:"Y-m-d" }}
                     </a>
                 </p>
