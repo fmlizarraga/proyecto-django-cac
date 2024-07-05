@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: django-stock-vinos
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn vinos.wsgi:application"
