@@ -2,7 +2,7 @@ FROM python
 
 WORKDIR /app
 
-COPY wait-for-it.sh /usr/bin/wait-for-it.sh
+COPY wait-for-it/wait-for-it.sh /usr/bin/wait-for-it.sh
 RUN chmod +x /usr/bin/wait-for-it.sh
 
 COPY requirements.txt .
