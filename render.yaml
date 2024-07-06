@@ -3,4 +3,4 @@ services:
     name: django-stock-vinos
     env: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn vinos.wsgi:application"
+    startCommand: "cd vinos && python create_superuser.py && gunicorn vinos.wsgi"
